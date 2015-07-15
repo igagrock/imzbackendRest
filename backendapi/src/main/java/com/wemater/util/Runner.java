@@ -4,14 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
 
-import com.wemater.dao.ArticleDao;
-import com.wemater.dao.UserDao;
-import com.wemater.dto.Article;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
-import com.wemater.service.ArticleService;
 
 
 
@@ -20,7 +15,9 @@ public class Runner {
 	
 	
 	public static void main(String[] args) {
-	
+	/*
+	 * 
+	 * 
 		       //BasicConfigurator.configure();
 		       
 	          SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -66,6 +63,7 @@ public class Runner {
 	
 	          
 	          
+	 */
 	          
      
 	
