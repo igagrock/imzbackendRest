@@ -66,7 +66,7 @@ public class ArticleService {
 		  
 		   Long id = ad.save(article); // save the article. if not saved -- throws exception
 		   
-		   return transformArticleToModel(ad.find(id), uriInfo); //return the article model
+		   return transformFullArticleToModel(ad.find(id), uriInfo); //return the article model
 	   }
 	     
 	 public ArticleModel updateArticle(Long id, ArticleModel model, UriInfo uriInfo){

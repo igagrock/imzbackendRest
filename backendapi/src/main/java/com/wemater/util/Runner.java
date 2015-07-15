@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
 
+import com.wemater.dto.Article;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 
@@ -14,17 +16,14 @@ import com.wemater.exception.EvaluateException;
 public class Runner {
 	
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-	/*
-	 * 
-	 * 
+	 
 		       //BasicConfigurator.configure();
 		       
 	          SessionFactory sf = HibernateUtil.getSessionFactory();
 	          SessionUtil su = new SessionUtil(sf.openSession());
-	          UserDao ud = new UserDao(su);
-	          ArticleDao ad = new ArticleDao(su);
-	          ArticleService as = new ArticleService();
+	          
 	        
 	          
 	          
@@ -52,20 +51,13 @@ public class Runner {
 				su.rollBackCurrentTransaction();
 				throw e;
 				
+			}finally{
+				 sf.close();
 			}
 	          
 	          
-	          
-	          
-	        	 sf.close();
-	     
-	        
-	
-	          
-	          
-	 */
-	          
-     
+        
+        
 	
 	}
 	
