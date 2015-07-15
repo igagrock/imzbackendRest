@@ -18,7 +18,7 @@ public class ExploreResource {
 	{   //eqaual to top stories
 		return "here in trending articles";
 		   
-	}
+	}   
 	@GET
 	@Path("/latest")
 	public String getLatestArticles()
