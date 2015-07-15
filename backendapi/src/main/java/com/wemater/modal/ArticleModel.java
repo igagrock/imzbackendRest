@@ -1,5 +1,7 @@
 package com.wemater.modal;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,7 +25,7 @@ public class ArticleModel {
 	private String image;
 	private String content;
 	private List<String> tags;
-	private Date date;
+	private String date;
 	private int likes;
 	private int commentCount;
 	private UserModel userModel;
@@ -88,10 +90,10 @@ public class ArticleModel {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	
@@ -123,7 +125,8 @@ public class ArticleModel {
 			this.id = article.getId();
 			this.title = article.getTitle();
 			this.url = article.getUrl();
-			this.date = article.getDate();
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			this.date = format.format(article.getDate());
 			return this;
 	}
 	
@@ -133,7 +136,7 @@ public class ArticleModel {
 		this.image = image;
 		return this;
 	}
-	
+	  
 	public synchronized ArticleModel addContent( String content ){
 		this.content = content;
 		return this;
