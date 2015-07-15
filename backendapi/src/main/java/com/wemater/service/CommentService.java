@@ -48,6 +48,8 @@ public class CommentService {
 
     }
 
+
+    
 	
   //2: get one Comments of User
 	public CommentModel getOneuserComment(long commentId, UriInfo uriInfo){
@@ -79,7 +81,29 @@ public class CommentService {
 	      	 else return null;
     } 
     
+    //4: get one article comment not allowed
+    
+    public CommentModel getarticleComment(long commentId, UriInfo uriInfo){
+    	/*auhtenticate the user and if same username
+    	 * 
+    	 * then show the comment
+    	 * condition is:  user has posted this comment and the article provided in url has this comment
+    	 */
+    	long articleId = HibernateUtil.getArticleIdFromURLforComments(3, uriInfo);			
+    	String profname = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+    	
+    	if(cd.IsUserCommentAvailable(profname, commentId)
+    			&& cd.IsArticleCommentAvailable(commentId,articleId)){
+    		
+    		Comment comment = cd.find(commentId);
+    		return transformCommentToModelForUser(comment, uriInfo);
  
+    	}
+    	else return null;
+
+    	
+    }
+    
     
     //5: post comments.
     

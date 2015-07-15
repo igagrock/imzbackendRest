@@ -8,6 +8,7 @@ import org.hibernate.HibernateException;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.util.SessionUtil;
@@ -188,7 +189,7 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 			 
 			 int value = Collections.binarySearch(usernames, username);
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataNotFoundException("404", "User '"+username+"' didnt not post this comment");
+			 else throw new DataForbiddenException("403", "User '"+username+"' didnt not post this comment");
 			   
 			   
 		} catch (HibernateException e) {
@@ -219,7 +220,7 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 			 int value = Collections.binarySearch(ids, articleId); 
 			 
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataNotFoundException("404", " comment requested doesnt belong to this article");//throw exception if not present
+			 else throw new DataForbiddenException("404", " comment requested doesnt belong to this article");//throw exception if not present
 			   
 			   
 		} catch (HibernateException e) {

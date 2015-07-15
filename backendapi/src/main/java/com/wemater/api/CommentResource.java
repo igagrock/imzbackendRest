@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
@@ -37,12 +38,20 @@ public class CommentResource {
 			return Response.ok(entity).build();		
 		}
 	
-	  
+		@GET
+		@Path("{commentId}")
+		public Response getComment(@PathParam("commentId") long id, @Context UriInfo uriInfo)
+		{
+			return Response.ok(service.getarticleComment(id, uriInfo)).build();
+		}
+	
+		
+		
 		
 		@POST
 		public Response postComment(CommentModel model, @Context UriInfo uriInfo)
 		{
-			return Response.ok(service.postArticleComment(model, uriInfo)).build();
+			return Response.status(Status.CREATED).entity(service.postArticleComment(model, uriInfo)).build();
 		}
 	
 		
