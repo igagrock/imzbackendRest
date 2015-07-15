@@ -3,7 +3,9 @@ package com.wemater.api;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,7 +16,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
-import com.wemater.modal.UserModel;
 import com.wemater.service.CommentService;
 
 @Path("userComments")
@@ -48,4 +49,20 @@ public class UserCommentResource {
 			return Response.ok(service.getOneuserComment(id, uriInfo)).build();
 		}
 
+		@PUT
+		@Path("/{commentId}")
+		public Response updateComment(@PathParam("commentId") long id,
+				CommentModel model, @Context UriInfo uriInfo){
+
+			return Response.ok(service.UpdateArticleComment(id, model, uriInfo)).build();
+		}
+		
+		
+		@DELETE
+		public Response deleteComment(@PathParam("commentId") long id, @Context UriInfo uriInfo){
+
+			service.deleteArticleComment(id, uriInfo);
+			return Response.ok().build();
+		}
+  
 }

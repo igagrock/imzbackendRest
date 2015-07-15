@@ -3,10 +3,8 @@ package com.wemater.api;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -40,13 +38,6 @@ public class CommentResource {
 		}
 	
 	  
-	
-		@GET
-		@Path("/{commentId}")
-		public Response getComment(@PathParam("commentId") long id, @Context UriInfo uriInfo){
-
-			return Response.ok(service.getOneArticleComment(id, uriInfo)).build();
-		}
 		
 		@POST
 		public Response postComment(CommentModel model, @Context UriInfo uriInfo)
@@ -54,22 +45,9 @@ public class CommentResource {
 			return Response.ok(service.postArticleComment(model, uriInfo)).build();
 		}
 	
-		@PUT
-		@Path("/{commentId}")
-		public Response updateComment(@PathParam("commentId") long id,
-				CommentModel model, @Context UriInfo uriInfo){
-
-			return Response.ok(service.UpdateArticleComment(id, model, uriInfo)).build();
-		}
 		
 		
-		@DELETE
-		public Response deleteComment(@PathParam("commentId") long id, @Context UriInfo uriInfo){
-
-			service.deleteArticleComment(id, uriInfo);
-			return Response.ok().build();
-		}
-  
+	
 		
 		
   

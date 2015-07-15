@@ -41,26 +41,32 @@ public class ArticleService {
 		//get all articles
 	     public List<ArticleModel> getAllArticlesWithNoContent(String profname, UriInfo uriInfo){
 	    	     	 
+	    	 //authentic check user is same as others
 	    	  return transformArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profname), uriInfo);
 	     }
   
+	     
 	     public List<ArticleModel> getAllArticlesWithContent(String profname, UriInfo uriInfo){
-	     	 
+	     	 //auth here
 	    	  return transformFullArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profname), uriInfo);
 	     }
 		  //
 		//get each article
 	     public ArticleModel getArticle(long Id,UriInfo uriInfo) {
+	    	 //if this is your article get it.
+	    	 //auth here
 	    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
-	    	  ad.find(Id);
-	    	 if(ad.IsUserArticleAvailable(profilename, Id))
+	    	  ad.find(Id);// check if article present
+	    	 
+	    	  if(ad.IsUserArticleAvailable(profilename, Id))
 	    	 	 return transformFullArticleToModel(ad.getArticleOfUserByNamedQuery(profilename, Id), uriInfo);
 	    	 else return null;
 		 }
 	     
 	   public ArticleModel postArticle(String profilename,ArticleModel model, UriInfo uriInfo){
 		   
-		   User user = ud.find(profilename); //get the related user
+		  //auth here
+		   User user = ud.find(profilename); //get the related user or throw exception
 		   
 		   Article article = ad.createArticle(model, user); //create the article with user attached
 		  

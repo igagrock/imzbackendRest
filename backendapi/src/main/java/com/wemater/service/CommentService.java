@@ -42,6 +42,7 @@ public class CommentService {
 	//1: get all Comments of User
     public List<CommentModel> getAlluserComments(String username,UriInfo uriInfo){
    
+    	//authentication here
    		return transformUsersCommentsToModelsWithUsername(
    				                  cd.getAllCommentsOfUserByNamedQuery(username), uriInfo);
 
@@ -51,18 +52,21 @@ public class CommentService {
   //2: get one Comments of User
 	public CommentModel getOneuserComment(long commentId, UriInfo uriInfo){
 
+	//authentication heere profilename is same as loggedin user	
    	  String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
    	   
    	 if(cd.IsUserCommentAvailable(profilename, commentId))
-   	  return transformCommentToModelForUser(cd.getCommentOfUserByNamedQuery(profilename, commentId),uriInfo);
-   	 else return null;
+   	 
+   		 return transformCommentToModelForUser(cd.getCommentOfUserByNamedQuery(profilename, commentId),uriInfo);
+   	 
+   	  else return null;
     }
 
   
      
   
     
-  //3: getallComments on an article
+  //3: getallComments on an article of my article
  
     public List<CommentModel> getAllArticleComments(Long articleId, UriInfo uriInfo){
     	
@@ -75,22 +79,10 @@ public class CommentService {
 	      	 else return null;
     } 
     
-    //4: get one Comments of article // do editing here
-    public CommentModel getOneArticleComment(long commentId, UriInfo uriInfo){
-   	      	 Long articleId = HibernateUtil.getArticleIdFromURLforComments(3,uriInfo);
-   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
-   	      	 
-   	      	 if(cd.IsArticleCommentAvailable(commentId, articleId)
-   	      			&& ad.IsUserArticleAvailable(profilename, articleId) ){
-   	      	 return transformCommentToModelForArticle(
-   	      			          cd.getCommentOfArticleByNamedQuery(articleId, commentId), uriInfo);
-   	      	 }
-   	      	 else return null;
-    }
+ 
     
-    //5: post comments. used in comment service only
+    //5: post comments.
     
-    //4: get one Comments of article // do editing here
     public CommentModel postArticleComment(CommentModel model, UriInfo uriInfo){
    	      	 
     	Long articleId = HibernateUtil.getArticleIdFromURLforComments(2,uriInfo);
@@ -103,15 +95,14 @@ public class CommentService {
 	   	        
 	   	        return transformCommentToModelForArticle(cd.find(id), uriInfo); //return model of comment   	  
     }
-    //5: Update the comment in article
+    //5: Update the comment in article for any ones articles
     
     public CommentModel UpdateArticleComment(long commentId,CommentModel model, UriInfo uriInfo){
 	      	 
-    	Long articleId = HibernateUtil.getArticleIdFromURLforComments(3,uriInfo);
-   	    String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+    	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+
    	    
-   	     if(cd.IsArticleCommentAvailable(commentId, articleId)
-      			&& ad.IsUserArticleAvailable(profilename, articleId) ){
+   	     if( cd.IsUserCommentAvailable(profilename, commentId)){
 	   	      
 	   	        Comment comment = cd.find(commentId);
 	   	         comment.setContent(model.getContent());
@@ -127,7 +118,7 @@ public class CommentService {
     
     //6: delete the comment
     
-    //4: get one Comments of article // do editing here
+    
     public void deleteArticleComment(long commentId, UriInfo uriInfo){
    	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
    	      	 
