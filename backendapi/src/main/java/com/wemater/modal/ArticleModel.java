@@ -121,7 +121,7 @@ public class ArticleModel {
 	
 	
 	public synchronized ArticleModel constructModel(Article article){
-		
+		    
 			this.id = article.getId();
 			this.title = article.getTitle();
 			this.url = article.getUrl();
