@@ -136,7 +136,7 @@ public class ArticleModel {
 		this.image = image;
 		return this;
 	}
-	  
+	     
 	public synchronized ArticleModel addContent( String content ){
 		this.content = content;
 		return this;
