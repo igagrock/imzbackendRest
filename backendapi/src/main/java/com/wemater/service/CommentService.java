@@ -10,7 +10,10 @@ import org.hibernate.SessionFactory;
 
 import com.wemater.dao.ArticleDao;
 import com.wemater.dao.CommentDao;
+import com.wemater.dao.UserDao;
+import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
+import com.wemater.dto.User;
 import com.wemater.modal.CommentModel;
 import com.wemater.modal.Link;
 import com.wemater.util.HibernateUtil;
@@ -22,6 +25,7 @@ public class CommentService {
     private final SessionUtil su;
     private final CommentDao cd;
     private final ArticleDao ad;
+    private final UserDao ud;
    
    
  
@@ -29,6 +33,7 @@ public class CommentService {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.cd = new CommentDao(su);
+		this.ud = new UserDao(su);
 		this.ad = new ArticleDao(su);
 	  
 	}
@@ -53,22 +58,28 @@ public class CommentService {
    	 else return null;
     }
 
-
+  
      
   
     
   //3: getallComments on an article
  
-    public List<CommentModel> getAllArticleCommentsWithArticleId(Long articleId, UriInfo uriInfo){
+    public List<CommentModel> getAllArticleComments(Long articleId, UriInfo uriInfo){
     	
-    	return transformUsersCommentsToModelsWithArticleId(
+    	String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
+	      	 if( ad.IsUserArticleAvailable(profilename, articleId) ){
+    	
+    	        return transformUsersCommentsToModelsWithArticleId(
     			                    cd.getAllCommentsOfArticleByNamedQuery(articleId), uriInfo);
+	      	 }
+	      	 else return null;
     } 
     
     //4: get one Comments of article // do editing here
     public CommentModel getOneArticleComment(long commentId, UriInfo uriInfo){
    	      	 Long articleId = HibernateUtil.getArticleIdFromURLforComments(3,uriInfo);
    	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	      	 
    	      	 if(cd.IsArticleCommentAvailable(commentId, articleId)
    	      			&& ad.IsUserArticleAvailable(profilename, articleId) ){
    	      	 return transformCommentToModelForArticle(
@@ -77,9 +88,57 @@ public class CommentService {
    	      	 else return null;
     }
     
+    //5: post comments. used in comment service only
+    
+    //4: get one Comments of article // do editing here
+    public CommentModel postArticleComment(CommentModel model, UriInfo uriInfo){
+   	      	 
+    	Long articleId = HibernateUtil.getArticleIdFromURLforComments(2,uriInfo);
+   	    String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
+   	    
+	   	        User user = ud.find(profilename); //get user
+	   	        Article article = ad.find(articleId); //get article
+	   	        Comment comment = cd.createComment(model.getContent(), article, user); //get comment
+	   	        long id = cd.save(comment); //save article or exception will be thrown
+	   	        
+	   	        return transformCommentToModelForArticle(cd.find(id), uriInfo); //return model of comment   	  
+    }
+    //5: Update the comment in article
+    
+    public CommentModel UpdateArticleComment(long commentId,CommentModel model, UriInfo uriInfo){
+	      	 
+    	Long articleId = HibernateUtil.getArticleIdFromURLforComments(3,uriInfo);
+   	    String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	    
+   	     if(cd.IsArticleCommentAvailable(commentId, articleId)
+      			&& ad.IsUserArticleAvailable(profilename, articleId) ){
+	   	      
+	   	        Comment comment = cd.find(commentId);
+	   	         comment.setContent(model.getContent());
+	   	         cd.save(comment);
+	   	        
+	   	        return transformCommentToModelForArticle(cd.find(commentId), uriInfo); //return model of comment
+	  
+	   	    }
+	   	    
+   	      else return null;    	  
+    } 
     
     
+    //6: delete the comment
     
+    //4: get one Comments of article // do editing here
+    public void deleteArticleComment(long commentId, UriInfo uriInfo){
+   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	      	 
+   	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){
+   	      	 
+   	      		 Comment comment = cd.find(commentId);
+   	      		 cd.delete(comment);
+   	      		 
+   	      	 }
+   	      	
+    }
     
     
     

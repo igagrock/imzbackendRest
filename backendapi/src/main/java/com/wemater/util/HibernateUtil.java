@@ -89,7 +89,7 @@ public class HibernateUtil {
 		   String url = uriInfo.getAbsolutePath().toString();
 	   	   String[] tokens = url.split("/");
 	       
-	   	   return Long.valueOf(tokens[tokens.length -3]);
+	   	   return Long.valueOf(tokens[tokens.length -index]);
 	       
 }
 

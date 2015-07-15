@@ -8,10 +8,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
+import com.wemater.modal.UserModel;
 import com.wemater.service.CommentService;
 
 @Path("userComments")
@@ -30,18 +33,19 @@ public class UserCommentResource {
 		
 		
 		@GET
-		public List<CommentModel> getComments(@PathParam("profileName") String username, @Context UriInfo uriInfo)
+		public Response getCommentsOfuser(@PathParam("profileName") String username, @Context UriInfo uriInfo)
 		{
-			System.err.println("getcomments inside the usercomment resouce called");
-			return service.getAlluserComments(username,uriInfo);
+			GenericEntity<List<CommentModel>> entity = 
+					new GenericEntity<List<CommentModel>>( service.getAlluserComments(username,uriInfo)){};
+			
+			return Response.ok(entity).build();
 		}
 				
 		@GET
 		@Path("/{commentId}")
-		public CommentModel getCommentsOfUser(@PathParam("commentId") long id, @Context UriInfo uriInfo)
+		public Response getCommentOfUser(@PathParam("commentId") long id, @Context UriInfo uriInfo)
 		{
-			System.err.println("getcomment of one user inside the usercomment resouce called");
-			return service.getOneuserComment(id, uriInfo);
+			return Response.ok(service.getOneuserComment(id, uriInfo)).build();
 		}
 
 }
