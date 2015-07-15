@@ -51,7 +51,7 @@ public class ArticleService {
 		  //
 		//get each article
 	     public ArticleModel getArticle(long Id,UriInfo uriInfo) {
-	    	 String profilename = HibernateUtil.getUsernameFromURLforComments(uriInfo);
+	    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
 	    	  ad.find(Id);
 	    	 if(ad.IsUserArticleAvailable(profilename, Id))
 	    	 	 return transformFullArticleToModel(ad.getArticleOfUserByNamedQuery(profilename, Id), uriInfo);
@@ -72,7 +72,7 @@ public class ArticleService {
 	 public ArticleModel updateArticle(Long id, ArticleModel model, UriInfo uriInfo){
 		 
 		 Article article = ad.find(id);
-		 String profilename = HibernateUtil.getUsernameFromURLforComments(uriInfo);
+		 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
     	 
 		 if(ad.IsUserArticleAvailable(profilename, id)){
 			 
@@ -88,7 +88,7 @@ public class ArticleService {
    public void deleteArticle(Long id, UriInfo uriInfo){
 		 
 		 Article article = ad.find(id);
-		 String profilename = HibernateUtil.getUsernameFromURLforComments(uriInfo);
+		 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
     	 
 		 if(ad.IsUserArticleAvailable(profilename, id)){ //if article belongs to the user
 		     ad.delete(article); //delete the article

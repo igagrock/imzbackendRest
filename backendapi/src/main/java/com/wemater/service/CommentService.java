@@ -8,6 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.SessionFactory;
 
+import com.wemater.dao.ArticleDao;
 import com.wemater.dao.CommentDao;
 import com.wemater.dto.Comment;
 import com.wemater.modal.CommentModel;
@@ -20,6 +21,7 @@ public class CommentService {
 	private  final SessionFactory sessionfactory;
     private final SessionUtil su;
     private final CommentDao cd;
+    private final ArticleDao ad;
    
    
  
@@ -27,6 +29,7 @@ public class CommentService {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.cd = new CommentDao(su);
+		this.ad = new ArticleDao(su);
 	  
 	}
 
@@ -43,7 +46,7 @@ public class CommentService {
   //2: get one Comments of User
 	public CommentModel getOneuserComment(long commentId, UriInfo uriInfo){
 
-   	  String profilename = HibernateUtil.getUsernameFromURLforComments(uriInfo);
+   	  String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
    	   
    	 if(cd.IsUserCommentAvailable(profilename, commentId))
    	  return transformCommentToModelForUser(cd.getCommentOfUserByNamedQuery(profilename, commentId),uriInfo);
@@ -64,8 +67,10 @@ public class CommentService {
     
     //4: get one Comments of article // do editing here
     public CommentModel getOneArticleComment(long commentId, UriInfo uriInfo){
-   	      	 Long articleId = HibernateUtil.getArticleIdFromURLforComments(uriInfo);
-   	      	 if(cd.IsArticleCommentAvailable(commentId, articleId)){
+   	      	 Long articleId = HibernateUtil.getArticleIdFromURLforComments(3,uriInfo);
+   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	      	 if(cd.IsArticleCommentAvailable(commentId, articleId)
+   	      			&& ad.IsUserArticleAvailable(profilename, articleId) ){
    	      	 return transformCommentToModelForArticle(
    	      			          cd.getCommentOfArticleByNamedQuery(articleId, commentId), uriInfo);
    	      	 }

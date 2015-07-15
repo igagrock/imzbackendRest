@@ -76,15 +76,15 @@ public class HibernateUtil {
 	 
 	 
 		
-	public static String getUsernameFromURLforComments(UriInfo uriInfo) {
+	public static String getUsernameFromURLforComments(int index,UriInfo uriInfo) {
 		     
 			   String url = uriInfo.getAbsolutePath().toString();
 		   	   String[] tokens = url.split("/");
 		       
-		   	   return tokens[tokens.length -3];
+		   	   return tokens[tokens.length -index];
 		       
 	}	 
-	public static Long getArticleIdFromURLforComments(UriInfo uriInfo) {
+	public static Long getArticleIdFromURLforComments(int index,UriInfo uriInfo) {
 	     
 		   String url = uriInfo.getAbsolutePath().toString();
 	   	   String[] tokens = url.split("/");
