@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 
+import com.wemater.dao.PublicDao;
 import com.wemater.dto.Article;
 import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ArticleModel;
@@ -20,19 +21,64 @@ import com.wemater.util.SessionUtil;
 
 public class PublicService implements Runnable {
 
-	 private  final SessionFactory sessionfactory;
-	 private final SessionUtil su;
+	private  final SessionFactory sessionfactory;
+    private final SessionUtil su;
+    private final PublicDao pd;
 	 
 	 private static List<Article> LatestArticles = new ArrayList<Article>();
+	 private static List<Article> trendingArticles = new ArrayList<Article>();
+	 private static List<Article> quickReadArticles = new ArrayList<Article>();
+	 private static List<Article> exploreArticles = new ArrayList<Article>();
+	 private int start;
+	 private int size;
+	 
 	
 	public PublicService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
+		this.pd = new PublicDao(su);
 	}
 
 	
 	
+  
+	public int getStart() {
+		return start;
+	}
 
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+
+
+
+	public static List<Article> getExploreArticles() {
+		return exploreArticles;
+	}
+
+	public static void setExploreArticles(List<Article> exploreArticles) {
+		PublicService.exploreArticles = exploreArticles;
+	}
+
+
+	public static List<Article> getQuickReadArticles() {
+		return quickReadArticles;
+	}
+
+	public static void setQuickReadArticles(List<Article> quickReadArticles) {
+		PublicService.quickReadArticles = quickReadArticles;
+	}
 	public static List<Article> getLatestArticles() {
 		return LatestArticles;
 	}
@@ -43,35 +89,32 @@ public class PublicService implements Runnable {
 	}
 	
 	
+	
+	
+	public static List<Article> getTrendingArticles() {
+		return trendingArticles;
+	}
+
+
+
+
+	public static void setTrendingArticles(List<Article> trendingArticles) {
+		PublicService.trendingArticles = trendingArticles;
+	}
+
+
+
+
 	@Override
-	public void run() { setLatestArticles(fetchLatestArticles()); }
+	public void run() { 
+		setLatestArticles(pd.fetchLatestArticles());
+	    setTrendingArticles(pd.fetchTrendingArticles());	
+	    setQuickReadArticles(pd.fetchQuickReadArticles());
+	    setExploreArticles(pd.fetchExploreArticles(getStart(), getSize()));
+	}
 
 
-	@SuppressWarnings({ "unchecked" })
-    private List<Article> fetchLatestArticles(){
-    	
-		List<Article> articleList = null;
-    	try {
-			su.beginSessionWithTransaction();
-			
-			articleList = su.getSession().createCriteria(Article.class)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-		 			.setFirstResult(1)
-		 			.setFetchSize(10)
-		            .addOrder(Order.desc("date"))
-		            .list();			
-			
-			
-			su.CommitCurrentTransaction();
-		
-			
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-		return articleList;
-    }
+	
 	
 	
 	
@@ -82,6 +125,29 @@ public class PublicService implements Runnable {
 		
 	}
 	
+	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo){
+	      System.out.println("articles found from list");
+	   return transformArticlesToModels(getTrendingArticles(), uriInfo);
+	
+	
+	}
+
+	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo){
+	      System.out.println("articles found from list");
+	   return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+	
+	}
+	
+	//do tomarrow and use the map for it to get all the articles or 
+	//think again about how do you want to get articles in the list
+	//
+	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start, int size){
+	      System.out.println("articles found from list");
+	      this.setStart(start);
+	      this.setSize(size);
+	   return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+	
+	}
 	
 	
 	

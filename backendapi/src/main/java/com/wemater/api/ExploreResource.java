@@ -6,10 +6,12 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.ArticleModel;
@@ -36,11 +38,17 @@ public class ExploreResource {
 	
 	@GET
 	@Path("/trending")
-	public String getTrendingArticles()
-	{   //eqaual to top stories
-		return "here in trending articles";
+	public Response getTrendingArticles(@Context UriInfo uriInfo)
+	{   
+		GenericEntity<List<ArticleModel>> entity = 
+				new GenericEntity<List<ArticleModel>>(service.getTrendingArticleModels(uriInfo)){};
+		return Response.ok(entity).build();
 		   
-	}   
+	}  
+	
+	
+	
+	
 	@GET
 	@Path("/latest")
 	public Response getLatestArticles(@Context UriInfo uriInfo)
@@ -53,16 +61,20 @@ public class ExploreResource {
 	}
 	@GET
 	@Path("/reads")
-	public String getQuickReadArticles()
+	public Response getQuickReadArticles(@Context UriInfo uriInfo)
 	{
-		return "here in quickread articles";
+		GenericEntity<List<ArticleModel>> entity = 
+				new GenericEntity<List<ArticleModel>>(service.getQuickReadArticleModels(uriInfo)){};
+		
+		return Response.ok(entity).build();
 		
 	}
 	@GET
 	@Path("/explore")
-	public String exploreArticles()
+	public String exploreArticles(@Context UriInfo uriInfo,@QueryParam("start") int start,
+			                           @QueryParam("size") int size )
 	{
-		return "here in explore articles";
+		return "queryparams are :start "+start+" :: size"+size ;
 		
 	}
 	
