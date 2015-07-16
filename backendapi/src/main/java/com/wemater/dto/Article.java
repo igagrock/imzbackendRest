@@ -118,7 +118,9 @@ public class Article {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-	@Column(name="DATE") @Temporal(TemporalType.DATE) public Date getDate() {
+	
+	@Column(name="DATE") @Temporal(TemporalType.DATE) 
+	public Date getDate() {
 		return date;
 	}
 	public void setDate(Date date) {
