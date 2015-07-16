@@ -1,12 +1,14 @@
 package com.wemater.util;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 
 import com.wemater.dto.Article;
+import com.wemater.service.PublicService;
 
 
 
@@ -14,7 +16,7 @@ import com.wemater.dto.Article;
 public class Runner {
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	public static void main(String[] args) {
 	 
 		       //BasicConfigurator.configure();
@@ -22,30 +24,25 @@ public class Runner {
 	          SessionFactory sf = HibernateUtil.getSessionFactory();
 	          SessionUtil su = new SessionUtil(sf.openSession());
 	          
-	        
+	          final PublicService service = new PublicService();
+	          
+	          HibernateUtil.StartExecutorService(service);
 	          
 	  
 	        		    
-	          
-	          try {
-	        	  su.beginSessionWithTransaction();
-		          
-	        	 List<Article> list = su.getSession().createCriteria(Article.class)
-	        			 			.setMaxResults(7)
-	        			            .addOrder(Order.desc("date"))
-	        			            .list();
-	        			             
-		          su.CommitCurrentTransaction();
-	        	  
-			} catch (HibernateException e) {
-				su.rollBackCurrentTransaction();
-				throw e;
+	     ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
+	     exec.scheduleAtFixedRate(new Runnable() {
+			
+			@Override
+			public void run() {
 				
-			}finally{
-				 sf.close();
-			}
-	          
-	          
+			  	
+			   List<Article> list = service.getLatestArticles();	
+			   
+			   for (Article ar : list) {
+				System.out.println(ar.getTitle());
+				System.out.println(ar.getDate());
+			}}}, 1, 1, TimeUnit.SECONDS);
         
         
 	

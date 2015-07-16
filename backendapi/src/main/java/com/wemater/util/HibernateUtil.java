@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.core.UriInfo;
 
@@ -20,6 +23,8 @@ public class HibernateUtil {
 	
 	private static SessionFactory sessionFactory;
 	private static final Logger logger= Logger.getLogger(HibernateUtil.class);
+	private static final int START_TIME = 1;
+	private static final int DELAY = 3600*12;
 	
 	private static SessionFactory buildSessionFactory()
 	{
@@ -92,5 +97,15 @@ public class HibernateUtil {
 	   	   return Long.valueOf(tokens[tokens.length -index]);
 	       
 }
+	
+	public static void StartExecutorService(Runnable task){
+		
+		     
+		    ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+		    executor.scheduleWithFixedDelay(task, START_TIME, DELAY, TimeUnit.SECONDS);
+		
+		
+	}
+	
 
 }
