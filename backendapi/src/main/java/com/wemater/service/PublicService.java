@@ -8,6 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 
 import com.wemater.dto.Article;
@@ -54,7 +55,9 @@ public class PublicService implements Runnable {
 			su.beginSessionWithTransaction();
 			
 			articleList = su.getSession().createCriteria(Article.class)
-		 			.setMaxResults(10)
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+		 			.setFirstResult(1)
+		 			.setFetchSize(10)
 		            .addOrder(Order.desc("date"))
 		            .list();			
 			
@@ -73,7 +76,7 @@ public class PublicService implements Runnable {
 	
 	
 	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo){
-		
+		      System.out.println("articles found from list");
 		   return transformArticlesToModels(getLatestArticles(), uriInfo);
 		
 		

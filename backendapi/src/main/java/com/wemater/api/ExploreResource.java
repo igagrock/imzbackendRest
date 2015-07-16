@@ -14,7 +14,6 @@ import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.ArticleModel;
 import com.wemater.service.PublicService;
-import com.wemater.util.HibernateUtil;
 
 
 @Path("public")
@@ -22,7 +21,7 @@ import com.wemater.util.HibernateUtil;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ExploreResource {
 	
-	private PublicService service ;
+	private PublicService service;
 	
 
 	
