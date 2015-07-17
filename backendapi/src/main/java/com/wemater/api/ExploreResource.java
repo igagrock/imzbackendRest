@@ -11,7 +11,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.ArticleModel;
@@ -28,7 +27,6 @@ public class ExploreResource {
 
 	
 	public ExploreResource() {
-		super();
 		this.service = new PublicService();
 	}
 	
