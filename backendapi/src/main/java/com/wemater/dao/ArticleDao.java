@@ -42,15 +42,46 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 	public List<Article> findByTag(String tag) {
 		
 		String articlesByTag = "from Article as article where :tag in elements(article.tags)";
-		return sessionUtil
-				.getSession()
-				.createQuery(articlesByTag) 
-		                                 .setParameter("tag", tag)
-		                                 .list();
+		List<Article> articles = null;
+        try {
+			
+			sessionUtil.beginSessionWithTransaction();
+			articles = sessionUtil
+					.getSession()
+					.createQuery(articlesByTag) 
+			                                 .setParameter("tag", tag)
+			                                 .list();
+			
+			sessionUtil.CommitCurrentTransaction();
+			
+			if(articles.isEmpty()) throw new DataNotFoundException("404", "No articles found with this tag");
+			return articles;
+			
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+	
 		
 	}
 
-	
+	//util method to send the likes. using setlikes doubles the count coz of hibernate proxy
+		public void addLikes(int likes,Article article){
+			
+			try {
+				sessionUtil.beginSessionWithTransaction();
+				if(article != null)
+				 article.setLikes(likes);
+				else throw new DataNotFoundException("404", "likes cant be set- article not found");
+				
+				sessionUtil.CommitCurrentTransaction();
+				
+			} catch (HibernateException e) {
+				sessionUtil.rollBackCurrentTransaction();
+				throw new EvaluateException(e);
+			}
+			
+		}
 	
 
 	public Article getArticleOfUserByNamedQuery(String username, long articleId){

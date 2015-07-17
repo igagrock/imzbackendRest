@@ -137,10 +137,7 @@ public class Article {
 		this.likes = likes;
 		
 	}
-	//util method to send the likes. using setlikes doubles the count coz of hibernate proxy
-	public void sendLike(int like){
-		this.likes = this.getLikes()+like;
-	}
+	
 	@Column(name="COMMENT_COUNT")
 	public int getCommentCount() {
 		return commentCount;

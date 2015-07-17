@@ -105,6 +105,8 @@ public class PublicDao {
 		}
 		return articleList;
     }
+
+	
 	
 	@SuppressWarnings({ "unchecked" })
     public List<Article> fetchExploreArticles(int start,int size){

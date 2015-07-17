@@ -1,14 +1,9 @@
 package com.wemater.util;
 
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.hibernate.SessionFactory;
 
+import com.wemater.dao.ArticleDao;
 import com.wemater.dto.Article;
-import com.wemater.service.PublicService;
 
 
 
@@ -23,10 +18,24 @@ public class Runner {
 		       
 	          SessionFactory sf = HibernateUtil.getSessionFactory();
 	          SessionUtil su = new SessionUtil(sf.openSession());
+	          ArticleDao ad = new ArticleDao(su);
 	          
-	          final PublicService service = new PublicService();
+	       
 	          
-	          HibernateUtil.StartExecutorService(service);
+	          Article article  = ad.find(22l);
+	          ad.addLikes(1000, article);
+	       
+	          
+	          
+	          sf.close();
+	          
+	          
+	          
+	          
+	       /*
+	        * final PublicService service = new PublicService();
+	        * 
+	        *    HibernateUtil.StartExecutorService(service);
 	          
 	  
 	        		    
@@ -44,6 +53,7 @@ public class Runner {
 			
 			}}}, 1, 10, TimeUnit.SECONDS);
         
+	        */
         
 	
 	}
