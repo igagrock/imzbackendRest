@@ -1,9 +1,15 @@
 package com.wemater.util;
 
-import org.hibernate.SessionFactory;
+import java.util.List;
 
-import com.wemater.dao.ArticleDao;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+
 import com.wemater.dto.Article;
+
+
+
 
 
 
@@ -12,50 +18,40 @@ public class Runner {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 	 
-		       //BasicConfigurator.configure();
-		       
-	          SessionFactory sf = HibernateUtil.getSessionFactory();
-	          SessionUtil su = new SessionUtil(sf.openSession());
-	          ArticleDao ad = new ArticleDao(su);
-	          
-	       
-	          
-	          Article article  = ad.find(22l);
-	          ad.addLikes(1000, article);
-	       
-	          
-	          
-	          sf.close();
-	          
-	          
-	          
-	          
-	       /*
-	        * final PublicService service = new PublicService();
-	        * 
-	        *    HibernateUtil.StartExecutorService(service);
-	          
-	  
-	        		    
-	     ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
-	     exec.scheduleAtFixedRate(new Runnable() {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		SessionUtil su = new SessionUtil(sf.openSession());
+		
+		
+		try {
+			su.beginSessionWithTransaction();
 			
-			@Override
-			public void run() {
-				
-			  	
-			   List<Article> list =PublicService.getQuickReadArticles();	
-			   
-			   for (Article ar : list) {
-				System.out.println(ar.getLikes() +" :: "+ar.getCommentCount());
+			List<Article> articles = su.getSession()
+					 .createQuery("from Article as article order by article.date desc")
+		            .list();
 			
-			}}}, 1, 10, TimeUnit.SECONDS);
-        
-	        */
-        
-	
+			su.CommitCurrentTransaction();
+			int i =0;
+			for (Article article : articles) {
+				System.out.println((++i)+" :: "+article.getId()+" :: "+article.getTitle() +" :: "+article.getLikes());
+			}
+			
+		} catch (HibernateException e) {
+			
+			su.rollBackCurrentTransaction();
+			e.printStackTrace();
+			
+		}finally{sf.close();}
+		
+		
+		
+		
+		
+	      
+	 
+	    
 	}
 	
 	

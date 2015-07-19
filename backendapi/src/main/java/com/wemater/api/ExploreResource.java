@@ -69,10 +69,12 @@ public class ExploreResource {
 	}
 	@GET
 	@Path("/explore")
-	public String exploreArticles(@Context UriInfo uriInfo,@QueryParam("start") int start,
-			                           @QueryParam("size") int size )
+	public Response exploreArticles(@Context UriInfo uriInfo,@QueryParam("start") int start)
 	{
-		return "queryparams are :start "+start+" :: size"+size ;
+		GenericEntity<List<ArticleModel>> entity = 
+				new GenericEntity<List<ArticleModel>>(service.getExploreArticleModels(uriInfo, start)){};
+		
+		return Response.ok(entity).build();
 		
 	}
 	

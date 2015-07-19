@@ -3,8 +3,6 @@ package com.wemater.dao;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Order;
 
 import com.wemater.dto.Article;
 import com.wemater.exception.EvaluateException;
@@ -36,10 +34,9 @@ public class PublicDao {
     	try {
 			su.beginSessionWithTransaction();
 			
-			articleList = su.getSession().createCriteria(Article.class)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-					.setMaxResults(30)
-		            .addOrder(Order.desc("date"))
+			articleList = su.getSession()
+					.createQuery("from Article as article order by article.date desc")
+					.setMaxResults(10)
 		            .list();			
 			
 			
@@ -61,10 +58,9 @@ public class PublicDao {
     	try {
 			su.beginSessionWithTransaction();
 			
-			articleList = su.getSession().createCriteria(Article.class)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-		 			.addOrder(Order.desc("likes"))
-		            .setMaxResults(10)
+			articleList = su.getSession()
+					.createQuery("from Article as article order by article.likes desc")
+		            .setMaxResults(4)
 		 			.list();			
 			
 			
@@ -87,11 +83,9 @@ public class PublicDao {
     	try {
 			su.beginSessionWithTransaction();
 			
-			articleList = su.getSession().createCriteria(Article.class)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-		 			.addOrder(Order.desc("likes"))
-		 			.addOrder(Order.desc("commentCount"))
-		            .setMaxResults(5)
+			articleList = su.getSession()
+					.createQuery("from Article as article order by article.commentCount desc")
+		            .setMaxResults(2)
 		 			.list();			
 			
 			
@@ -107,24 +101,23 @@ public class PublicDao {
     }
 
 	
-	
+	//do it again
 	@SuppressWarnings({ "unchecked" })
-    public List<Article> fetchExploreArticles(int start,int size){
+    public List<Article> fetchExploreArticles(){
+		System.out.println("fetchexplorearticles again.. ");
     	
 		List<Article> articleList = null;
-    	try {
+        final int SIZE =5;
+			try {
 			su.beginSessionWithTransaction();
 			
-			articleList = su.getSession().createCriteria(Article.class)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-					.setFirstResult(start)
-					.setMaxResults(size*3)
-		            .list();			
-			
+			 articleList = su.getSession()
+					 .createQuery("from Article as article order by article.date desc")
+					 .setMaxResults(SIZE)
+		            .list();		
 			
 			su.CommitCurrentTransaction();
 		
-			
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
@@ -133,6 +126,31 @@ public class PublicDao {
 		return articleList;
     }
 	
+	@SuppressWarnings("unchecked")
+	public List<Article> fetchAgainExploreArticles(int start){
+		System.out.println("fetchexplorearticles  ");
+    	
+		List<Article> articleList = null;
+        final int SIZE =5;
+			try {
+			su.beginSessionWithTransaction();
+			
+			 articleList = su.getSession()
+					 .createQuery("from Article as article order by article.date desc")
+					 .setFirstResult(start)
+					 .setMaxResults(SIZE)
+		            .list();		
+			
+			su.CommitCurrentTransaction();
+		
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+			
+		}
+		return articleList;
+    }
+
 	
 
 }

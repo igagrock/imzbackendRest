@@ -24,7 +24,7 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	private static final Logger logger= Logger.getLogger(HibernateUtil.class);
 	private static final int START_TIME = 1;
-	private static final int DELAY = 3600*12;
+	private static final int DELAY = 3600;
 	
 	private static SessionFactory buildSessionFactory()
 	{

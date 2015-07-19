@@ -6,14 +6,10 @@ import java.util.List;
 
 import javax.ws.rs.core.UriInfo;
 
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Order;
 
 import com.wemater.dao.PublicDao;
 import com.wemater.dto.Article;
-import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ArticleModel;
 import com.wemater.modal.Link;
 import com.wemater.util.HibernateUtil;
@@ -29,8 +25,7 @@ public class PublicService implements Runnable {
 	 private static List<Article> trendingArticles = new ArrayList<Article>();
 	 private static List<Article> quickReadArticles = new ArrayList<Article>();
 	 private static List<Article> exploreArticles = new ArrayList<Article>();
-	 private int start;
-	 private int size;
+	 
 	 
 	
 	public PublicService() {
@@ -42,35 +37,16 @@ public class PublicService implements Runnable {
 	
 	
   
-	public int getStart() {
-		return start;
-	}
-
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-
-
-
+	
+	
 	public static List<Article> getExploreArticles() {
 		return exploreArticles;
 	}
 
+
 	public static void setExploreArticles(List<Article> exploreArticles) {
 		PublicService.exploreArticles = exploreArticles;
 	}
-
 
 	public static List<Article> getQuickReadArticles() {
 		return quickReadArticles;
@@ -110,13 +86,9 @@ public class PublicService implements Runnable {
 		setLatestArticles(pd.fetchLatestArticles());
 	    setTrendingArticles(pd.fetchTrendingArticles());	
 	    setQuickReadArticles(pd.fetchQuickReadArticles());
-	    setExploreArticles(pd.fetchExploreArticles(getStart(), getSize()));
+	    setExploreArticles(pd.fetchExploreArticles());
 	}
 
-
-	
-	
-	
 	
 	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo){
 		      System.out.println("articles found from list");
@@ -140,19 +112,26 @@ public class PublicService implements Runnable {
 	
 	//do tomarrow and use the map for it to get all the articles or 
 	//think again about how do you want to get articles in the list
-	//
-	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start, int size){
-	      System.out.println("articles found from list");
-	      this.setStart(start);
-	      this.setSize(size);
-	   return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+	// DO IT AGAIN --again
+	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start){
+	        
+		    System.out.println("articles found from list");
+		    	List<Article> articles = null;
+		        int SIZE = 5;
+	        
+			 articles = getExploreArticles();
+			         
+		     if(start > SIZE)
+			 articles = pd.fetchAgainExploreArticles(start);
+	        
+		     
+	       return transformArticlesToModels(articles, uriInfo);
 	
 	}
 	
 	
 	
-//service related methods
-	
+    //service related methods
 	private List<ArticleModel> transformArticlesToModels(List<Article> articles, UriInfo uriInfo) {  
    	 List<ArticleModel> models = new ArrayList<ArticleModel>();
    	   
