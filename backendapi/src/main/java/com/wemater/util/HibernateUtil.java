@@ -12,10 +12,13 @@ import java.util.concurrent.TimeUnit;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+
+import com.wemater.exception.EvaluateException;
 
 //creation of singleton for creating the Sessionfactory object
 public class HibernateUtil {
@@ -39,18 +42,18 @@ public class HibernateUtil {
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 											.applySettings(configuration.getProperties()).build();
 			
-			  //System.out.println("Hibernate serviceRegistry created\n");
+			  System.out.println("Hibernate serviceRegistry created\n");
 			   logger.info( "Hibernate serviceRegistry created");  
 			
 			    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 			
 			
-		}catch(Exception ex)
+		}catch(HibernateException ex)
 		{
 			logger.error("intitial session factory creation failed"+ex);
 			if(sessionFactory != null) sessionFactory.close();
 			
-			throw new ExceptionInInitializerError();
+			throw new EvaluateException(ex);
 			
 		}
 		return sessionFactory;

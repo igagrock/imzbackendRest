@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.UserModel;
-import com.wemater.service.AuthService;
 import com.wemater.service.UserService;
 
 @Path("users")
@@ -28,13 +27,13 @@ import com.wemater.service.UserService;
 public class UserResource {
   
 	  private UserService service;
-	  private AuthService authService;
+
     
 	
 	  
 	public UserResource() {
 		this.service = new UserService();
-		this.authService = new AuthService();
+		
 	}
 
 
@@ -69,7 +68,7 @@ public class UserResource {
 			                                 UserModel model, 
 			                                 @Context UriInfo uriInfo){
 	
-	      authService.isUserAuthenticated(authparam);	    
+	    	    
 		return Response.ok(service.updateUser(profilename, model, uriInfo)).build();
 		
 	}
@@ -78,7 +77,7 @@ public class UserResource {
 	@Path("/{profileName}")
 	public Response deleteUser(@HeaderParam("auth") String authparam,@PathParam("profileName") String profilename,@Context UriInfo uriInfo){
 		
-		authService.isUserAuthenticated(authparam);
+	
 		service.deleteUser(profilename);
 		return Response.ok().build();
 		

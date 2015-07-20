@@ -17,8 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 
-@Table(name="USER")
-@Entity
+
 
 
 @NamedQueries(value = { 
@@ -28,11 +27,13 @@ import org.hibernate.annotations.NaturalId;
 	   		+ "inner join user.articles as article on article.id = :id "),
 	   		
 	   @NamedQuery(name = "user.IsUserCommentAvailable", query = "select user.username from User as user"
-	   		+ " inner join user.comments as comment on comment.id = :id  ")
-	   		   
+	   		+ " inner join user.comments as comment on comment.id = :id  "),
+	   @NamedQuery(name = "user.IsUserAvailable", query = "from User as user "
+	   		+ "where user.username = :username and user.password = :password ")		
+	  
 })
-
-
+@Table(name="USER")
+@Entity
 public class User {
     
 	
