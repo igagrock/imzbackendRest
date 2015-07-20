@@ -168,7 +168,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			 
 			 int value = Collections.binarySearch(usernames, username);
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataForbiddenException("404", "User '"+username+"' is not author of this article");
+			 else throw new DataForbiddenException("403", "User '"+username+"' is not author of this article");
 			   
 			   
 		} catch (HibernateException e) {
@@ -190,7 +190,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			    User user = article.getUser(); //get the user
 			    int count = user.getArticleCount(); //get count of articles
 			    //throw exception if no articles written
-			    if(count == 0) throw new DataNotInsertedException("40o", "No articles written by User "
+			    if(count == 0) throw new DataNotFoundException("404", "No articles written by User "
 			                                           +user.getUsername());
 			    
 			    sessionUtil.beginSessionWithTransaction();

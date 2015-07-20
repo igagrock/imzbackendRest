@@ -1,12 +1,11 @@
 package com.wemater.api;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -38,10 +37,14 @@ public class ArticleResource {
 
 
 	@GET
-	public Response getArticles(@PathParam("profileName") String profilename,@Context UriInfo uriInfo) {
+	public Response getArticles(
+			@HeaderParam("Authorization") String authString,  
+			@PathParam("profileName") String profilename,
+			 @Context UriInfo uriInfo) {
 	 		
 		GenericEntity<List<ArticleModel>> entity = 
-				new GenericEntity<List<ArticleModel>>(service.getAllArticlesWithNoContent(profilename, uriInfo)){};
+				new GenericEntity<List<ArticleModel>>(
+						service.getAllArticlesWithNoContent(authString,profilename, uriInfo)){};
 		
 		return Response.ok(entity).build();
 	}
@@ -50,6 +53,7 @@ public class ArticleResource {
 	@GET
 	@Path("/{articleId}")
 	public Response getArticle(@PathParam("articleId") Long Id, @Context UriInfo uriInfo)  {
+		//No authentication here coz anyone should see an article
 		return Response.ok(service.getArticleWithFullContent(Id, uriInfo)).build();
 
 	}
@@ -57,28 +61,35 @@ public class ArticleResource {
 	
 
 	@POST
-	public Response postArticle(@PathParam("profileName") String profilename,
-			                                     ArticleModel model, @Context UriInfo uriInfo) {
+	public Response postArticle(
+								@HeaderParam("Authorization") String authString,
+								@PathParam("profileName") String profilename,
+								ArticleModel model, 
+								@Context UriInfo uriInfo) {
 	 		
 		return Response.status(Status.CREATED)
-				       .entity(service.postArticle(profilename, model, uriInfo))
+				       .entity(service.postArticle(authString,profilename, model, uriInfo))
 				       .build();
 	}
 	
 	@PUT
 	@Path("/{articleId}")
-	public Response updateArticle(@PathParam("articleId") Long Id, 
+	public Response updateArticle(
+						@HeaderParam("Authorization") String authString,
+			            @PathParam("articleId") Long Id, 
 			            ArticleModel model, @Context UriInfo uriInfo)  {
-		return Response.ok(service.updateArticle(Id, model, uriInfo)).build();
+		return Response.ok(service.updateArticle(authString,Id, model, uriInfo)).build();
 
 	}
 	@DELETE
 	@Path("/{articleId}")
-	public Response deteArticle(@PathParam("articleId") Long Id, 
-			             @Context UriInfo uriInfo) throws IOException, SQLException {
+	public Response deteArticle(
+						 @HeaderParam("Authorization") String authString,
+						 @PathParam("articleId") Long Id, 
+			             @Context UriInfo uriInfo) {
 		
-		service.deleteArticle(Id, uriInfo);
-		return Response.ok().build();
+		service.deleteArticle(authString,Id, uriInfo);
+		return Response.noContent().build();
 
 	}
 	

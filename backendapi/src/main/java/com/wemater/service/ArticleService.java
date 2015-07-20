@@ -17,6 +17,7 @@ import com.wemater.dto.User;
 import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ArticleModel;
 import com.wemater.modal.Link;
+import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
@@ -26,6 +27,7 @@ public class ArticleService {
 	    private final SessionUtil su;
 	    private final ArticleDao ad;
 	    private final UserDao ud;
+	    private final AuthUtil au;
 	   
 	   
 	 
@@ -34,22 +36,24 @@ public class ArticleService {
 			this.su = new SessionUtil(sessionfactory.openSession());
 			this.ad = new ArticleDao(su);
 			this.ud = new UserDao(su);
+			this.au = new AuthUtil(su);
 		  
 		}  
 		
 		//here we need sql query
 		//get all articles
-	     public List<ArticleModel> getAllArticlesWithNoContent(String profname, UriInfo uriInfo){
+	     public List<ArticleModel> getAllArticlesWithNoContent(String authString,String profilename, UriInfo uriInfo){
 	    	     	 
+	    	 au.isUserAuthenticated(authString, profilename);
 	    	 //authentic check user is same as others
-	    	  return transformArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profname), uriInfo);
+	    	  return transformArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profilename), uriInfo);
 	     }
   
 	
 		//get each article
 	     public ArticleModel getArticleWithFullContent(long Id,UriInfo uriInfo) {
 	    	 //if this is your article get it.
-	    	 //auth here
+	    	 //No auth here
 	    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
 	    	  ad.find(Id);// check if article present
 	    	 
@@ -58,27 +62,30 @@ public class ArticleService {
 	    	 else return null;
 		 }
 	     
-	   public ArticleModel postArticle(String profilename,ArticleModel model, UriInfo uriInfo){
-		   
-		  //auth here
-		   User user = ud.find(profilename); //get the related user or throw exception
-		   
-		   Article article = ad.createArticle(model, user); //create the article with user attached
+	   public ArticleModel postArticle(String authString,String profilename,
+			                           ArticleModel model, UriInfo uriInfo){
+		 //auth here
+		   au.isUserAuthenticated(authString, profilename);
 		  
+		   User user = ud.find(profilename); //get the related user or throw exception
+		   Article article = ad.createArticle(model, user); //create the article with user attached
 		   Long id = ad.save(article); // save the article. if not saved -- throws exception
-		   
+		  
 		   return transformFullArticleToModel(ad.find(id), uriInfo); //return the article model
 	   }
 	     
-	 public ArticleModel updateArticle(Long id, ArticleModel model, UriInfo uriInfo){
+	 public ArticleModel updateArticle(String authString,Long id, ArticleModel model, UriInfo uriInfo){
 		 
-		 Article article = ad.find(id);
+		
 		 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
-    	 
+		 //auth here
+		  au.isUserAuthenticated(authString, profilename); 
+		
 		 if(ad.IsUserArticleAvailable(profilename, id)){
-			 
+			 Article article = ad.find(id);
 		     article = ad.updateArticleValues(article, model);
 		     ad.update(article);
+		     
 		     return transformFullArticleToModel(ad.find(id), uriInfo);
 	     
     	 }
@@ -86,12 +93,14 @@ public class ArticleService {
     	 
 	 }   
 	 
-   public void deleteArticle(Long id, UriInfo uriInfo){
+   public void deleteArticle(String authString,Long id, UriInfo uriInfo){
 		 
-		 Article article = ad.find(id);
 		 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
-    	 
+		 //auth here
+    	 au.isUserAuthenticated(authString, profilename);
+		 
 		 if(ad.IsUserArticleAvailable(profilename, id)){ //if article belongs to the user
+			 Article article = ad.find(id);
 		     ad.delete(article); //delete the article
 		     ad.decrementArticleCount(article); //decrement the articlecount of user
 	     

@@ -99,7 +99,8 @@ public class CommentService {
    	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){
    	      	 
    	      		 Comment comment = cd.find(commentId);
-   	      		 cd.delete(comment);
+   	      		 cd.delete(comment); 
+   	      		 cd.decrementCommentCount(comment);
    	      		 
    	      	 }
    	      	

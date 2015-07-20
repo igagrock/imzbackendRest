@@ -10,6 +10,7 @@ import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
+import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.util.SessionUtil;
 
@@ -232,7 +233,30 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 	}
 	
 	
-	
+	 public void decrementCommentCount(Comment comment){
+		   
+		   try {
+			    User user = comment.getUser(); //get the user
+			    Article article = comment.getArticle();
+			    int userCommentCount = user.getCommentCount(); //get count of comments
+			    int articleCommentCount = article.getCommentCount();
+			    //throw exception if no articles written
+			    if(articleCommentCount == 0) throw new DataNotFoundException("404", "No comments article");
+			    if(userCommentCount == 0) throw new DataNotFoundException("404", "No comments written by User "
+                        +user.getUsername());
+			    
+			    sessionUtil.beginSessionWithTransaction();
+			      user.setCommentCount(userCommentCount-1);
+			      article.setCommentCount(articleCommentCount-1);
+			      
+			    sessionUtil.CommitCurrentTransaction();
+			    
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+	         
+		}
+	   }
 
 
 	
