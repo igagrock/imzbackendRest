@@ -73,7 +73,8 @@ public class CommentService {
     
     public CommentModel UpdateUserComment(String authString,long commentId,CommentModel model, UriInfo uriInfo){
 	      	 
-    	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3, uriInfo);
+    	 System.out.println(profilename);
          au.isUserAuthenticated(authString, profilename);
    	    
    	     if( cd.IsUserCommentAvailable(profilename, commentId)){
@@ -92,7 +93,7 @@ public class CommentService {
     //6: delete the comment
     public void deleteUserComment(String authString,long commentId, UriInfo uriInfo){
     	
-   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(3, uriInfo);
    	      	 au.isUserAuthenticated(authString, profilename);
    	      	 
    	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){

@@ -61,12 +61,13 @@ public class UserCommentResource {
 		
 		
 		@DELETE
+		@Path("/{commentId}")
 		public Response deleteComment(  @HeaderParam("Authorization") String authString,
 										@PathParam("commentId") long id,
 										@Context UriInfo uriInfo){
 
 			service.deleteUserComment(authString,id, uriInfo);
-			return Response.ok().build();
+			return Response.noContent().build();
 		}
   
 }

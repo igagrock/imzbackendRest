@@ -32,10 +32,10 @@ public class CommentResource {
 		}
 	
 		@GET
-		public Response getComments(									
+		public Response getComments(
 									@PathParam("articleId") long id,
-									@Context UriInfo uriInfo)
-		{
+									@Context UriInfo uriInfo){
+			
 			
 			GenericEntity<List<CommentModel>> entity = 
 					new GenericEntity<List<CommentModel>>( 
