@@ -41,7 +41,7 @@ public class ArticleResource {
 	public Response getArticles(@PathParam("profileName") String profilename,@Context UriInfo uriInfo) {
 	 		
 		GenericEntity<List<ArticleModel>> entity = 
-				new GenericEntity<List<ArticleModel>>(service.getAllArticlesWithContent(profilename, uriInfo)){};
+				new GenericEntity<List<ArticleModel>>(service.getAllArticlesWithNoContent(profilename, uriInfo)){};
 		
 		return Response.ok(entity).build();
 	}
@@ -50,7 +50,7 @@ public class ArticleResource {
 	@GET
 	@Path("/{articleId}")
 	public Response getArticle(@PathParam("articleId") Long Id, @Context UriInfo uriInfo)  {
-		return Response.ok(service.getArticle(Id, uriInfo)).build();
+		return Response.ok(service.getArticleWithFullContent(Id, uriInfo)).build();
 
 	}
 	

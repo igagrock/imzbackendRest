@@ -21,6 +21,7 @@ public class UserService {
     private final SessionFactory sessionfactory;
     private final SessionUtil su;
     private final UserDao ud;
+
    
    
  
@@ -47,6 +48,7 @@ public class UserService {
   
     public UserModel postUser(UserModel model, UriInfo uriInfo){ 
     	 
+    	     	   
     	   String username = model.getUsername().trim(); //replace the side white spaces
     	   username = username.replaceAll("\\s+","");    //replace extra inside white spaces for one word
     	   model.setUsername(username);
@@ -60,7 +62,7 @@ public class UserService {
         
      
     public UserModel updateUser(String profilename,UserModel model, UriInfo uriInfo){
- 
+    	
     	String profTrimmed = profilename.trim();
     	User user = ud.find(profTrimmed); 
     	 
@@ -69,14 +71,14 @@ public class UserService {
 		 user.setEmail(model.getEmail());//
  
          ud.update(user);  //update the user in the database
-    		 
-        user = ud.find(user.getId()); // get the updated user from database
+    	 user = ud.find(user.getId()); // get the updated user from database
 
     	return transformUserToModel(user, uriInfo);   //return the model of the updated user
  
   }
     
    public void deleteUser(String profilename){
+	      
 	      User user = ud.find(profilename);
 	      ud.delete(user);
    }   
@@ -115,6 +117,9 @@ public class UserService {
 			
 		UserModel model = new UserModel()
 		                  .constructModel(user)
+		                  .addId(user.getId())
+		                  .addUsername(user.getUsername())
+		                  .addEmail(user.getEmail())
 		                  .addArticleCount(user.getArticleCount())
 		                  .addCommentCount(user.getCommentCount())
 	                      .addLinks(self, users,articles,comments);

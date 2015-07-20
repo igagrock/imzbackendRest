@@ -45,14 +45,9 @@ public class ArticleService {
 	    	  return transformArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profname), uriInfo);
 	     }
   
-	     
-	     public List<ArticleModel> getAllArticlesWithContent(String profname, UriInfo uriInfo){
-	     	 //auth here
-	    	  return transformFullArticlesToModels(ad.getAllArticlesOfUserByNamedQuery(profname), uriInfo);
-	     }
-		  //
+	
 		//get each article
-	     public ArticleModel getArticle(long Id,UriInfo uriInfo) {
+	     public ArticleModel getArticleWithFullContent(long Id,UriInfo uriInfo) {
 	    	 //if this is your article get it.
 	    	 //auth here
 	    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
@@ -104,7 +99,10 @@ public class ArticleService {
 		
     	 
 	 }
-	     
+	   
+   
+   
+   
 		
 	///transformation service here
 	     
@@ -122,19 +120,7 @@ public class ArticleService {
 	     
 	     }
 	     
-	 
-			private List<ArticleModel> transformFullArticlesToModels(List<Article> articles, UriInfo uriInfo) {  
-		    	 List<ArticleModel> models = new ArrayList<ArticleModel>();
-		    	   
-		    	 for (Iterator<Article> iterator = articles.iterator(); iterator.hasNext();) {
-					Article article = (Article) iterator.next();
-					models.add( transformArticleToModel(article, uriInfo));
-					
-				}
-		    	return models;
-		    	 
-		     
-		     }
+
 	     
 	     
 		//transform content of article to its model
@@ -198,6 +184,7 @@ public class ArticleService {
 					                  .addContent(article.returnContentString())
 					                  .addImage(article.returnImageString())
 					                  .addTags(article.getTags())
+					                  .addUser(article.getUser(), true, false)
 					                  .addLinks(self, articles,comments,user);
 					
 				} catch (IOException | SQLException e) {

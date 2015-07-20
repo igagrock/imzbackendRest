@@ -52,6 +52,7 @@ public class ArticleModel {
 	public void setUserModel(UserModel userModel) {
 		this.userModel = userModel;
 	}
+
 	public long getId() {
 		return id;
 	}

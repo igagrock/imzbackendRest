@@ -31,7 +31,6 @@ public class UserModel {
 		super();
 		
 	}
-	
 	public long getId() {
 		return id;
 	}
@@ -108,14 +107,21 @@ public class UserModel {
 
 		public synchronized UserModel constructModel(User user) {
 			
-			  this.id = user.getId();
-			  this.username = user.getUsername();
 			  this.name = user.getName();
 			  this.bio = user.getBio();
 		
 			 return this;
 		}
+		public synchronized UserModel addUsername(String username){
+			this.username = username;
+			return this;
+			
+		}
 		
+		public synchronized UserModel addId(Long Id){
+			this.id = Id;
+			return this;
+		}
 	    public synchronized UserModel addEmail(String email){
 	    	this.email = email;
 	    	return this;

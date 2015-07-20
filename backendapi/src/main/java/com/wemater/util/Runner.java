@@ -1,55 +1,34 @@
 package com.wemater.util;
 
-import java.util.List;
+import java.util.Base64;
 
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
-
-import com.wemater.dto.Article;
-
-
-
-
-
+import com.wemater.service.AuthService;
 
 
 public class Runner {
 	
-	
-	
-	@SuppressWarnings("unchecked")
+
 	public static void main(String[] args) {
 	 
-		SessionFactory sf = HibernateUtil.getSessionFactory();
-		SessionUtil su = new SessionUtil(sf.openSession());
+	
+	    /* SessionFactory sf = HibernateUtil.getSessionFactory();
+		  SessionUtil su = new SessionUtil(sf.openSession());*/
+	
 		
+	  
+		String username = "sammer";
+		String password = "inotapass";
+		String baseString ="Base "+username+":"+password;
+		byte[] encoded = Base64.getEncoder().encode(baseString.getBytes());
 		
-		try {
-			su.beginSessionWithTransaction();
-			
-			List<Article> articles = su.getSession()
-					 .createQuery("from Article as article order by article.date desc")
-		            .list();
-			
-			su.CommitCurrentTransaction();
-			int i =0;
-			for (Article article : articles) {
-				System.out.println((++i)+" :: "+article.getId()+" :: "+article.getTitle() +" :: "+article.getLikes());
-			}
-			
-		} catch (HibernateException e) {
-			
-			su.rollBackCurrentTransaction();
-			e.printStackTrace();
-			
-		}finally{sf.close();}
+		String encodedinfo = new String(encoded);
 		
+		System.out.println(encodedinfo);
+		AuthService service = new AuthService();
 		
+		service.isUserAuthenticated(encodedinfo);
 		
-		
-		
-	      
+		  
 	 
 	    
 	}
