@@ -36,7 +36,7 @@ public class UserResource {
 		
 	}
 
-
+   //remove this after testing
 	  
 	@GET
 	public Response  getAllUsers( @Context UriInfo uriInfo){
@@ -46,11 +46,15 @@ public class UserResource {
 			return Response.ok(entity).build();
 	}
 	
+	
 	@GET
 	@Path("/{profileName}")
-	public Response getUser(@PathParam("profileName") String profilename, @Context UriInfo uriInfo) {
+	public Response getUser(
+							@HeaderParam("Authorization") String authString,
+							@PathParam("profileName") String profilename,
+							@Context UriInfo uriInfo) {
 		
-		return Response.ok(service.getUser(profilename, uriInfo)).build(); 
+		return Response.ok(service.getUser(authString,profilename, uriInfo)).build(); 
 
 	}
 	
@@ -64,22 +68,27 @@ public class UserResource {
 	
 	@PUT
 	@Path("/{profileName}")
-	public Response updateUser(@HeaderParam("auth") String authparam,@PathParam("profileName") String profilename,
-			                                 UserModel model, 
-			                                 @Context UriInfo uriInfo){
+	public Response updateUser(
+								@HeaderParam("Authorization") String authString,
+								@PathParam("profileName") String profilename,
+								 UserModel model, 
+								 @Context UriInfo uriInfo){
 	
 	    	    
-		return Response.ok(service.updateUser(profilename, model, uriInfo)).build();
+		return Response.ok(service.updateUser(authString,profilename, model, uriInfo)).build();
 		
 	}
 	
 	@DELETE
 	@Path("/{profileName}")
-	public Response deleteUser(@HeaderParam("auth") String authparam,@PathParam("profileName") String profilename,@Context UriInfo uriInfo){
+	public Response deleteUser(
+								@HeaderParam("Authorization") String authString,
+								@PathParam("profileName") String profilename,
+								@Context UriInfo uriInfo){
 		
 	
-		service.deleteUser(profilename);
-		return Response.ok().build();
+		service.deleteUser(authString,profilename);
+		return Response.noContent().build();
 		
 	}
 	

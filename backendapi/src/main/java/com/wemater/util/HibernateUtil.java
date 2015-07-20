@@ -104,7 +104,7 @@ public class HibernateUtil {
 	public static void StartExecutorService(Runnable task){
 		
 		     
-		    ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+		    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		    executor.scheduleWithFixedDelay(task, START_TIME, DELAY, TimeUnit.SECONDS);
 		
 		

@@ -104,7 +104,7 @@ public class PublicDao {
 	//do it again
 	@SuppressWarnings({ "unchecked" })
     public List<Article> fetchExploreArticles(){
-		System.out.println("fetchexplorearticles again.. ");
+		System.out.println("fetchexplorearticles .. ");
     	
 		List<Article> articleList = null;
         final int SIZE =5;
@@ -128,7 +128,7 @@ public class PublicDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Article> fetchAgainExploreArticles(int start){
-		System.out.println("fetchexplorearticles  ");
+		System.out.println("fetchexplorearticles again called here ");
     	
 		List<Article> articleList = null;
         final int SIZE =5;

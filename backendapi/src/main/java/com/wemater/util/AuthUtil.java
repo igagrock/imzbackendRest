@@ -1,4 +1,4 @@
-package com.wemater.service;
+package com.wemater.util;
 
 import java.util.Base64;
 
@@ -7,16 +7,15 @@ import org.hibernate.HibernateException;
 import com.wemater.dto.User;
 import com.wemater.exception.AuthException;
 import com.wemater.exception.EvaluateException;
-import com.wemater.util.SessionUtil;
 
 
 
-public class AuthService {
+public class AuthUtil {
 	
 
     private final SessionUtil su;
     
-	public AuthService(SessionUtil su) { 
+	public AuthUtil(SessionUtil su) { 
 		
 		this.su = su;
 		}  

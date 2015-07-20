@@ -12,6 +12,7 @@ import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
 import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
+import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
@@ -21,7 +22,7 @@ public class UserService {
     private final SessionFactory sessionfactory;
     private final SessionUtil su;
     private final UserDao ud;
-
+    private final AuthUtil au;
    
    
  
@@ -29,6 +30,7 @@ public class UserService {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.ud = new UserDao(su);
+		this.au = new AuthUtil(su);
 	  
 	}   
 	
@@ -41,7 +43,8 @@ public class UserService {
      }
 
      //2: get each user
-     public UserModel getUser(String profileName,UriInfo uriInfo){
+     public UserModel getUser(String authString,String profileName,UriInfo uriInfo){
+    	   au.isUserAuthenticated(authString, profileName);
     	 
     	 return transformUserToModel(ud.find(profileName.trim()), uriInfo);
      }
@@ -61,7 +64,10 @@ public class UserService {
      }
         
      
-    public UserModel updateUser(String profilename,UserModel model, UriInfo uriInfo){
+    public UserModel updateUser(String authString,String profilename,UserModel model, UriInfo uriInfo){
+    	
+    	//authentication first
+    	au.isUserAuthenticated(authString, profilename);
     	
     	String profTrimmed = profilename.trim();
     	User user = ud.find(profTrimmed); 
@@ -69,6 +75,7 @@ public class UserService {
 		 user.setBio(model.getBio()); // update the changes here
 		 user.setName(model.getName()); //
 		 user.setEmail(model.getEmail());//
+		 user.setPassword(model.getPassword());
  
          ud.update(user);  //update the user in the database
     	 user = ud.find(user.getId()); // get the updated user from database
@@ -77,8 +84,10 @@ public class UserService {
  
   }
     
-   public void deleteUser(String profilename){
+   public void deleteUser(String authString,String profilename){
 	      
+	       au.isUserAuthenticated(authString, profilename);
+	         
 	      User user = ud.find(profilename);
 	      ud.delete(user);
    }   

@@ -4,8 +4,6 @@ import java.util.Base64;
 
 import org.hibernate.SessionFactory;
 
-import com.wemater.service.AuthService;
-
 
 public class Runner {
 	
@@ -24,7 +22,7 @@ public class Runner {
 		String encodedAuth = "Base "+new String(encoded);
 		System.out.println(encodedAuth);
 		
-		AuthService service = new AuthService(su);
+		AuthUtil service = new AuthUtil(su);
 		
 		service.isUserAuthenticated(encodedAuth,"sammer");
 	  

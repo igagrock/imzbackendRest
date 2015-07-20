@@ -6,9 +6,7 @@ import javax.servlet.http.HttpServlet;
 import com.wemater.service.PublicService;
 import com.wemater.util.HibernateUtil;
 
-/**
- * Servlet implementation class StartExecutorforArticles
- */
+
 public class StartExecutorforArticles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
