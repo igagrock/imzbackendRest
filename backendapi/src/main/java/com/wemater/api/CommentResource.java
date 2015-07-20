@@ -24,14 +24,19 @@ import com.wemater.service.CommentService;
 public class CommentResource {
 	
 		private CommentService service;
+	
 		
 		public CommentResource() {
 			this.service = new CommentService();
+		
 		}
 	
 		@GET
-		public Response getComments(@PathParam("articleId") long id, @Context UriInfo uriInfo)
+		public Response getComments(									
+									@PathParam("articleId") long id,
+									@Context UriInfo uriInfo)
 		{
+			
 			GenericEntity<List<CommentModel>> entity = 
 					new GenericEntity<List<CommentModel>>( 
 							service.getAllArticleComments(id, uriInfo)){};

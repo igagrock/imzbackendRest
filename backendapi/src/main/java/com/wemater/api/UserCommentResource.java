@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,45 +24,48 @@ import com.wemater.service.CommentService;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserCommentResource {
 	
-	  private CommentService service;
-	    
-		
-	  
+		private CommentService service;
 		public UserCommentResource() {
 			this.service = new CommentService();
 		}
 
-		
-		
+	
 		@GET
-		public Response getCommentsOfuser(@PathParam("profileName") String username, @Context UriInfo uriInfo)
-		{
+		public Response getCommentsOfuser(	@HeaderParam("Authorization") String authString,
+											@PathParam("profileName") String username, 
+											@Context UriInfo uriInfo){
 			GenericEntity<List<CommentModel>> entity = 
-					new GenericEntity<List<CommentModel>>( service.getAlluserComments(username,uriInfo)){};
+					new GenericEntity<List<CommentModel>>( 
+							service.getAlluserComments(authString,username,uriInfo)){};
 			
 			return Response.ok(entity).build();
 		}
 				
 		@GET
 		@Path("/{commentId}")
-		public Response getCommentOfUser(@PathParam("commentId") long id, @Context UriInfo uriInfo)
-		{
-			return Response.ok(service.getOneuserComment(id, uriInfo)).build();
+		public Response getCommentOfUser(	@HeaderParam("Authorization") String authString,
+											@PathParam("commentId") long id,
+											@Context UriInfo uriInfo){
+			return Response.ok(service.getOneuserComment(authString,id, uriInfo)).build();
 		}
 
 		@PUT
 		@Path("/{commentId}")
-		public Response updateComment(@PathParam("commentId") long id,
-				CommentModel model, @Context UriInfo uriInfo){
+		public Response updateComment(  @HeaderParam("Authorization") String authString,
+										@PathParam("commentId") long id,
+										CommentModel model,
+										@Context UriInfo uriInfo){
 
-			return Response.ok(service.UpdateArticleComment(id, model, uriInfo)).build();
+			return Response.ok(service.UpdateUserComment(authString,id, model, uriInfo)).build();
 		}
 		
 		
 		@DELETE
-		public Response deleteComment(@PathParam("commentId") long id, @Context UriInfo uriInfo){
+		public Response deleteComment(  @HeaderParam("Authorization") String authString,
+										@PathParam("commentId") long id,
+										@Context UriInfo uriInfo){
 
-			service.deleteArticleComment(id, uriInfo);
+			service.deleteUserComment(authString,id, uriInfo);
 			return Response.ok().build();
 		}
   

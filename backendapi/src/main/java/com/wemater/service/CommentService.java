@@ -16,6 +16,7 @@ import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.modal.CommentModel;
 import com.wemater.modal.Link;
+import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
@@ -26,6 +27,7 @@ public class CommentService {
     private final CommentDao cd;
     private final ArticleDao ad;
     private final UserDao ud;
+    private final AuthUtil au;
    
    
  
@@ -35,14 +37,17 @@ public class CommentService {
 		this.cd = new CommentDao(su);
 		this.ud = new UserDao(su);
 		this.ad = new ArticleDao(su);
+		this.au = new AuthUtil(su);
 	  
 	}
 
 	
 	//1: get all Comments of User
-    public List<CommentModel> getAlluserComments(String username,UriInfo uriInfo){
+    public List<CommentModel> getAlluserComments(String authString,String username,UriInfo uriInfo){
    
     	//authentication here
+    	  au.isUserAuthenticated(authString, username);
+    	  
    		return transformUsersCommentsToModelsWithUsername(
    				                  cd.getAllCommentsOfUserByNamedQuery(username), uriInfo);
 
@@ -52,10 +57,10 @@ public class CommentService {
     
 	
   //2: get one Comments of User
-	public CommentModel getOneuserComment(long commentId, UriInfo uriInfo){
+	public CommentModel getOneuserComment(String authString,long commentId, UriInfo uriInfo){
 
-	//authentication heere profilename is same as loggedin user	
    	  String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
+   	  au.isUserAuthenticated(authString, profilename);
    	   
    	 if(cd.IsUserCommentAvailable(profilename, commentId))
    	 
@@ -64,7 +69,40 @@ public class CommentService {
    	  else return null;
     }
 
-  
+ //5: Update the comment in article for any ones articles
+    
+    public CommentModel UpdateUserComment(String authString,long commentId,CommentModel model, UriInfo uriInfo){
+	      	 
+    	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+         au.isUserAuthenticated(authString, profilename);
+   	    
+   	     if( cd.IsUserCommentAvailable(profilename, commentId)){
+	   	      
+	   	        Comment comment = cd.find(commentId);
+	   	         comment.setContent(model.getContent());
+	   	         cd.save(comment);
+	   	        
+	   	        return transformCommentToModelForArticle(cd.find(commentId), uriInfo); //return model of comment
+	  
+	   	    }
+	   	    
+   	      else return null;    	  
+    } 
+    
+    //6: delete the comment
+    public void deleteUserComment(String authString,long commentId, UriInfo uriInfo){
+    	
+   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
+   	      	 au.isUserAuthenticated(authString, profilename);
+   	      	 
+   	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){
+   	      	 
+   	      		 Comment comment = cd.find(commentId);
+   	      		 cd.delete(comment);
+   	      		 
+   	      	 }
+   	      	
+    }
      
   
     
@@ -119,42 +157,9 @@ public class CommentService {
 	   	        
 	   	        return transformCommentToModelForArticle(cd.find(id), uriInfo); //return model of comment   	  
     }
-    //5: Update the comment in article for any ones articles
+   
     
-    public CommentModel UpdateArticleComment(long commentId,CommentModel model, UriInfo uriInfo){
-	      	 
-    	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
-
-   	    
-   	     if( cd.IsUserCommentAvailable(profilename, commentId)){
-	   	      
-	   	        Comment comment = cd.find(commentId);
-	   	         comment.setContent(model.getContent());
-	   	         cd.save(comment);
-	   	        
-	   	        return transformCommentToModelForArticle(cd.find(commentId), uriInfo); //return model of comment
-	  
-	   	    }
-	   	    
-   	      else return null;    	  
-    } 
-    
-    
-    //6: delete the comment
-    
-    
-    public void deleteArticleComment(long commentId, UriInfo uriInfo){
-   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
-   	      	 
-   	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){
-   	      	 
-   	      		 Comment comment = cd.find(commentId);
-   	      		 cd.delete(comment);
-   	      		 
-   	      	 }
-   	      	
-    }
-    
+   
     
     
     
