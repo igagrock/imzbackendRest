@@ -15,7 +15,6 @@ public class CommentModel {
 	
 	private Long id;
 	private String username;
-	private String email;
 	private String content;
 	private ArticleModel articleModel;
 	private UserModel userModel;
@@ -34,12 +33,7 @@ public class CommentModel {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 	public String getContent() {
 		return content;
 	}
@@ -81,7 +75,6 @@ public class CommentModel {
 		
 		this.id = comment.getId();
 		this.username = comment.getUsername();
-		this.email =  comment.getEmail();
 		this.content = comment.getContent();
 		return this;
 		

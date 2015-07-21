@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,7 +36,7 @@ public class CommentResource {
 		public Response getComments(
 									@PathParam("articleId") long id,
 									@Context UriInfo uriInfo){
-			
+			//no auth required
 			
 			GenericEntity<List<CommentModel>> entity = 
 					new GenericEntity<List<CommentModel>>( 
@@ -43,20 +44,16 @@ public class CommentResource {
 			return Response.ok(entity).build();		
 		}
 	
-		@GET
-		@Path("{commentId}")
-		public Response getComment(@PathParam("commentId") long id, @Context UriInfo uriInfo)
-		{
-			return Response.ok(service.getarticleComment(id, uriInfo)).build();
-		}
-	
-		
 		
 		
 		@POST
-		public Response postComment(CommentModel model, @Context UriInfo uriInfo)
+		public Response postComment(
+				@HeaderParam("Authorization") String authString,
+				CommentModel model,
+				@Context UriInfo uriInfo)
 		{
-			return Response.status(Status.CREATED).entity(service.postArticleComment(model, uriInfo)).build();
+			return Response.status(Status.CREATED).entity(
+					service.postArticleComment(authString,model, uriInfo)).build();
 		}
 	
 		

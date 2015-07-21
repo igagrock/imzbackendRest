@@ -79,7 +79,7 @@ public class CommentService {
    	    
    	     if( cd.IsUserCommentAvailable(profilename, commentId)){
 	   	      
-	   	        Comment comment = cd.find(commentId);
+	   	         Comment comment = cd.find(commentId);
 	   	         comment.setContent(model.getContent());
 	   	         cd.save(comment);
 	   	        
@@ -111,8 +111,9 @@ public class CommentService {
   //3: getallComments on an article of my article
  
     public List<CommentModel> getAllArticleComments(Long articleId, UriInfo uriInfo){
-    	
+    	//No auth required
     	String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
+    	
 	      	 if( ad.IsUserArticleAvailable(profilename, articleId) ){
     	
     	        return transformUsersCommentsToModelsWithArticleId(
@@ -121,36 +122,16 @@ public class CommentService {
 	      	 else return null;
     } 
     
-    //4: get one article comment not allowed
-    
-    public CommentModel getarticleComment(long commentId, UriInfo uriInfo){
-    	/*auhtenticate the user and if same username
-    	 * 
-    	 * then show the comment
-    	 * condition is:  user has posted this comment and the article provided in url has this comment
-    	 */
-    	long articleId = HibernateUtil.getArticleIdFromURLforComments(3, uriInfo);			
-    	String profname = HibernateUtil.getUsernameFromURLforComments(5, uriInfo);
-    	
-    	if(cd.IsUserCommentAvailable(profname, commentId)
-    			&& cd.IsArticleCommentAvailable(commentId,articleId)){
-    		
-    		Comment comment = cd.find(commentId);
-    		return transformCommentToModelForUser(comment, uriInfo);
  
-    	}
-    	else return null;
-
-    	
-    }
     
     
     //5: post comments.
     
-    public CommentModel postArticleComment(CommentModel model, UriInfo uriInfo){
+    public CommentModel postArticleComment(String authString,CommentModel model, UriInfo uriInfo){
    	      	 
     	Long articleId = HibernateUtil.getArticleIdFromURLforComments(2,uriInfo);
    	    String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
+   	    au.isUserAuthenticated(authString, profilename);
    	    
 	   	        User user = ud.find(profilename); //get user
 	   	        Article article = ad.find(articleId); //get article

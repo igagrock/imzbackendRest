@@ -40,7 +40,6 @@ public class Comment {
 	
 	private Long id;
 	private String username;
-	private String email;
 	private String content;
 	private Article article;
 	private User user;
@@ -62,13 +61,7 @@ public class Comment {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	@Column(name="COMMENT_EMAIL") public String getEmail() {
-		return email;
-	}
 	
-	public void setEmail(String email) {
-		this.email = email;
-	}
 	@Column(name="COMMENT_CONTENT")public String getContent() {
 		return content;
 	}
@@ -93,13 +86,7 @@ public class Comment {
 	private void setUser(User user) {
 		this.user = user;
 	}
-	public Comment(String username, String email, String content) {
-		super();
-		this.username = username;
-		this.email = email;
-		this.content = content;
-	}
-	
+
 	public void MapCommentsAndArticle(Article article){
 		article.getComments().add(this);
 		article.setCommentCount(article.getComments().size());

@@ -17,9 +17,10 @@ public class SessionUtil {
 	}
 
 	
-	public Session beginSessionWithTransaction() {
+	public void beginSessionWithTransaction() {
+		
 		session.beginTransaction();
-		return session;
+	
 	}
 
 

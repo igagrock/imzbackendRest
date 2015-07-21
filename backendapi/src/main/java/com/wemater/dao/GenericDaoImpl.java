@@ -84,7 +84,8 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 				throw new DataNotFoundException("404", "No "+type.getSimpleName()+"'s present ");
 			
 		} catch ( RuntimeException e) {
-			sessionUtil.rollBackCurrentTransaction();
+		
+			//  sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 

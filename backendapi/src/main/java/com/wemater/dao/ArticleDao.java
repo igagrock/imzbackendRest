@@ -13,7 +13,6 @@ import com.wemater.dto.Article;
 import com.wemater.dto.User;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
-import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ArticleModel;
 import com.wemater.util.SessionUtil;

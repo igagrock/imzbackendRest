@@ -10,7 +10,6 @@ import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
-import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.util.SessionUtil;
 
@@ -37,7 +36,6 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 	public Comment createComment(String content, Article article, User user) {
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());
-		comment.setEmail(user.getEmail());
 		comment.setContent(content);
 		comment.MapCommentsAndArticle(article);
 		comment.MapCommentsAndUser(user);
