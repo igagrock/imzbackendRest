@@ -1,7 +1,8 @@
 package com.wemater.util;
 
-import java.util.Base64;
 
+
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.SessionFactory;
 
 
@@ -18,7 +19,7 @@ public class Runner {
 		String username = "sammer";
 		String password = "inotapass";
 		String baseString =username+":"+password;
-		byte[] encoded = Base64.getEncoder().encode(baseString.getBytes());
+		byte[] encoded = Base64.decodeBase64(baseString);
 		String encodedAuth = "Base "+new String(encoded);
 		System.out.println(encodedAuth);
 		
