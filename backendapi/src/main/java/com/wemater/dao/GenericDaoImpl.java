@@ -1,6 +1,7 @@
 package com.wemater.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -73,19 +74,24 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findAll() {
-		List<T> entityList= null;
+		List<T> entityList = new ArrayList<T>();
+	
 		try {
+			
 			sessionUtil.beginSessionWithTransaction();
+						
 			entityList= sessionUtil.getSession().createQuery("from "+type.getSimpleName())
 										.list();
-			sessionUtil.CommitCurrentTransaction();
 			
 			if(entityList.isEmpty())
 				throw new DataNotFoundException("404", "No "+type.getSimpleName()+"'s present ");
 			
+			sessionUtil.CommitCurrentTransaction();
+			
+			
 		} catch ( RuntimeException e) {
 		
-			//  sessionUtil.rollBackCurrentTransaction();
+			 sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 
