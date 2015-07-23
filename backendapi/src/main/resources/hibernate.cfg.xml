@@ -8,9 +8,9 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/wemater</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
+        <property name="connection.url">mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/wemater</property>
+        <property name="connection.username">adminpMUDzD6</property>
+        <property name="connection.password">RiVp6kmJkqQR</property>
 
         <!-- JDBC connection pool (use the built-in)--> 
         <property name="connection.pool_size">1</property>
