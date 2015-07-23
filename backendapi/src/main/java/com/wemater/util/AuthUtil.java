@@ -1,7 +1,6 @@
 package com.wemater.util;
 
-import java.util.Base64;
-
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.HibernateException;
 
 import com.wemater.dto.User;
@@ -27,7 +26,7 @@ public class AuthUtil {
 	    if(authString ==  null) throw new AuthException("401", "Authentication Required");
 	    
 		String[] decodedAuth = authString.split("\\s+");
-		byte[] decodedAuthParam = Base64.getDecoder().decode(decodedAuth[1]);
+		byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
 		String decodedAuthParamString = new String(decodedAuthParam);
 		System.out.println(decodedAuthParamString);
 		
