@@ -12,9 +12,10 @@ public class DataForbiddenExceptionMapper implements ExceptionMapper<DataForbidd
 
 	@Override
 	public Response toResponse(DataForbiddenException ex) {
-		ErrorModel  errorModel = new ErrorModel(ex.getMessage(), ex.getErrorcode(), "some link here");
+		ErrorModel  errorModel = new ErrorModel(ex.getError_type(), ex.getCode(), ex.getError_message());
 		System.out.println("DataForbidden mapper found");
 		return Response.status(Status.FORBIDDEN).entity(errorModel).build();
 	}
 
 }
+   

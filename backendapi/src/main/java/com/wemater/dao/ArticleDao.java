@@ -1,5 +1,6 @@
 package com.wemater.dao;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -52,7 +53,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			
 			sessionUtil.CommitCurrentTransaction();
 			
-			if(articles.isEmpty()) throw new DataNotFoundException("404", "No articles found with this tag");
+			if(articles.isEmpty()) throw new DataNotFoundException("No articles found with this tag");
 			return articles;
 			
 		} catch (HibernateException e) {
@@ -70,7 +71,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 				sessionUtil.beginSessionWithTransaction();
 				if(article != null)
 				 article.setLikes(likes);
-				else throw new DataNotFoundException("404", "likes cant be set- article not found");
+				else throw new DataNotFoundException( "likes cant be set- article not found");
 				
 				sessionUtil.CommitCurrentTransaction();
 				
@@ -99,7 +100,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			 sessionUtil.CommitCurrentTransaction();
 			  
 		
-			 if(article == null)  throw new DataNotFoundException("404", "This article doesnt not exist");
+			 if(article == null)  throw new DataNotFoundException("This article doesnt not exist");
 			 return article;
 		    
 		} catch (HibernateException e) {
@@ -132,7 +133,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 		    System.out.println(articles.size());
 		    
 		  if(articles.isEmpty())
-			  throw new DataNotFoundException("404", "No articles for the "+username);
+			  throw new DataNotFoundException("No articles for the "+username);
 		  
 			
 		} catch (HibernateException e) {
@@ -166,7 +167,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			 
 			 int value = Collections.binarySearch(usernames, username);
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataForbiddenException("403", "User '"+username+"' is not author of this article");
+			 else throw new DataForbiddenException("User '"+username+"' is not author of this article");
 			   
 			   
 		} catch (HibernateException e) {
@@ -188,8 +189,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			    User user = article.getUser(); //get the user
 			    int count = user.getArticleCount(); //get count of articles
 			    //throw exception if no articles written
-			    if(count == 0) throw new DataNotFoundException("404", "No articles written by User "
-			                                           +user.getUsername());
+			    if(count == 0) throw new DataNotFoundException( "No articles written by User "+user.getUsername());
 			    
 			    sessionUtil.beginSessionWithTransaction();
 			     user.setArticleCount(count-1); 

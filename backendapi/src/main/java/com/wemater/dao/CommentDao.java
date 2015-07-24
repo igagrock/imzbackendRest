@@ -78,7 +78,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 			 
 			 sessionUtil.CommitCurrentTransaction();
 			  
-			 if(comment == null)  throw new DataNotFoundException("404", "This comment doesnt not exist");
+			 if(comment == null)  throw new DataNotFoundException("This comment doesnt not exist");
 			    return comment;
 		 
 		  
@@ -111,7 +111,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 		    System.out.println(comments.size());
 		    
 		  if(comments.isEmpty())
-			  throw new DataNotFoundException("404", "No Comments for the "+username);
+			  throw new DataNotFoundException("No Comments for the "+username);
 		  
 			
 		} catch (HibernateException e) {
@@ -142,7 +142,7 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 		 
 		 sessionUtil.CommitCurrentTransaction();
 		  
-		 if(comment == null)  throw new DataNotFoundException("404", "This comment doesnt not exist");
+		 if(comment == null)  throw new DataNotFoundException("This comment doesnt not exist");
 		    return comment;
 	 
 	  
@@ -174,7 +174,7 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 		    System.out.println(comments.size());
 		    
 		  if(comments.isEmpty())
-			  throw new DataNotFoundException("404", "No Comments for this article");
+			  throw new DataNotFoundException("No Comments for this article");
 		  
 			
 		} catch (HibernateException e) {
@@ -204,7 +204,7 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 			 
 			 int value = Collections.binarySearch(usernames, username);
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataForbiddenException("403", "User '"+username+"' didnt not post this comment");
+			 else throw new DataForbiddenException("User '"+username+"' didnt not post this comment");
 			   
 			   
 		} catch (HibernateException e) {
@@ -235,7 +235,8 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 			 int value = Collections.binarySearch(ids, articleId); 
 			 
 			 if(value == 0) IsAvailable = true;
-			 else throw new DataForbiddenException("404", " comment requested doesnt belong to this article");//throw exception if not present
+			//throw exception if not present
+			 else throw new DataForbiddenException(" comment requested doesnt belong to this article");
 			   
 			   
 		} catch (HibernateException e) {
@@ -255,9 +256,8 @@ public Comment getCommentOfArticleByNamedQuery(long articleId, long commentId){
 			    int userCommentCount = user.getCommentCount(); //get count of comments
 			    int articleCommentCount = article.getCommentCount();
 			    //throw exception if no articles written
-			    if(articleCommentCount == 0) throw new DataNotFoundException("404", "No comments article");
-			    if(userCommentCount == 0) throw new DataNotFoundException("404", "No comments written by User "
-                        +user.getUsername());
+			    if(articleCommentCount == 0) throw new DataNotFoundException("No comments article");
+			    if(userCommentCount == 0) throw new DataNotFoundException( "No comments written by User "+user.getUsername());
 			    
 			    sessionUtil.beginSessionWithTransaction();
 			      user.setCommentCount(userCommentCount-1);

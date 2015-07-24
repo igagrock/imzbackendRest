@@ -44,7 +44,7 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 			
 		} catch (RuntimeException e) {
 			sessionUtil.rollBackCurrentTransaction();
-			throw new DataNotInsertedException("400","NaturalId already present");
+			throw new DataNotInsertedException("NaturalId already present");
 		}
     	
 	   return id;
@@ -84,7 +84,7 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 										.list();
 			
 			if(entityList.isEmpty())
-				throw new DataNotFoundException("404", "No "+type.getSimpleName()+"'s present ");
+				throw new DataNotFoundException("No "+type.getSimpleName()+"'s present ");
 			
 			sessionUtil.CommitCurrentTransaction();
 			
@@ -111,7 +111,7 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 	   		 entity = (T) sessionUtil.getSession().get(type, id);
 	   		 
 	   		 if(entity == null)
-	   			throw new DataNotFoundException("404",  type.getSimpleName()+" not found");
+	   			throw new DataNotFoundException( type.getSimpleName()+" not found");
     		
     		 sessionUtil.CommitCurrentTransaction();
 			
@@ -137,7 +137,7 @@ public  class GenericDaoImpl<T,Id extends Serializable> implements GenericDao<T,
 		   		 entity = (T) sessionUtil.getSession().bySimpleNaturalId(type).load(naturalId);
 		   		 
 		   		 if(entity == null)
-		   			throw new DataNotFoundException("404",  type.getSimpleName()+" not found");
+		   			throw new DataNotFoundException( type.getSimpleName()+" not found");
 	    		
 	    		 sessionUtil.CommitCurrentTransaction();
 				

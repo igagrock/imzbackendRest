@@ -14,8 +14,8 @@ public class ValueNotProvidedExceptionMapper implements ExceptionMapper<ValueNot
 	public Response toResponse(ValueNotProvidedException ex) {
 
 		System.out.println("Value not found exception mapper");
-		ErrorModelPro edp = new ErrorModelPro(ex.getValuename(), ex.getMessage(), ex.getErrorcode());
-		return Response.status(Status.NOT_FOUND).entity(edp).build();
+		ErrorModelPro edp = new ErrorModelPro(ex.getError_type(), ex.getCode(), ex.getError_message(), ex.getValue_name());
+		return Response.status(Status.NOT_ACCEPTABLE).entity(edp).build();
 	}
 
 	

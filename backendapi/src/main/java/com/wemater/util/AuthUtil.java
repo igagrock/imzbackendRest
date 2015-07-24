@@ -5,6 +5,7 @@ import org.hibernate.HibernateException;
 
 import com.wemater.dto.User;
 import com.wemater.exception.AuthException;
+import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.EvaluateException;
 
 
@@ -21,7 +22,7 @@ public AuthUtil(SessionUtil su) {
 	
 public boolean isUserAuthenticated(String authString, String username){
 	
-	if(Util.IsEmptyOrNull(authString)) throw new AuthException("401", "Authentication Required");
+	if(Util.IsEmptyOrNull(authString)) throw new AuthException("Authentication Required");
         
 if (validateUserCredentials(DecodeAuthString(authString),username)) return true;
 return false;
@@ -29,7 +30,7 @@ return false;
 	
 public boolean isUserAuthenticatedGET(String authString){
     
-if(Util.IsEmptyOrNull(authString)) throw new AuthException("401", "Authentication Required");
+if(Util.IsEmptyOrNull(authString)) throw new AuthException("Authentication Required");
 	    
 		
 if (validateUserCredentials(DecodeAuthString(authString))) return true;
@@ -58,11 +59,11 @@ private  boolean validateUserCredentials(String decodedAuthString, String userna
 			
 			   	if(AuthUser == null ){ //either username doesnt match or no user present
 			   		isValidationSuccessfull = false;
-			   		throw new AuthException("401", "User credentials are invalid");
+			   		throw new AuthException("User credentials are invalid");
 			   	}
 			   	if(!username.equals(params[0])){ //either username doesnt match or no user present
 			   		isValidationSuccessfull = false;
-			   		throw new AuthException("401", "Private Resouce!!");
+			   		throw new DataForbiddenException("Private Resouce!!");
 			   	}
 			 
 				if(AuthUser != null && username.equals(params[0])){ //user present and username matches to current
@@ -97,7 +98,7 @@ private  boolean validateUserCredentials(String decodedAuthString){
 			
 			   	if(AuthUser == null ){ //either username doesnt match or no user present
 			   		isValidationSuccessfull = false;
-			   		throw new AuthException("401", "User credentials are invalid");
+			   		throw new AuthException( "User credentials are invalid");
 			   	}
 			 
 				if(AuthUser != null ){ //user present and username matches to current
@@ -115,17 +116,17 @@ private  boolean validateUserCredentials(String decodedAuthString){
  private String DecodeAuthString(String authString){
 	 
 	 String[] decodedAuth = authString.split("\\s+");
-	 if(decodedAuth.length != 2 ) throw new AuthException("401", "Invalid User Credentials");
+	 if(decodedAuth.length != 2 ) throw new AuthException("Invalid User Credentials");
 	  byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
 	  String authparam =  new String(decodedAuthParam);
-	  if(Util.IsEmptyOrNull(authparam)) throw new AuthException("401", "Invalid User Credentials");
+	  if(Util.IsEmptyOrNull(authparam)) throw new AuthException("Invalid User Credentials");
 	  return authparam;
 	  
  }
  
  private String[] getParamArray(String authString){
 	   String[] params = authString.split(":");
-	   if(params.length != 2 ) throw new AuthException("401", "Invalid User Credentials");
+	   if(params.length != 2 ) throw new AuthException( "Invalid User Credentials");
 	   return params;
  }
  

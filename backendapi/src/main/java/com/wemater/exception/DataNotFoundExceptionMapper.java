@@ -14,11 +14,9 @@ public class DataNotFoundExceptionMapper implements ExceptionMapper<DataNotFound
 	@Override
 	public Response toResponse(DataNotFoundException ex) {
 		
-		ErrorModel  errorModel = new ErrorModel(ex.getMessage(), ex.getErrorcode(), "some link here");
-		
+		ErrorModel  errorModel = new ErrorModel(ex.getError_type(), ex.getCode(), ex.getError_message());
 		System.out.println("NotFound mapper executed..");
-		
 		return Response.status(Status.NOT_FOUND).entity(errorModel).build();
-	}
+	} 
 
 }

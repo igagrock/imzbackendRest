@@ -1,6 +1,7 @@
 package com.wemater.exception;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -12,10 +13,9 @@ public class DataNotInsertedExceptionMapper implements ExceptionMapper<DataNotIn
 	@Override
 	public Response toResponse(DataNotInsertedException ex) {
 
-		ErrorModel  errorModel = new ErrorModel(ex.getMessage(), ex.getErrorcode(), "some link here");
-		
+		ErrorModel  errorModel = new ErrorModel(ex.getError_type(), ex.getCode(), ex.getError_message());
 		System.out.println("Notintserted mapper executed..");
-		return Response.status(400).entity(errorModel).build();
+		return Response.status(Status.CONFLICT).entity(errorModel).build();
 	}
 
 }

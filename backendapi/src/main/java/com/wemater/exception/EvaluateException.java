@@ -13,16 +13,15 @@ public class EvaluateException extends HibernateException {
 		 
 		  
 		 if(e instanceof ObjectNotFoundException)
-			 throw new DataNotFoundException("404", "Data Not Found");
+			 throw new DataNotFoundException( "Data Not Found");
 			    
 		
 		else if(e instanceof DataNotFoundException)
-			   throw new DataNotFoundException(((DataNotFoundException) e).getErrorcode(), e.getMessage());
+			   throw new DataNotFoundException( e.getMessage());
 		
 		else if(e instanceof DataNotInsertedException){
 			  System.out.println("here in evaluate exception");
-			   throw new DataNotInsertedException(((DataNotInsertedException) e).getErrorcode(),
-					   e.getMessage());
+			   throw new DataNotInsertedException( e.getMessage());
 		}
 		
 		else e.printStackTrace();

@@ -4,63 +4,53 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ErrorModelPro  {
-
-	private String valuename;
-	private String message;
-	private String errorcode;
-	private String documentation;
-
-
-	public ErrorModelPro() {}
-		
-
-	public ErrorModelPro(String valuename, String message,String errorcode	) {
-		
-		super();
-		this.valuename = valuename;
-		this.message = message;
-		this.errorcode = errorcode;
-		this.documentation = "Some documentation link here";
-	}
-
-
-	public String getValuename() {
-		return valuename;
-	}
-
-	public void setValuename(String valuename) {
-		this.valuename = valuename;
-	}
-
-   public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getErrorcode() {
-		return errorcode;
-	}
-
-	public void setErrorcode(String errorcode) {
-		this.errorcode = errorcode;
-	}
-
-
-	public String getDocumentation() {
-		return documentation;
-	}
-
-
-	public void setDocumentation(String documentation) {
-		this.documentation = documentation;
-	}
-
-
 	
-	  
-	  
+	private String error_type;
+	private int code;
+	private String error_message;
+	private String value_name;
+	
+	
+	public String getError_type() {
+		return error_type;
+	}
+	public int getCode() {
+		return code;
+	}
+	public String getError_message() {
+		return error_message;
+	}
+	public String getValue_name() {
+		return value_name;
+	}
+	public void setError_type(String error_type) {
+		this.error_type = error_type;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public void setError_message(String error_message) {
+		this.error_message = error_message;
+	}
+	public void setValue_name(String value_name) {
+		this.value_name = value_name;
+	}
+	
+	public ErrorModelPro() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ErrorModelPro(String error_type, int code, String error_message,
+			String value_name) {
+		super();
+		this.error_type = error_type;
+		this.code = code;
+		this.error_message = error_message;
+		this.value_name = value_name;
+	}
+	
+	
+	
+	
 	
 }
