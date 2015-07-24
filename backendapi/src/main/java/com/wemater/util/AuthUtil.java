@@ -11,44 +11,36 @@ import com.wemater.exception.EvaluateException;
 
 public class AuthUtil {
 	
-
-    private final SessionUtil su;
+private final SessionUtil su;
     
-	public AuthUtil(SessionUtil su) { 
-		
-		this.su = su;
-		}  
+public AuthUtil(SessionUtil su) { 
+	this.su = su;
+}  
 	
 	
 	
-	public boolean isUserAuthenticated(String authString, String username){
+public boolean isUserAuthenticated(String authString, String username){
         
-	    if(authString ==  null) throw new AuthException("401", "Authentication Required");
+if(authString ==  null) throw new AuthException("401", "Authentication Required");
 	    
-		String[] decodedAuth = authString.split("\\s+");
-		byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
-		String decodedAuthParamString = new String(decodedAuthParam);
-		System.out.println(decodedAuthParamString);
+  String[] decodedAuth = authString.split("\\s+");
+  byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
+  String decodedAuthParamString = new String(decodedAuthParam);
+  System.out.println(decodedAuthParamString);
 		
-		
+if (validateUserCredentials(decodedAuthParamString,username)) return true;
+return false;
+}
 	
-    	   if (validateUserCredentials(decodedAuthParamString,username)) {
-    		   return true;
-	       }
-	     	   return false;
-	}
-	
-     private  boolean validateUserCredentials(String decodedAuthString, String username){
-	   
-    	 
-    	 
+private  boolean validateUserCredentials(String decodedAuthString, String username){
+
       String[] params = decodedAuthString.split(":");
       System.out.println(params[0]+" "+params[1]);
     	 
 	   User AuthUser = null;
 	   Boolean isValidationSuccessfull = false;
 	
-		   try {
+		try {
 			   	su.beginSessionWithTransaction();
 			
 			   	AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
