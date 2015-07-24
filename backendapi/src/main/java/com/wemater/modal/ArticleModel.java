@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.ValueNotProvidedException;
 
 /**
  * @author sheikh
@@ -197,6 +198,16 @@ public class ArticleModel {
 		return this;
 		
 	}
+	
+	public synchronized ArticleModel ValidateArticle(){
+		 
+		 if(this.getTitle() == null) throw new ValueNotProvidedException("Title", "Title is not provided");
+		 if(this.getImage() == null) throw new ValueNotProvidedException("Image", "Image is not provided");
+		 if(this.getContent() == null) throw new ValueNotProvidedException("Content","Content is not provided");
+		 if(this.getTags().isEmpty()) throw new ValueNotProvidedException("Tags"," Tags Not provided");
+		return this;
+	}
+	
 	
 	public ArticleModel() {
 		super();

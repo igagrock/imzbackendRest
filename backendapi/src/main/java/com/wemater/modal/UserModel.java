@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.ValueNotProvidedException;
 
 public class UserModel {
 	
@@ -191,5 +192,15 @@ public class UserModel {
 			
 		}
 		
-
+		//validate the values of usermodel
+      public  UserModel validateUserModel(){
+  	    if(this.getUsername() == null) throw new ValueNotProvidedException("Username", "Username is required");
+  	    if(this.getName() == null) throw new ValueNotProvidedException("Name", "Name of user is not provided");
+  	    if(this.getPassword() == null) throw new ValueNotProvidedException("Password", "Password is not provided");
+  	    if(this.getEmail() == null) throw new ValueNotProvidedException("Email", "Email is not provided");
+  	    if(this.getBio() == null) this.setBio("");
+  	    return this;
+      }
+		
+		
 }

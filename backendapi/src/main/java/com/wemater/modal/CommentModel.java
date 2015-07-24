@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.ValueNotProvidedException;
 
 
 public class CommentModel {
@@ -97,6 +98,12 @@ public class CommentModel {
 			}
 			this.setLinks(linkage);
 		return this;
+		
+	}
+	
+	public synchronized void validateComments(String content){
+		    if(content == null) throw new ValueNotProvidedException("Content", "No content for comment Provided");
+	
 		
 	}
 }

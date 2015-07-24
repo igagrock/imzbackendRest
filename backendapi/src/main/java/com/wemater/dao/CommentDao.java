@@ -11,6 +11,7 @@ import com.wemater.dto.User;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
+import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.util.SessionUtil;
 
 public class CommentDao extends GenericDaoImpl<Comment, Long>{
@@ -34,6 +35,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 
 
 	public Comment createComment(String content, Article article, User user) {
+		
+		if(content == null) throw new ValueNotProvidedException("Content", "No content for comment Provided");
+		 
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());
 		comment.setContent(content);

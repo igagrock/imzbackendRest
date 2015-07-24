@@ -215,28 +215,11 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 		
 	}
 
-
-	public Article createArticle(String title, String image, String content,
-			List<String> tags, User user) throws IOException, SQLException {
-		Article article = new Article();
-		 //article id will be generated at the insertion time so not set
-		 article.setTitle(title);
-		// article.setUrl(URL); URL will be generated later when file will be serialized
-		 article.createImageString(image);
-		 article.createContentString(content);
-		 article.setTags(tags);
-		 article.setLikes(0);
-		 article.setDate(new Date());
-		 article.mapUserAndArticle(user);
-		 //article comments will be added when new comment will be posted on article so not set
-		 
-		return article;
-	}
-
 	public Article createArticle(ArticleModel model, User user) {
 		Article article = new Article();
 		 try {
-			//article id will be generated at the insertion time so not set
+	
+			 model = model.ValidateArticle(); //validate the article first 
 			 article.setTitle(model.getTitle());
 			// article.setUrl(URL); URL will be generated later when file will be serialized
 			 article.createImageString(model.getImage());
@@ -248,7 +231,8 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			 
 			 
 		} catch (SQLException | IOException e) {
-			e.printStackTrace();
+			System.out.println("exception in createArticle + for image or content conversion");
+			throw new EvaluateException(e);
 		}
 		return article;
 	}
@@ -257,7 +241,6 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 		
 		 try {
 
-			// article.setUrl(URL); URL will be generated later when file will be serialized
 			 article.createImageString(model.getImage());
 			 article.createContentString(model.getContent());
 			 article.setTags(model.getTags());

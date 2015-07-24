@@ -1,7 +1,9 @@
 package com.wemater.dao;
 
 import com.wemater.dto.User;
+import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.modal.UserModel;
+import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
 public class UserDao extends GenericDaoImpl<User, Long> {
@@ -34,14 +36,15 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		user.setEmail(email);
 		user.setPassword(password);
 		user.setBio(bio);
-		user.setArticleCount(0);
 		return user;
 		
 	}
 
 	public User createUser(UserModel model) {
 		User user = new User();
-		user.setUsername(model.getUsername());
+		model= model.validateUserModel();//validate the usermodel for null values and update the model
+		
+		user.setUsername(HibernateUtil.removeSpaces(model.getUsername()));
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
 		user.setPassword(model.getPassword());
@@ -49,8 +52,8 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		return user;
 	}
 
-	
-
+      
+  
 	
 
 }

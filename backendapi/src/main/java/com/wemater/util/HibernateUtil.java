@@ -111,4 +111,10 @@ public class HibernateUtil {
 	}
 	
 
+	public static String removeSpaces(String string){
+		   return string.trim().replaceAll("\\s+","");    //replace extra inside white spaces for one word
+ 	 	
+	}
+	
+
 }

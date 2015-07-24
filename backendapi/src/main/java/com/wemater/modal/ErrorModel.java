@@ -1,10 +1,14 @@
 package com.wemater.modal;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name="error")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ErrorModel {
 	
+
 	private String message;
 	private String errorcode;
 	private String documentation;

@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
+import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
@@ -50,12 +51,7 @@ public class UserService {
      }
   
     public UserModel postUser(UserModel model, UriInfo uriInfo){ 
-    	 
-    	     	   
-    	   String username = model.getUsername().trim(); //replace the side white spaces
-    	   username = username.replaceAll("\\s+","");    //replace extra inside white spaces for one word
-    	   model.setUsername(username);
-    	      
+    	   
     	   User user = ud.createUser(model);
     	   Long id= ud.save(user);
    	       user = ud.find(id);
