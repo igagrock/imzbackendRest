@@ -194,10 +194,15 @@ public class UserModel {
 		
 		//validate the values of usermodel
       public  UserModel validateUserModel(){
-  	    if(this.getUsername() == null) throw new ValueNotProvidedException("Username", "Username is required");
-  	    if(this.getName() == null) throw new ValueNotProvidedException("Name", "Name of user is not provided");
-  	    if(this.getPassword() == null) throw new ValueNotProvidedException("Password", "Password is not provided");
-  	    if(this.getEmail() == null) throw new ValueNotProvidedException("Email", "Email is not provided");
+    	  System.out.println(this.getUsername()+" / "+this.getName()+" / "+this.getEmail()+" / "+this.password+" / "+this.getBio());
+  	    if(this.getUsername() == null || this.getUsername().isEmpty())
+  	    	throw new ValueNotProvidedException("Username", "Username is required");
+  	    if(this.getName() == null || this.getName().isEmpty())
+  	    	throw new ValueNotProvidedException("Name", "Name of user is not provided");
+  	    if(this.getPassword() == null || this.getPassword().isEmpty()) 
+  	    	throw new ValueNotProvidedException("Password", "Password is not provided");
+  	    if(this.getEmail() == null || this.getEmail().isEmpty())
+  	    	throw new ValueNotProvidedException("Email", "Email is not provided");
   	    if(this.getBio() == null) this.setBio("");
   	    return this;
       }

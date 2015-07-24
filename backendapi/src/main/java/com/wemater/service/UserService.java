@@ -10,7 +10,6 @@ import org.hibernate.SessionFactory;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
-import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
@@ -51,8 +50,9 @@ public class UserService {
      }
   
     public UserModel postUser(UserModel model, UriInfo uriInfo){ 
-    	   
-    	   User user = ud.createUser(model);
+    	  	  
+    	 User user = ud.createUser(model);
+    	 
     	   Long id= ud.save(user);
    	       user = ud.find(id);
    	      return transformUserToModel(user, uriInfo);

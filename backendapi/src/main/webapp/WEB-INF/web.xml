@@ -17,7 +17,7 @@
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
  
-
+<!-- 
   <servlet>
     <description></description>
     <display-name>StartExecutorforArticles</display-name>
@@ -26,6 +26,6 @@
     <load-on-startup>2</load-on-startup>
   </servlet>
  
-
+ -->
  
 </web-app>

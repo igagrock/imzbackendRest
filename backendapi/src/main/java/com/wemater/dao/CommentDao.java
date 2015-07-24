@@ -36,7 +36,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 
 	public Comment createComment(String content, Article article, User user) {
 		
-		if(content == null) throw new ValueNotProvidedException("Content", "No content for comment Provided");
+		if(content == null || content.isEmpty()) throw new ValueNotProvidedException("Content", "No content for comment Provided");
 		 
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());

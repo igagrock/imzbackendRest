@@ -100,10 +100,5 @@ public class CommentModel {
 		return this;
 		
 	}
-	
-	public synchronized void validateComments(String content){
-		    if(content == null) throw new ValueNotProvidedException("Content", "No content for comment Provided");
-	
-		
-	}
+
 }

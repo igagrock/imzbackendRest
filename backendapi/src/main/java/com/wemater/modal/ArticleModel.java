@@ -201,10 +201,14 @@ public class ArticleModel {
 	
 	public synchronized ArticleModel ValidateArticle(){
 		 
-		 if(this.getTitle() == null) throw new ValueNotProvidedException("Title", "Title is not provided");
-		 if(this.getImage() == null) throw new ValueNotProvidedException("Image", "Image is not provided");
-		 if(this.getContent() == null) throw new ValueNotProvidedException("Content","Content is not provided");
-		 if(this.getTags().isEmpty()) throw new ValueNotProvidedException("Tags"," Tags Not provided");
+		 if(this.getTitle() == null || this.getTitle().isEmpty()) 
+			 throw new ValueNotProvidedException("Title", "Title is not provided");
+		 if(this.getImage() == null || this.getImage().isEmpty())
+			 throw new ValueNotProvidedException("Image", "Image is not provided");
+		 if(this.getContent() == null || this.getContent().isEmpty())
+			 throw new ValueNotProvidedException("Content","Content is not provided");
+		 if(this.getTags().isEmpty() || this.getTags().isEmpty()) 
+			 throw new ValueNotProvidedException("Tags"," Tags Not provided");
 		return this;
 	}
 	
