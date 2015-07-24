@@ -1,8 +1,6 @@
 package com.wemater.dto;
 
-import java.io.IOException;
 import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,15 +22,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.sql.rowset.serial.SerialClob;
-import javax.sql.rowset.serial.SerialException;
 
 import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 
-import com.wemater.util.HibernateUtil;
+import com.wemater.util.Util;
 
 @Table(name="ARTICLE")
 @Entity
@@ -178,26 +174,25 @@ public class Article {
 		}
 		
 	
-	public String returnImageString() throws IOException, SQLException{
+	public String returnImageString(){
 		
-			return HibernateUtil.convertClobToString(this.getImage());
-		
-	}
-	
-	public void createImageString(String image) throws IOException, SerialException, SQLException{
-		
-			this.setImage(new SerialClob(image.toCharArray()));
-		
+			return Util.convertClobToString(this.getImage());
 		
 	}
 	
-	public String returnContentString() throws IOException, SQLException{
-		return HibernateUtil.convertClobToString(this.getContent());
+	public void createImageString(String image)  {
+		
+			this.setImage(Util.convertStringToClob(image));
 
 	}
-	public void createContentString(String content) throws IOException, SerialException, SQLException{
 	
-		this.setContent(new SerialClob(content.toCharArray()));
+	public String returnContentString(){
+		return Util.convertClobToString(this.getContent());
+
+	}
+	public void createContentString(String content){
+	
+		this.setContent(Util.convertStringToClob(content));
 	}
 	
 	

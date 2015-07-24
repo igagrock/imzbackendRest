@@ -12,6 +12,7 @@ import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.exception.ValueNotProvidedException;
+import com.wemater.util.Util;
 
 public class UserModel {
 	
@@ -193,19 +194,25 @@ public class UserModel {
 		}
 		
 		//validate the values of usermodel
-      public  UserModel validateUserModel(){
+      public synchronized UserModel validateUserModel(){
+    	 
     	  System.out.println(this.getUsername()+" / "+this.getName()+" / "+this.getEmail()+" / "+this.password+" / "+this.getBio());
-  	    if(this.getUsername() == null || this.getUsername().isEmpty())
+  	    
+    	  if(Util.IsEmptyOrNull(this.getUsername()) )
   	    	throw new ValueNotProvidedException("Username", "Username is required");
-  	    if(this.getName() == null || this.getName().isEmpty())
+  	    
+  	    if(Util.IsEmptyOrNull(this.getName()) )
   	    	throw new ValueNotProvidedException("Name", "Name of user is not provided");
-  	    if(this.getPassword() == null || this.getPassword().isEmpty()) 
+  	    
+  	    if(Util.IsEmptyOrNull(this.getPassword()) ) 
   	    	throw new ValueNotProvidedException("Password", "Password is not provided");
-  	    if(this.getEmail() == null || this.getEmail().isEmpty())
+  	    if(Util.IsEmptyOrNull( this.getEmail()) )
   	    	throw new ValueNotProvidedException("Email", "Email is not provided");
-  	    if(this.getBio() == null) this.setBio("");
+  	    
+  	    if(Util.IsEmptyOrNull(this.getBio() )) this.setBio("");
   	    return this;
       }
-		
-		
+	
+    
+      
 }

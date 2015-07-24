@@ -15,6 +15,7 @@ import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 
 
@@ -46,16 +47,14 @@ public class UserService {
      public UserModel getUser(String authString,String profileName,UriInfo uriInfo){
     	   au.isUserAuthenticated(authString, profileName);
     	 
-    	 return transformUserToModel(ud.find(profileName.trim()), uriInfo);
+    	 return transformUserToModel(ud.find(Util.removeSpaces(profileName)), uriInfo);
      }
   
     public UserModel postUser(UserModel model, UriInfo uriInfo){ 
-    	  	  
-    	 User user = ud.createUser(model);
-    	 
-    	   Long id= ud.save(user);
-   	       user = ud.find(id);
-   	      return transformUserToModel(user, uriInfo);
+  
+         Long id= ud.save( ud.createUser(model)); //create the user in param and save the user
+ 
+   	      return transformUserToModel(ud.find(id), uriInfo);
       
      }
         
@@ -64,28 +63,16 @@ public class UserService {
     	
     	//authentication first
     	au.isUserAuthenticated(authString, profilename);
-    	
-    	String profTrimmed = profilename.trim();
-    	User user = ud.find(profTrimmed); 
-    	 
-		 user.setBio(model.getBio()); // update the changes here
-		 user.setName(model.getName()); //
-		 user.setEmail(model.getEmail());//
-		 user.setPassword(model.getPassword());
- 
-         ud.update(user);  //update the user in the database
-    	 user = ud.find(user.getId()); // get the updated user from database
+        ud.update(ud.updateValidateUser(ud.find(Util.removeSpaces(profilename)),model));  //update the user in the database
 
-    	return transformUserToModel(user, uriInfo);   //return the model of the updated user
+    	return transformUserToModel(ud.find(profilename), uriInfo);   //return the model of the updated user
  
   }
     
    public void deleteUser(String authString,String profilename){
 	      
 	       au.isUserAuthenticated(authString, profilename);
-	         
-	      User user = ud.find(profilename);
-	      ud.delete(user);
+           ud.delete(ud.find(profilename));
    }   
  
      

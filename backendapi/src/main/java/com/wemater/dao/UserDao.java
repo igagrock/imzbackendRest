@@ -2,8 +2,8 @@ package com.wemater.dao;
 
 import com.wemater.dto.User;
 import com.wemater.modal.UserModel;
-import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class UserDao extends GenericDaoImpl<User, Long> {
 
@@ -28,7 +28,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 	
 		model= model.validateUserModel();//validate the usermodel for null values and update the model
 		User user = new User();
-		user.setUsername(HibernateUtil.removeSpaces(model.getUsername()));
+		user.setUsername(Util.removeSpaces(model.getUsername()));
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
 		user.setPassword(model.getPassword());
@@ -36,6 +36,25 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		return user;
 	}
 
+	  public synchronized User updateValidateUser(User user, UserModel model){
+    	  
+  	    
+  	    if(!Util.IsEmptyOrNull(model.getName()) )
+  	    	                   user.setName(model.getName());
+  	    
+  	    if(!Util.IsEmptyOrNull(model.getPassword()) )
+  	    						user.setPassword(model.getPassword());
+  	    	
+  	    if(!Util.IsEmptyOrNull( model.getEmail()) )
+  	    						user.setEmail(model.getEmail());	
+  	    	
+  	    if(!Util.IsEmptyOrNull(model.getBio() ))
+  	    						user.setBio(model.getBio());
+  	    
+  	    return user;
+  	  
+    }
+	
  
 	
 

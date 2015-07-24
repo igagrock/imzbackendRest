@@ -12,6 +12,7 @@ import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.exception.ValueNotProvidedException;
+import com.wemater.util.Util;
 
 /**
  * @author sheikh
@@ -201,13 +202,16 @@ public class ArticleModel {
 	
 	public synchronized ArticleModel ValidateArticle(){
 		 
-		 if(this.getTitle() == null || this.getTitle().isEmpty()) 
+		 if(Util.IsEmptyOrNull( this.getTitle())) 
 			 throw new ValueNotProvidedException("Title", "Title is not provided");
-		 if(this.getImage() == null || this.getImage().isEmpty())
+		 
+		 if(Util.IsEmptyOrNull(this.getImage()))
 			 throw new ValueNotProvidedException("Image", "Image is not provided");
-		 if(this.getContent() == null || this.getContent().isEmpty())
+		 
+		 if(Util.IsEmptyOrNull(this.getContent() ))
 			 throw new ValueNotProvidedException("Content","Content is not provided");
-		 if(this.getTags().isEmpty() || this.getTags().isEmpty()) 
+		 
+		 if(Util.IsEmptyOrNull(this.getTags())) 
 			 throw new ValueNotProvidedException("Tags"," Tags Not provided");
 		return this;
 	}

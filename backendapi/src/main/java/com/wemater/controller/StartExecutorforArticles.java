@@ -4,7 +4,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import com.wemater.service.PublicService;
-import com.wemater.util.HibernateUtil;
+import com.wemater.util.Util;
 
 
 public class StartExecutorforArticles extends HttpServlet {
@@ -16,7 +16,7 @@ public class StartExecutorforArticles extends HttpServlet {
 		System.out.println("servlet started here...");
 		PublicService task = new PublicService();
 		
-		HibernateUtil.StartExecutorService(task);
+		Util.StartExecutorService(task);
 		System.out.println("started the executor service");
 		
 		

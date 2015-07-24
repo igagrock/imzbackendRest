@@ -1,7 +1,5 @@
 package com.wemater.dao;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -16,6 +14,7 @@ import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ArticleModel;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 	
@@ -216,10 +215,11 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 	}
 
 	public Article createArticle(ArticleModel model, User user) {
-		Article article = new Article();
-		 try {
-	
+		
+		
 			 model = model.ValidateArticle(); //validate the article first 
+			 
+			 Article article = new Article();
 			 article.setTitle(model.getTitle());
 			// article.setUrl(URL); URL will be generated later when file will be serialized
 			 article.createImageString(model.getImage());
@@ -229,25 +229,19 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 			 article.mapUserAndArticle(user);
 			 //article comments will be added when new comment will be posted on article so not set
 			 
-			 
-		} catch (SQLException | IOException e) {
-			System.out.println("exception in createArticle + for image or content conversion");
-			throw new EvaluateException(e);
-		}
 		return article;
 	}
 	
-	public Article updateArticleValues(Article article,ArticleModel model) {
-		
-		 try {
-
-			 article.createImageString(model.getImage());
-			 article.createContentString(model.getContent());
-			 article.setTags(model.getTags());
+	public Article ValidateUpdateArticle(Article article,ArticleModel model) {
+ 
+		  if(!Util.IsEmptyOrNull(model.getImage()))
+			                article.createImageString(model.getImage());
+		  if(!Util.IsEmptyOrNull(model.getContent()))
+		     	 			article.createContentString(model.getContent());
+		  if(!Util.IsEmptyOrNull(model.getTags()))
+			       			article.setTags(model.getTags());
 			 	 
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-		}
+	
 		return article;
 	}
 

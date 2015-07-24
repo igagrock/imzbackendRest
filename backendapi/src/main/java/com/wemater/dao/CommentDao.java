@@ -12,7 +12,9 @@ import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.exception.ValueNotProvidedException;
+import com.wemater.modal.CommentModel;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class CommentDao extends GenericDaoImpl<Comment, Long>{
 	
@@ -36,7 +38,8 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 
 	public Comment createComment(String content, Article article, User user) {
 		
-		if(content == null || content.isEmpty()) throw new ValueNotProvidedException("Content", "No content for comment Provided");
+		if(Util.IsEmptyOrNull(content))
+			throw new ValueNotProvidedException("Content", "No content for comment Provided");
 		 
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());
@@ -45,7 +48,16 @@ public class CommentDao extends GenericDaoImpl<Comment, Long>{
 		comment.MapCommentsAndUser(user);
 		return comment;
 	}
+	
+  public Comment validateUpdateComment(Comment comment, CommentModel model)	{
+	            
+	       if( !Util.IsEmptyOrNull(model.getContent())) comment.setContent(model.getContent());
+	       return comment;
+	  
+  }
 
+	
+	
 /*
  * USER COMMENT SECTION STARTS HERE
  */

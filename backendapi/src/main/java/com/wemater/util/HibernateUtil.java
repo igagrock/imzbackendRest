@@ -1,16 +1,6 @@
 package com.wemater.util;
 
 
-import java.io.IOException;
-import java.io.Reader;
-import java.sql.Clob;
-import java.sql.SQLException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import javax.ws.rs.core.UriInfo;
-
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -26,8 +16,7 @@ public class HibernateUtil {
 	
 	private static SessionFactory sessionFactory;
 	private static final Logger logger = Logger.getLogger(HibernateUtil.class);
-	private static final int START_TIME = 1;
-	private static final int DELAY = 3600;
+	
 	
 	private static SessionFactory buildSessionFactory()
 	{
@@ -71,50 +60,6 @@ public class HibernateUtil {
 		
 	}
 	
-	 public static String convertClobToString(Clob clob) throws IOException, SQLException {
-         Reader reader = clob.getCharacterStream();
-         int c = -1;
-         StringBuilder sb = new StringBuilder();
-         while((c = reader.read()) != -1) {
-              sb.append(((char)c));
-         }
 
-         return sb.toString();
-  }
-	 
-	 
-		
-	public static String getUsernameFromURLforComments(int index,UriInfo uriInfo) {
-		     
-			   String url = uriInfo.getAbsolutePath().toString();
-		   	   String[] tokens = url.split("/");
-		       
-		   	   return tokens[tokens.length -index];
-		       
-	}	 
-	public static Long getArticleIdFromURLforComments(int index,UriInfo uriInfo) {
-	     
-		   String url = uriInfo.getAbsolutePath().toString();
-	   	   String[] tokens = url.split("/");
-	       
-	   	   return Long.valueOf(tokens[tokens.length -index]);
-	       
-}
-	
-	public static void StartExecutorService(Runnable task){
-		
-		     
-		    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		    executor.scheduleWithFixedDelay(task, START_TIME, DELAY, TimeUnit.SECONDS);
-		
-		
-	}
-	
-
-	public static String removeSpaces(String string){
-		   return string.trim().replaceAll("\\s+","");    //replace extra inside white spaces for one word
- 	 	
-	}
-	
 
 }

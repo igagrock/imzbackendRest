@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
-import com.wemater.exception.ValueNotProvidedException;
 
 
 public class CommentModel {

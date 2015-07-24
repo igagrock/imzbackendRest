@@ -19,6 +19,7 @@ import com.wemater.modal.Link;
 import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class CommentService {
 	
@@ -59,7 +60,7 @@ public class CommentService {
   //2: get one Comments of User
 	public CommentModel getOneuserComment(String authString,long commentId, UriInfo uriInfo){
 
-   	  String profilename = HibernateUtil.getUsernameFromURLforComments(3,uriInfo);
+   	  String profilename = Util.getUsernameFromURLforComments(3,uriInfo);
    	  au.isUserAuthenticated(authString, profilename);
    	   
    	 if(cd.IsUserCommentAvailable(profilename, commentId))
@@ -73,15 +74,14 @@ public class CommentService {
     
     public CommentModel UpdateUserComment(String authString,long commentId,CommentModel model, UriInfo uriInfo){
 	      	 
-    	 String profilename = HibernateUtil.getUsernameFromURLforComments(3, uriInfo);
+    	 String profilename = Util.getUsernameFromURLforComments(3, uriInfo);
     	 System.out.println(profilename);
          au.isUserAuthenticated(authString, profilename);
    	    
    	     if( cd.IsUserCommentAvailable(profilename, commentId)){
 	   	      
 	   	         Comment comment = cd.find(commentId);
-	   	         comment.setContent(model.getContent());
-	   	         cd.save(comment);
+	   	        cd.save(cd.validateUpdateComment(comment, model));
 	   	        
 	   	        return transformCommentToModelForArticle(cd.find(commentId), uriInfo); //return model of comment
 	  
@@ -93,7 +93,7 @@ public class CommentService {
     //6: delete the comment
     public void deleteUserComment(String authString,long commentId, UriInfo uriInfo){
     	
-   	      	 String profilename = HibernateUtil.getUsernameFromURLforComments(3, uriInfo);
+   	      	 String profilename = Util.getUsernameFromURLforComments(3, uriInfo);
    	      	 au.isUserAuthenticated(authString, profilename);
    	      	 
    	      	 if(cd.IsUserCommentAvailable(profilename, commentId) ){
@@ -112,7 +112,7 @@ public class CommentService {
  
     public List<CommentModel> getAllArticleComments(Long articleId, UriInfo uriInfo){
     	//No auth required
-    	String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
+    	String profilename = Util.getUsernameFromURLforComments(4, uriInfo);
     	
 	      	 if( ad.IsUserArticleAvailable(profilename, articleId) ){
     	
@@ -129,11 +129,10 @@ public class CommentService {
     
     public CommentModel postArticleComment(String authString,CommentModel model, UriInfo uriInfo){
    	      	 
-    	Long articleId = HibernateUtil.getArticleIdFromURLforComments(2,uriInfo);
-   	    String profilename = HibernateUtil.getUsernameFromURLforComments(4, uriInfo);
-   	    au.isUserAuthenticated(authString, profilename);
-   	    
-	   	        User user = ud.find(profilename); //get user
+    	Long articleId = Util.getArticleIdFromURLforComments(2,uriInfo);
+  
+   	       au.isUserAuthenticatedGET(authString);
+ 	   	        User user = ud.find(au.getLoggedInUser(authString)); //get user
 	   	        Article article = ad.find(articleId); //get article
 	   	        Comment comment = cd.createComment(model.getContent(), article, user); //get comment
 	   	        long id = cd.save(comment); //save article or exception will be thrown
