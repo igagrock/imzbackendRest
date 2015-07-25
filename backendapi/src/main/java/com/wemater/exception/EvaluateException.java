@@ -2,6 +2,7 @@ package com.wemater.exception;
 
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
+import org.hibernate.exception.ConstraintViolationException;
 
 public class EvaluateException extends HibernateException {
 
@@ -11,6 +12,8 @@ public class EvaluateException extends HibernateException {
 	public EvaluateException(Throwable e) {
 		super(e);
 		 
+		  if(e instanceof ConstraintViolationException)
+			     throw new DataNotInsertedException("Natural ID voilation constraint");
 		  
 		 if(e instanceof ObjectNotFoundException)
 			 throw new DataNotFoundException( "Data Not Found");

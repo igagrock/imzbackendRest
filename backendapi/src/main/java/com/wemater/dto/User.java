@@ -107,15 +107,15 @@ public class User {
 	public void setArticleCount(int articleCount) {
 		this.ArticleCount = articleCount;
 	}
-	@OneToMany(mappedBy="user", cascade = CascadeType.PERSIST) 
+	@OneToMany(mappedBy="user", cascade = {CascadeType.PERSIST}) 
 	public List<Article> getArticles() {
 		if(this.articles == null) this.articles= new ArrayList<Article>();
 	
 		return articles;
 	}
     
-	@SuppressWarnings("unused")
-	private void setArticles(List<Article> articles) {
+
+	public void setArticles(List<Article> articles) {
 		this.articles = articles;
 	}
 

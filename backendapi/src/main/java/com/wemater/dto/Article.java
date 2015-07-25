@@ -74,7 +74,7 @@ public class Article {
 	}
 	
 	@Column(name="TITLE")
-	@NaturalId(mutable=false)
+	@NaturalId(mutable=true)
 	public String getTitle() {
 		return title;
 	}
@@ -146,12 +146,12 @@ public class Article {
 	public User getUser() {
 		return user;
 	}
-	private void setUser(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	
 	
-	@OneToMany(mappedBy="article",cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="article",cascade=CascadeType.REMOVE)
 	public List<Comment> getComments() {
 		if(this.comments == null) this.comments= new ArrayList<Comment>();
 		return comments;

@@ -1,6 +1,5 @@
 package com.wemater.exception;
 
-import javax.ws.rs.core.Response.Status;
 
 public class ValueNotProvidedException extends RuntimeException {
 

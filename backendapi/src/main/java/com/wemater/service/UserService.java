@@ -72,7 +72,9 @@ public class UserService {
    public void deleteUser(String authString,String profilename){
 	      
 	       au.isUserAuthenticated(authString, profilename);
-           ud.delete(ud.find(profilename));
+	       User user = ud.find(profilename);
+	       ud.removeRefrences(user);
+           ud.delete(user);
    }   
  
      

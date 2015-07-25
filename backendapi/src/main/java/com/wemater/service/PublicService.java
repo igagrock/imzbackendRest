@@ -21,7 +21,7 @@ public class PublicService implements Runnable {
     private final SessionUtil su;
     private final PublicDao pd;
 	 
-	 private static List<Article> LatestArticles = new ArrayList<Article>();
+	 private static List<Article> LatestArticles  = new ArrayList<Article>();
 	 private static List<Article> trendingArticles = new ArrayList<Article>();
 	 private static List<Article> quickReadArticles = new ArrayList<Article>();
 	 private static List<Article> exploreArticles = new ArrayList<Article>();
@@ -44,16 +44,16 @@ public class PublicService implements Runnable {
 	}
 
 
-	public static void setExploreArticles(List<Article> exploreArticles) {
-		PublicService.exploreArticles = exploreArticles;
+	public static void setExploreArticles(List<Article> ExploreArticles) {
+	    exploreArticles = ExploreArticles;
 	}
 
 	public static List<Article> getQuickReadArticles() {
 		return quickReadArticles;
 	}
 
-	public static void setQuickReadArticles(List<Article> quickReadArticles) {
-		PublicService.quickReadArticles = quickReadArticles;
+	public static void setQuickReadArticles(List<Article> QuickReadArticles) {
+	    quickReadArticles = QuickReadArticles;
 	}
 	public static List<Article> getLatestArticles() {
 		return LatestArticles;
@@ -83,7 +83,8 @@ public class PublicService implements Runnable {
 
 	@Override
 	public void run() { 
-		setLatestArticles(pd.fetchLatestArticles());
+		
+ 		setLatestArticles(pd.fetchLatestArticles());
 	    setTrendingArticles(pd.fetchTrendingArticles());	
 	    setQuickReadArticles(pd.fetchQuickReadArticles());
 	    setExploreArticles(pd.fetchExploreArticles());
@@ -91,21 +92,21 @@ public class PublicService implements Runnable {
 
 	
 	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo){
-		      System.out.println("articles found from list");
+		      System.out.println("articles found from latest list");
 		   return transformArticlesToModels(getLatestArticles(), uriInfo);
 		
 		
 	}
 	
 	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo){
-	      System.out.println("articles found from list");
+	      System.out.println("articles found from tredding list");
 	   return transformArticlesToModels(getTrendingArticles(), uriInfo);
 	
 	
 	}
 
 	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo){
-	      System.out.println("articles found from list");
+	      System.out.println("articles found from read list");
 	   return transformArticlesToModels(getQuickReadArticles(), uriInfo);
 	
 	}
@@ -115,7 +116,7 @@ public class PublicService implements Runnable {
 	// DO IT AGAIN --again
 	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start){
 	        
-		    System.out.println("articles found from list");
+		    System.out.println("articles found from explore list");
 		    	List<Article> articles = null;
 		        int SIZE = 5;
 	        
@@ -147,6 +148,8 @@ public class PublicService implements Runnable {
 	
 	
 	private ArticleModel transformArticleToModel(Article article, UriInfo uriInfo) {
+		
+		
 		
 		Link self = LinkService.createLinkForEachArticleOfUser("getAllArticles",
                 article.getUser().getUsername(),
