@@ -61,10 +61,11 @@ public class ArticleResource {
 	
 
 	@POST
-	public Response postArticle( HeaderParam("Authorization") String authString,
-			             @PathParam("profileName") String profilename,
-				     ArticleModel model, 
-				     @Context UriInfo uriInfo) {
+	public Response postArticle(
+								@HeaderParam("Authorization") String authString,
+								@PathParam("profileName") String profilename,
+								ArticleModel model, 
+								@Context UriInfo uriInfo) {
 	 		
 		return Response.status(Status.CREATED)
 				       .entity(service.postArticle(authString,profilename, model, uriInfo))
@@ -74,7 +75,7 @@ public class ArticleResource {
 	@PUT
 	@Path("/{articleId}")
 	public Response updateArticle(
-				    @HeaderParam("Authorization") String authString,
+						@HeaderParam("Authorization") String authString,
 			            @PathParam("articleId") Long Id, 
 			            ArticleModel model, @Context UriInfo uriInfo)  {
 		return Response.ok(service.updateArticle(authString,Id, model, uriInfo)).build();
