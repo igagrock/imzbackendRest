@@ -233,7 +233,9 @@ public class ArticleDao extends GenericDaoImpl<Article, Long>  {
 	}
 	
 	public Article ValidateUpdateArticle(Article article,ArticleModel model) {
- 
+          
+		  if(!Util.IsEmptyOrNull(model.getTitle()))
+			  				article.setTitle(model.getTitle());
 		  if(!Util.IsEmptyOrNull(model.getImage()))
 			                article.createImageString(model.getImage());
 		  if(!Util.IsEmptyOrNull(model.getContent()))

@@ -83,7 +83,7 @@ public class Comment {
 	public User getUser() {
 		return user;
 	}
-	private void setUser(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 

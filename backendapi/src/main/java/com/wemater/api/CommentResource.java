@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.wemater.exception.NoImplementionException;
 import com.wemater.modal.CommentModel;
 import com.wemater.service.CommentService;
 
@@ -43,7 +44,12 @@ public class CommentResource {
 							service.getAllArticleComments(id, uriInfo)){};
 			return Response.ok(entity).build();		
 		}
-	
+	   
+		
+		@Path("/{commentId}")
+		public Response getCommentOfUser( ){
+			throw new NoImplementionException();
+		}
 		
 		
 		@POST
