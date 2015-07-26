@@ -1,5 +1,6 @@
 package com.wemater.dao;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -7,6 +8,7 @@ import org.hibernate.HibernateException;
 import com.wemater.dto.Article;
 import com.wemater.exception.EvaluateException;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class PublicDao {
 	
@@ -42,12 +44,17 @@ public class PublicDao {
 			
 			su.CommitCurrentTransaction();
 		
+			for (Iterator<Article> iterator = articleList.iterator(); iterator.hasNext();) {
+				Article article = (Article) iterator.next();
+				System.out.println(article.getId());
+			}
 			
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 			
 		}
+    	System.out.println("CHECKING:   articleList is null?"+Util.IsEmptyOrNull(articleList));
 		return articleList;
     }
 	

@@ -83,8 +83,10 @@ public class PublicService implements Runnable {
 
 	@Override
 	public void run() { 
+
 		
  		setLatestArticles(pd.fetchLatestArticles());
+
 	    setTrendingArticles(pd.fetchTrendingArticles());	
 	    setQuickReadArticles(pd.fetchQuickReadArticles());
 	    setExploreArticles(pd.fetchExploreArticles());
@@ -92,7 +94,7 @@ public class PublicService implements Runnable {
 
 	
 	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo){
-		      System.out.println("articles found from latest list");
+
 		   return transformArticlesToModels(getLatestArticles(), uriInfo);
 		
 		
