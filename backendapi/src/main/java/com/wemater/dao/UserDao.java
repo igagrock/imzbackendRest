@@ -115,14 +115,14 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 					Comment comment = (Comment) iterator.next();
 					comment.setUser(anyonymous);
 				}
-			}
-
+				 }
+				
 			sessionUtil.CommitCurrentTransaction();
 		} catch (HibernateException e) {
 			sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 
-	}
+	}	
 
 }
