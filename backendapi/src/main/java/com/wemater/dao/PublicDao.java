@@ -11,153 +11,148 @@ import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
 
 public class PublicDao {
-	
-	private final SessionUtil su;
-    //inject sessionUtil object at the runtime to use the session
-	public PublicDao(SessionUtil sessionUtil) {
-				this.su = sessionUtil;
-	}
 
+	private final SessionUtil su;
+
+	// inject sessionUtil object at the runtime to use the session
+	public PublicDao(SessionUtil sessionUtil) {
+		this.su = sessionUtil;
+	}
 
 	public SessionUtil getSessionUtil() throws InstantiationException {
-		
-			if (su == null)  
-	            throw new InstantiationException("SessionUtil has not been set on DAO before usage");
-			return su;
+
+		if (su == null)
+			throw new InstantiationException(
+					"SessionUtil has not been set on DAO before usage");
+		return su;
 	}
-	
-	
-	
-	
+
 	@SuppressWarnings({ "unchecked" })
-    public List<Article> fetchLatestArticles(){
-    	
+	public List<Article> fetchLatestArticles() {
+
 		List<Article> articleList = null;
-    	try {
+		try {
 			su.beginSessionWithTransaction();
-			
-			articleList = su.getSession()
-					.createQuery("from Article as article order by article.date desc")
-					.setMaxResults(10)
-		            .list();			
-			
-			
+
+			articleList = su
+					.getSession()
+					.createQuery(
+							"from Article as article order by article.date desc")
+					.setMaxResults(10).list();
+
 			su.CommitCurrentTransaction();
-		
-			for (Iterator<Article> iterator = articleList.iterator(); iterator.hasNext();) {
+
+			for (Iterator<Article> iterator = articleList.iterator(); iterator
+					.hasNext();) {
 				Article article = (Article) iterator.next();
 				System.out.println(article.getId());
 			}
-			
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-    	System.out.println("CHECKING:   articleList is null?"+Util.IsEmptyOrNull(articleList));
-		return articleList;
-    }
-	
-	@SuppressWarnings({ "unchecked" })
-    public List<Article> fetchTrendingArticles(){
-    	
-		List<Article> articleList = null;
-    	try {
-			su.beginSessionWithTransaction();
-			
-			articleList = su.getSession()
-					.createQuery("from Article as article order by article.likes desc")
-		            .setMaxResults(4)
-		 			.list();			
-			
-			
-			su.CommitCurrentTransaction();
-		
-			
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-		return articleList;
-    }
-	
-	
-	@SuppressWarnings({ "unchecked" })
-    public List<Article> fetchQuickReadArticles(){
-    	
-		List<Article> articleList = null;
-    	try {
-			su.beginSessionWithTransaction();
-			
-			articleList = su.getSession()
-					.createQuery("from Article as article order by article.commentCount desc")
-		            .setMaxResults(2)
-		 			.list();			
-			
-			
-			su.CommitCurrentTransaction();
-		
-			
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-		return articleList;
-    }
 
-	
-	//do it again
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+
+		}
+		System.out.println("CHECKING:   articleList is null?"
+				+ Util.IsEmptyOrNull(articleList));
+		return articleList;
+	}
+
 	@SuppressWarnings({ "unchecked" })
-    public List<Article> fetchExploreArticles(){
+	public List<Article> fetchTrendingArticles() {
+
+		List<Article> articleList = null;
+		try {
+			su.beginSessionWithTransaction();
+
+			articleList = su
+					.getSession()
+					.createQuery(
+							"from Article as article order by article.likes desc")
+					.setMaxResults(4).list();
+
+			su.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+
+		}
+		return articleList;
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public List<Article> fetchQuickReadArticles() {
+
+		List<Article> articleList = null;
+		try {
+			su.beginSessionWithTransaction();
+
+			articleList = su
+					.getSession()
+					.createQuery(
+							"from Article as article order by article.commentCount desc")
+					.setMaxResults(2).list();
+
+			su.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+
+		}
+		return articleList;
+	}
+
+	// do it again
+	@SuppressWarnings({ "unchecked" })
+	public List<Article> fetchExploreArticles() {
 		System.out.println("fetchexplorearticles .. ");
-    	
-		List<Article> articleList = null;
-        final int SIZE =5;
-			try {
-			su.beginSessionWithTransaction();
-			
-			 articleList = su.getSession()
-					 .createQuery("from Article as article order by article.date desc")
-					 .setMaxResults(SIZE)
-		            .list();		
-			
-			su.CommitCurrentTransaction();
-		
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-		return articleList;
-    }
-	
-	@SuppressWarnings("unchecked")
-	public List<Article> fetchAgainExploreArticles(int start){
-		System.out.println("fetchexplorearticles again called here ");
-    	
-		List<Article> articleList = null;
-        final int SIZE =5;
-			try {
-			su.beginSessionWithTransaction();
-			
-			 articleList = su.getSession()
-					 .createQuery("from Article as article order by article.date desc")
-					 .setFirstResult(start)
-					 .setMaxResults(SIZE)
-		            .list();		
-			
-			su.CommitCurrentTransaction();
-		
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-			
-		}
-		return articleList;
-    }
 
-	
+		List<Article> articleList = null;
+		final int SIZE = 5;
+		try {
+			su.beginSessionWithTransaction();
+
+			articleList = su
+					.getSession()
+					.createQuery(
+							"from Article as article order by article.date desc")
+					.setMaxResults(SIZE).list();
+
+			su.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+
+		}
+		return articleList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Article> fetchAgainExploreArticles(int start) {
+		System.out.println("fetchexplorearticles again called here ");
+
+		List<Article> articleList = null;
+		final int SIZE = 5;
+		try {
+			su.beginSessionWithTransaction();
+
+			articleList = su
+					.getSession()
+					.createQuery(
+							"from Article as article order by article.date desc")
+					.setFirstResult(start).setMaxResults(SIZE).list();
+
+			su.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+
+		}
+		return articleList;
+	}
 
 }

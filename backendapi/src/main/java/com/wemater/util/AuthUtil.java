@@ -11,183 +11,201 @@ import com.wemater.exception.AuthException;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.EvaluateException;
 
-
-
 public class AuthUtil {
-	
-		private final SessionUtil su;
-		private final static Map<String, String> Authmapper = new HashMap<String, String>();
-		    
-		public AuthUtil(SessionUtil su) { 
-			this.su = su;
-			
-		}  
-			    
-			
-		/*
-		 * //Authentication for the private resources which only a user can see.
-		 * User can see his Own Information or the comments he has put
-		 * Other users cant see the information about other user such as email address or username 
-		 * 
-		 * This is meant to keep the user Info private
-		 * however the protected resources such as the articles written by a user are not controlled by it
-		 * 
-		 */
-		
-		/**
-		 * @param authString
-		 * @param username
-		 * @return boolean. true if the authentication is success 
-		 * username should match the user who has logged in
-		 */
-		public boolean isUserAuthenticated(String authString, String username){
-			
-			if(Util.IsEmptyOrNull(authString)) throw new AuthException("Authentication Required--NULL AUTH");
-		        
-		       if(IsUserAvailableInAuthMap(authString)) return true;
-		       else if(isUserAvailableInDatabase(authString, username)){return true;}
-		       else return false;
-		}
-			
-		
-		
-		/**
-		 * @param authString
-		 * @return boolean /Return true if the user has already registered
-		 * 
-		 * This method is used to authenticate a user for protected resources
-		 */
-		public boolean isUserAuthenticatedGET(String authString){
-		    
-			if(Util.IsEmptyOrNull(authString)) throw new AuthException("Authentication Required - NULL AUTH GET");
- 
-	       if(IsUserAvailableInAuthMap(authString)) return true;
-	       else if(isUserAvaliableInDatabaseGET(authString)){return true;}
-	       else return false;
 
-		}
-	
+	private final SessionUtil su;
+	private final static Map<String, String> Authmapper = new HashMap<String, String>();
 
-private  boolean  isUserAvailableInDatabase(String encodedAuthString, String username){
+	public AuthUtil(SessionUtil su) {
+		this.su = su;
 
-	  
-      String[] params = getParamArray(encodedAuthString);
-      System.out.println(params[0]+" "+params[1]);
-    	 
-	   User AuthUser = null;
-	   Boolean isValidationSuccessfull = false;
-	
+	}
+
+	/*
+	 * //Authentication for the private resources which only a user can see.
+	 * User can see his Own Information or the comments he has put Other users
+	 * can't see the information about other user such as email address or
+	 * userName This is meant to keep the user Info private however the
+	 * protected resources such as the articles written by a user are not
+	 * controlled by it
+	 */
+
+	/**
+	 * @param authString
+	 * @param username
+	 * @return boolean. true if the authentication is success user name should
+	 *         match the user who has logged in
+	 */
+	public boolean isUserAuthenticated(String authString, String username) {
+
+		if (Util.IsEmptyOrNull(authString))
+			throw new AuthException("Authentication Required--NULL AUTH");
+
+		if (IsUserAvailableInAuthMap(authString))
+			return true;
+		else if (isUserAvailableInDatabase(authString, username)) {
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * @param authString
+	 * @return boolean /Return true if the user has already registered
+	 * 
+	 *         This method is used to authenticate a user for protected
+	 *         resources
+	 */
+	public boolean isUserAuthenticatedGET(String authString) {
+
+		if (Util.IsEmptyOrNull(authString))
+			throw new AuthException("Authentication Required - NULL AUTH GET");
+
+		if (IsUserAvailableInAuthMap(authString))
+			return true;
+		else if (isUserAvaliableInDatabaseGET(authString)) {
+			return true;
+		} else
+			return false;
+
+	}
+
+	private boolean isUserAvailableInDatabase(String encodedAuthString,
+			String username) {
+
+		String[] params = getParamArray(encodedAuthString);
+		System.out.println(params[0] + " " + params[1]);
+
+		User AuthUser = null;
+		Boolean isValidationSuccessfull = false;
+
 		try {
-			   	AuthUser = findRegisteredUser(params);
-			
-			   	if(AuthUser == null ){ //either username doesnt match or no user present
-			   		isValidationSuccessfull = false;
-			   		throw new AuthException("User credentials are invalid -NOT FOUND IN DATABASE");
-			   	}
-			   	if(!username.equals(params[0])){ //either username doesnt match or no user present
-			   		isValidationSuccessfull = false;
-			   		throw new DataForbiddenException("Private Resouce!!");
-			   	}
-			 
-				if(AuthUser != null && username.equals(params[0])){ //user present and username matches to current
-			    	isValidationSuccessfull =true;
-			    	System.out.println("FOUND IN DATABASE ");
-				   addToAuthMap(encodedAuthString); //User validated so put it in map
-				}
-				
-		}catch (HibernateException e) {
-		  su.rollBackCurrentTransaction();
-		  throw new EvaluateException(e);
-	   }
-		   return isValidationSuccessfull;
-    }	
-	
+			AuthUser = findRegisteredUser(params);
 
-private  boolean isUserAvaliableInDatabaseGET(String encodedAuthString){
+			if (AuthUser == null) { // either username doesnt match or no user
+				// present
+				isValidationSuccessfull = false;
+				throw new AuthException(
+						"User credentials are invalid -NOT FOUND IN DATABASE");
+			}
+			if (!username.equals(params[0])) { // either username doesnt match
+				// or no user present
+				isValidationSuccessfull = false;
+				throw new DataForbiddenException("Private Resouce!!");
+			}
 
-    String[] params = getParamArray(encodedAuthString);
-    System.out.println(params[0]+" "+params[1]);
-  	 
-	   User AuthUser = null;
-	   Boolean isValidationSuccessfull = false;
-	
+			if (AuthUser != null && username.equals(params[0])) { // user
+				// present
+				// and
+				// username
+				// matches
+				// to
+				// current
+				isValidationSuccessfull = true;
+				System.out.println("FOUND IN DATABASE ");
+				addToAuthMap(encodedAuthString); // User validated so put it in
+				// map
+			}
+
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+		return isValidationSuccessfull;
+	}
+
+	private boolean isUserAvaliableInDatabaseGET(String encodedAuthString) {
+
+		String[] params = getParamArray(encodedAuthString);
+		System.out.println(params[0] + " " + params[1]);
+
+		User AuthUser = null;
+		Boolean isValidationSuccessfull = false;
+
 		try {
-			   	AuthUser = findRegisteredUser(params);
-			
-			   	if(AuthUser == null ){ //either username doesnt match or no user present
-			   		isValidationSuccessfull = false;
-			   		throw new AuthException( "User credentials are invalid -- NOT FOUND IN DATABASE GET");
-			   	}
-			 
-				if(AuthUser != null ){ //user present and username matches to current
-					System.out.println("FOUND IN DATABASE GET");
-					addToAuthMap(encodedAuthString);
-			   	isValidationSuccessfull =true;
-				}
-				
-		}catch (HibernateException e) {
-		  su.rollBackCurrentTransaction();
-		  throw new EvaluateException(e);
-	   }
-		   return isValidationSuccessfull;
-  }
+			AuthUser = findRegisteredUser(params);
 
+			if (AuthUser == null) { // either username doesnt match or no user
+				// present
+				isValidationSuccessfull = false;
+				throw new AuthException(
+						"User credentials are invalid -- NOT FOUND IN DATABASE GET");
+			}
 
-private User findRegisteredUser(String[] params) {
-	User AuthUser;
-	su.beginSessionWithTransaction();
+			if (AuthUser != null) { // user present and username matches to
+				// current
+				System.out.println("FOUND IN DATABASE GET");
+				addToAuthMap(encodedAuthString);
+				isValidationSuccessfull = true;
+			}
 
-	AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
-	       .setParameter("username", params[0])
-	       .setParameter("password", params[1])
-	       .uniqueResult();
+		} catch (HibernateException e) {
+			su.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+		return isValidationSuccessfull;
+	}
 
-	su.CommitCurrentTransaction();
-	return AuthUser;
-}	
-	
-private  void addToAuthMap(String encodedAuthString){
-	
-	 System.out.println(" Adding to auth map");
-	 Authmapper.put(getLoggedInUser(encodedAuthString), encodedAuthString);
-	 System.out.println("added to authmap "+Authmapper.get(getLoggedInUser(encodedAuthString)));
-	
-}
+	private User findRegisteredUser(String[] params) {
+		User AuthUser;
+		su.beginSessionWithTransaction();
 
-private void removeFromAuthMap(String username){
-	Authmapper.remove(username);
-}
+		AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
+				.setParameter("username", params[0])
+				.setParameter("password", params[1]).uniqueResult();
 
-private boolean IsUserAvailableInAuthMap(String authString){
-	 System.out.println("checking in Map");
-	    System.out.println(Authmapper.get(getLoggedInUser(authString)));
-	  if(Authmapper.get(getLoggedInUser(authString)) == null) return false;
-	  System.out.println("FOUND IN MAP");
-    return true;
-	
-} 
+		su.CommitCurrentTransaction();
+		return AuthUser;
+	}
 
- private String DecodeAuthString(String encodedAuthString){
-	 
-	 String[] decodedAuth = encodedAuthString.split("\\s+");
-	 if(decodedAuth.length != 2 ) throw new AuthException("Invalid User Credentials _DECODE AUTH !=2");
-	  byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
-	  String authparam =  new String(decodedAuthParam);
-	  if(Util.IsEmptyOrNull(authparam)) throw new AuthException("Invalid User Credentials EMPTY NULL");
-	  return authparam;
-	  
- }
- 
- private String[] getParamArray(String encodedauthString){
-	   String[] params = DecodeAuthString(encodedauthString).split(":");
-	   if(params.length != 2 ) throw new AuthException( "Invalid User Credentials --PARAM ARRAY != 2");
-	   return params;
- }
- 
- public String getLoggedInUser(String decodedauthString){
-	return getParamArray(decodedauthString)[0];
-	  
- }
+	private void addToAuthMap(String encodedAuthString) {
 
+		System.out.println(" Adding to auth map");
+		Authmapper.put(getLoggedInUser(encodedAuthString), encodedAuthString);
+		System.out.println("added to authmap "
+				+ Authmapper.get(getLoggedInUser(encodedAuthString)));
+
+	}
+
+	@SuppressWarnings("unused")
+	private void removeFromAuthMap(String username) {
+		Authmapper.remove(username);
+	}
+
+	private boolean IsUserAvailableInAuthMap(String authString) {
+		System.out.println("checking in Map");
+		System.out.println(Authmapper.get(getLoggedInUser(authString)));
+		if (Authmapper.get(getLoggedInUser(authString)) == null)
+			return false;
+		System.out.println("FOUND IN MAP");
+		return true;
+
+	}
+
+	private String DecodeAuthString(String encodedAuthString) {
+
+		String[] decodedAuth = encodedAuthString.split("\\s+");
+		if (decodedAuth.length != 2)
+			throw new AuthException("Invalid User Credentials _DECODE AUTH !=2");
+		byte[] decodedAuthParam = Base64.decodeBase64(decodedAuth[1]);
+		String authparam = new String(decodedAuthParam);
+		if (Util.IsEmptyOrNull(authparam))
+			throw new AuthException("Invalid User Credentials EMPTY NULL");
+		return authparam;
+
+	}
+
+	private String[] getParamArray(String encodedauthString) {
+		String[] params = DecodeAuthString(encodedauthString).split(":");
+		if (params.length != 2)
+			throw new AuthException(
+					"Invalid User Credentials --PARAM ARRAY != 2");
+		return params;
+	}
+
+	public String getLoggedInUser(String decodedauthString) {
+		return getParamArray(decodedauthString)[0];
+
+	}
 
 }

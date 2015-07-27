@@ -17,35 +17,27 @@ import com.wemater.util.SessionUtil;
 
 public class PublicService implements Runnable {
 
-	private  final SessionFactory sessionfactory;
-    private final SessionUtil su;
-    private final PublicDao pd;
-	 
-	 private static List<Article> LatestArticles  = new ArrayList<Article>();
-	 private static List<Article> trendingArticles = new ArrayList<Article>();
-	 private static List<Article> quickReadArticles = new ArrayList<Article>();
-	 private static List<Article> exploreArticles = new ArrayList<Article>();
-	 
-	 
-	
+	private final SessionFactory sessionfactory;
+	private final SessionUtil su;
+	private final PublicDao pd;
+
+	private static List<Article> LatestArticles = new ArrayList<Article>();
+	private static List<Article> trendingArticles = new ArrayList<Article>();
+	private static List<Article> quickReadArticles = new ArrayList<Article>();
+	private static List<Article> exploreArticles = new ArrayList<Article>();
+
 	public PublicService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.pd = new PublicDao(su);
 	}
 
-	
-	
-  
-	
-	
 	public static List<Article> getExploreArticles() {
 		return exploreArticles;
 	}
 
-
 	public static void setExploreArticles(List<Article> ExploreArticles) {
-	    exploreArticles = ExploreArticles;
+		exploreArticles = ExploreArticles;
 	}
 
 	public static List<Article> getQuickReadArticles() {
@@ -53,132 +45,107 @@ public class PublicService implements Runnable {
 	}
 
 	public static void setQuickReadArticles(List<Article> QuickReadArticles) {
-	    quickReadArticles = QuickReadArticles;
+		quickReadArticles = QuickReadArticles;
 	}
+
 	public static List<Article> getLatestArticles() {
 		return LatestArticles;
 	}
 
-
 	public static void setLatestArticles(List<Article> latestArticles) {
 		LatestArticles = latestArticles;
 	}
-	
-	
-	
-	
+
 	public static List<Article> getTrendingArticles() {
 		return trendingArticles;
 	}
-
-
-
 
 	public static void setTrendingArticles(List<Article> trendingArticles) {
 		PublicService.trendingArticles = trendingArticles;
 	}
 
-
-
-
 	@Override
-	public void run() { 
+	public void run() {
 
-		
- 		setLatestArticles(pd.fetchLatestArticles());
+		setLatestArticles(pd.fetchLatestArticles());
 
-	    setTrendingArticles(pd.fetchTrendingArticles());	
-	    setQuickReadArticles(pd.fetchQuickReadArticles());
-	    setExploreArticles(pd.fetchExploreArticles());
+		setTrendingArticles(pd.fetchTrendingArticles());
+		setQuickReadArticles(pd.fetchQuickReadArticles());
+		setExploreArticles(pd.fetchExploreArticles());
 	}
 
-	
-	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo){
+	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo) {
 
-		   return transformArticlesToModels(getLatestArticles(), uriInfo);
-		
-		
-	}
-	
-	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo){
-	      System.out.println("articles found from tredding list");
-	   return transformArticlesToModels(getTrendingArticles(), uriInfo);
-	
-	
+		return transformArticlesToModels(getLatestArticles(), uriInfo);
+
 	}
 
-	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo){
-	      System.out.println("articles found from read list");
-	   return transformArticlesToModels(getQuickReadArticles(), uriInfo);
-	
+	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo) {
+		System.out.println("articles found from tredding list");
+		return transformArticlesToModels(getTrendingArticles(), uriInfo);
+
 	}
-	
-	//do tomarrow and use the map for it to get all the articles or 
-	//think again about how do you want to get articles in the list
+
+	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo) {
+		System.out.println("articles found from read list");
+		return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+
+	}
+
+	// do tomarrow and use the map for it to get all the articles or
+	// think again about how do you want to get articles in the list
 	// DO IT AGAIN --again
-	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start){
-	        
-		    System.out.println("articles found from explore list");
-		    	List<Article> articles = null;
-		        int SIZE = 5;
-	        
-			 articles = getExploreArticles();
-			         
-		     if(start > SIZE)
-			 articles = pd.fetchAgainExploreArticles(start);
-	        
-		     
-	       return transformArticlesToModels(articles, uriInfo);
-	
-	}
-	
-	
-	
-    //service related methods
-	private List<ArticleModel> transformArticlesToModels(List<Article> articles, UriInfo uriInfo) {  
-   	 List<ArticleModel> models = new ArrayList<ArticleModel>();
-   	   
-   	 for (Iterator<Article> iterator = articles.iterator(); iterator.hasNext();) {
-			Article article = (Article) iterator.next();
-			models.add( transformArticleToModel(article, uriInfo));
-			
-		}
-   	return models;
-   	 
-    
-    }
-	
-	
-	private ArticleModel transformArticleToModel(Article article, UriInfo uriInfo) {
-		
-		
-		
-		Link self = LinkService.createLinkForEachArticleOfUser("getAllArticles",
-                article.getUser().getUsername(),
-                article.getId(), uriInfo,"self");
-		Link articles = LinkService.createLinkForAllArticlesOfUser("getAllArticles",
-							article.getUser().getUsername(),
-							uriInfo, "articles");
-		 Link comments = LinkService.createLinkForArticleComments("getAllArticles",
-				   "getAllComments",
-				  article.getUser().getUsername(),
-				  article.getId(),
-				  uriInfo, "comments");  
-		 Link user = LinkService.CreateLinkForEachUser(article.getUser().getUsername(),
-					uriInfo, "user");
-		
+	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start) {
 
-			
-		  ArticleModel model = new ArticleModel()
-				               .constructModel(article)
-		                       .addCount(article.getCommentCount())
-		   					   .addLikes(article.getLikes())
-		   					   .addTags(article.getTags())
-	              		       .addLinks(self, articles,comments,user);
-		
+		System.out.println("articles found from explore list");
+		List<Article> articles = null;
+		int SIZE = 5;
+
+		articles = getExploreArticles();
+
+		if (start > SIZE)
+			articles = pd.fetchAgainExploreArticles(start);
+
+		return transformArticlesToModels(articles, uriInfo);
+
+	}
+
+	// service related methods
+	private List<ArticleModel> transformArticlesToModels(
+			List<Article> articles, UriInfo uriInfo) {
+		List<ArticleModel> models = new ArrayList<ArticleModel>();
+
+		for (Iterator<Article> iterator = articles.iterator(); iterator
+				.hasNext();) {
+			Article article = (Article) iterator.next();
+			models.add(transformArticleToModel(article, uriInfo));
+
+		}
+		return models;
+
+	}
+
+	private ArticleModel transformArticleToModel(Article article,
+			UriInfo uriInfo) {
+
+		Link self = LinkService.createLinkForEachArticleOfUser(
+				"getAllArticles", article.getUser().getUsername(),
+				article.getId(), uriInfo, "self");
+		Link articles = LinkService.createLinkForAllArticlesOfUser(
+				"getAllArticles", article.getUser().getUsername(), uriInfo,
+				"articles");
+		Link comments = LinkService.createLinkForArticleComments(
+				"getAllArticles", "getAllComments", article.getUser()
+						.getUsername(), article.getId(), uriInfo, "comments");
+		Link user = LinkService.CreateLinkForEachUser(article.getUser()
+				.getUsername(), uriInfo, "user");
+
+		ArticleModel model = new ArticleModel().constructModel(article)
+				.addCount(article.getCommentCount())
+				.addLikes(article.getLikes()).addTags(article.getTags())
+				.addLinks(self, articles, comments, user);
+
 		return model;
 	}
 
-
-	
 }
