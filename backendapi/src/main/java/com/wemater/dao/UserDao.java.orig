@@ -117,23 +117,20 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 				}
 <<<<<<< HEAD
 				 }
-				 
-				  sessionUtil.CommitCurrentTransaction();
-			} catch (HibernateException e) {
-				sessionUtil.rollBackCurrentTransaction();
-				throw new EvaluateException(e);
-			}
-
-		
+				
 =======
 			}
 
+>>>>>>> after merge
 			sessionUtil.CommitCurrentTransaction();
 		} catch (HibernateException e) {
 			sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 
+<<<<<<< HEAD
+		
+=======
 	}
 >>>>>>> after merge
 
