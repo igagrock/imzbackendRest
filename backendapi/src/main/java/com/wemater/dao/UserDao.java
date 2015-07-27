@@ -17,9 +17,9 @@ import com.wemater.util.Util;
 public class UserDao extends GenericDaoImpl<User, Long> {
 
 	private final SessionUtil sessionUtil;
-
-	// inject sessionUtil object at the runtime to use the session
-	public UserDao(SessionUtil sessionUtil) {
+    //inject sessionUtil object at the runtime to use the session
+	public UserDao(SessionUtil sessionUtil)
+	{
 		super(sessionUtil, User.class);
 		this.sessionUtil = sessionUtil;
 	}
@@ -115,14 +115,14 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 					Comment comment = (Comment) iterator.next();
 					comment.setUser(anyonymous);
 				}
-				 }
-				
+			}
+
 			sessionUtil.CommitCurrentTransaction();
 		} catch (HibernateException e) {
 			sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 
-		
+	}
 
 }
