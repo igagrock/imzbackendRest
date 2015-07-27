@@ -41,7 +41,7 @@ public class AuthUtil {
 		if (Util.IsEmptyOrNull(authString))
 			throw new AuthException("Authentication Required--NULL AUTH");
 
-		if (IsUserAvailableInAuthMap(authString))
+		if (IsUserAvailableInAuthMap(authString,username))
 			return true;
 		else if (isUserAvailableInDatabase(authString, username)) {
 			return true;
@@ -61,7 +61,7 @@ public class AuthUtil {
 		if (Util.IsEmptyOrNull(authString))
 			throw new AuthException("Authentication Required - NULL AUTH GET");
 
-		if (IsUserAvailableInAuthMap(authString))
+		if (IsUserAvailableInAuthMapGET(authString))
 			return true;
 		else if (isUserAvaliableInDatabaseGET(authString)) {
 			return true;
@@ -171,7 +171,7 @@ public class AuthUtil {
 		Authmapper.remove(username);
 	}
 
-	private boolean IsUserAvailableInAuthMap(String authString) {
+	private boolean IsUserAvailableInAuthMapGET(String authString) {
 		System.out.println("checking in Map");
 		System.out.println(Authmapper.get(getLoggedInUser(authString)));
 		if (Authmapper.get(getLoggedInUser(authString)) == null)
@@ -179,6 +179,19 @@ public class AuthUtil {
 		System.out.println("FOUND IN MAP");
 		return true;
 
+	}
+	
+	private boolean IsUserAvailableInAuthMap(String authString,String username) {
+		System.out.println("checking in Map");
+		String LoggedUser = getLoggedInUser(authString);
+		System.out.println(Authmapper.get(getLoggedInUser(authString)));
+		if (Authmapper.get(LoggedUser) == null)
+			return false;
+		System.out.println("FOUND IN MAP");
+		if(Authmapper.get(LoggedUser) != null && LoggedUser.equals(username))
+         return true;
+		
+     return false;
 	}
 
 	private String DecodeAuthString(String encodedAuthString) {
