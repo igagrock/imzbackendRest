@@ -25,78 +25,73 @@ import com.wemater.service.ArticleService;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ArticleResource {
-	
+
 	private ArticleService service;
 
-	
-	
-	
 	public ArticleResource() {
 		this.service = new ArticleService();
 	}
 
-
 	@GET
 	public Response getArticles(
-			@HeaderParam("Authorization") String authString,  
+			@HeaderParam("Authorization") String authString,
 			@PathParam("profileName") String profilename,
-			 @Context UriInfo uriInfo) {
-	 		
-		GenericEntity<List<ArticleModel>> entity = 
-				new GenericEntity<List<ArticleModel>>(
-						service.getAllArticlesWithNoContent(authString,profilename, uriInfo)){};
-		
+			@Context UriInfo uriInfo) {
+
+		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(
+				service.getAllArticlesWithNoContent(authString, profilename,
+						uriInfo)) {
+		};
+
 		return Response.ok(entity).build();
 	}
-	
 
 	@GET
 	@Path("/{articleId}")
-	public Response getArticle(@PathParam("articleId") Long Id, @Context UriInfo uriInfo)  {
-		//No authentication here coz anyone should see an article
-		return Response.ok(service.getArticleWithFullContent(Id, uriInfo)).build();
+	public Response getArticle(@PathParam("articleId") Long Id,
+			@Context UriInfo uriInfo) {
+		// No authentication here coz anyone should see an article
+		return Response.ok(service.getArticleWithFullContent(Id, uriInfo))
+				.build();
 
 	}
-	
-	
 
 	@POST
-	public Response postArticle( @HeaderParam("Authorization") String authString,
-			             @PathParam("profileName") String profilename,
-				     ArticleModel model, 
-				     @Context UriInfo uriInfo) {
-	 		
-		return Response.status(Status.CREATED)
-				       .entity(service.postArticle(authString,profilename, model, uriInfo))
-				       .build();
+	public Response postArticle(
+			@HeaderParam("Authorization") String authString,
+			@PathParam("profileName") String profilename, ArticleModel model,
+			@Context UriInfo uriInfo) {
+
+		return Response
+				.status(Status.CREATED)
+				.entity(service.postArticle(authString, profilename, model,
+						uriInfo)).build();
 	}
-	
+
 	@PUT
 	@Path("/{articleId}")
 	public Response updateArticle(
-				    @HeaderParam("Authorization") String authString,
-			            @PathParam("articleId") Long Id, 
-			            ArticleModel model, @Context UriInfo uriInfo)  {
-		return Response.ok(service.updateArticle(authString,Id, model, uriInfo)).build();
+			@HeaderParam("Authorization") String authString,
+			@PathParam("articleId") Long Id, ArticleModel model,
+			@Context UriInfo uriInfo) {
+		return Response.ok(
+				service.updateArticle(authString, Id, model, uriInfo)).build();
 
 	}
+
 	@DELETE
 	@Path("/{articleId}")
 	public Response deteArticle(
-						 @HeaderParam("Authorization") String authString,
-						 @PathParam("articleId") Long Id, 
-			             @Context UriInfo uriInfo) {
-		
-		service.deleteArticle(authString,Id, uriInfo);
+			@HeaderParam("Authorization") String authString,
+			@PathParam("articleId") Long Id, @Context UriInfo uriInfo) {
+
+		service.deleteArticle(authString, Id, uriInfo);
 		return Response.noContent().build();
 
 	}
-	
-	
-	  
+
 	@Path("/{articleId}/comments")
-	public CommentResource getAllComments()
-	{
+	public CommentResource getAllComments() {
 		return new CommentResource();
 	}
 }

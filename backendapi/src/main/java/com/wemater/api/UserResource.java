@@ -25,90 +25,78 @@ import com.wemater.service.UserService;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
-  
-	  private UserService service;
 
-    
-	
-	  
+	private UserService service;
+
 	public UserResource() {
 		this.service = new UserService();
-		
+
 	}
 
-   //remove this after testing
-	  
+	// remove this after testing
+
 	@GET
-	public Response  getAllUsers( @Context UriInfo uriInfo){
-		GenericEntity<List<UserModel>> entity = 
-				new GenericEntity<List<UserModel>>(service.getAllusers(uriInfo)){};
-		
-			return Response.ok(entity).build();
+	public Response getAllUsers(@Context UriInfo uriInfo) {
+		GenericEntity<List<UserModel>> entity = new GenericEntity<List<UserModel>>(
+				service.getAllusers(uriInfo)) {
+		};
+
+		return Response.ok(entity).build();
 	}
-	
-	
+
 	@GET
 	@Path("/{profileName}")
-	public Response getUser(
-							@HeaderParam("Authorization") String authString,
-							@PathParam("profileName") String profilename,
-							@Context UriInfo uriInfo) {
-		
-		return Response.ok(service.getUser(authString,profilename, uriInfo)).build(); 
+	public Response getUser(@HeaderParam("Authorization") String authString,
+			@PathParam("profileName") String profilename,
+			@Context UriInfo uriInfo) {
+
+		return Response.ok(service.getUser(authString, profilename, uriInfo))
+				.build();
 
 	}
-	
+
 	@POST
-	public Response postUser( @Context UriInfo uriInfo, UserModel model ){
-		
-	    return Response.status(Status.CREATED)
-	    		 .entity( service.postUser(model, uriInfo))
-	    		 .build();
-	    
+	public Response postUser(@Context UriInfo uriInfo, UserModel model) {
+
+		return Response.status(Status.CREATED)
+				.entity(service.postUser(model, uriInfo)).build();
+
 	}
-	
+
 	@PUT
 	@Path("/{profileName}")
-	public Response updateUser(
-								@HeaderParam("Authorization") String authString,
-								@PathParam("profileName") String profilename,
-								 UserModel model, 
-								 @Context UriInfo uriInfo){
-	
-	    	    
-		return Response.ok(service.updateUser(authString,profilename, model, uriInfo)).build();
-		
+	public Response updateUser(@HeaderParam("Authorization") String authString,
+			@PathParam("profileName") String profilename, UserModel model,
+			@Context UriInfo uriInfo) {
+
+		return Response.ok(
+				service.updateUser(authString, profilename, model, uriInfo))
+				.build();
+
 	}
-	
+
 	@DELETE
 	@Path("/{profileName}")
-	public Response deleteUser(
-								@HeaderParam("Authorization") String authString,
-								@PathParam("profileName") String profilename,
-								@Context UriInfo uriInfo){
-		
-	
-		service.deleteUser(authString,profilename);
+	public Response deleteUser(@HeaderParam("Authorization") String authString,
+			@PathParam("profileName") String profilename,
+			@Context UriInfo uriInfo) {
+
+		service.deleteUser(authString, profilename);
 		return Response.noContent().build();
-		
+
 	}
-	
-	//redirection from here
-	
+
+	// redirection from here
+
 	@Path("/{profileName}/comments")
 	public UserCommentResource getComments() {
 		return new UserCommentResource();
 
-	} 
-	
-	 
-	
-	 @Path("/{profileName}/articles")
-	 public ArticleResource getAllArticles(){
-		    return new ArticleResource();
-	 }
-	 
-	
-	
-	
+	}
+
+	@Path("/{profileName}/articles")
+	public ArticleResource getAllArticles() {
+		return new ArticleResource();
+	}
+
 }

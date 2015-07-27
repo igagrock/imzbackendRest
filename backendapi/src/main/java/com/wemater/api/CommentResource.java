@@ -24,48 +24,37 @@ import com.wemater.service.CommentService;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CommentResource {
-	
-		private CommentService service;
-	
-		
-		public CommentResource() {
-			this.service = new CommentService();
-		
-		}
-	
-		@GET
-		public Response getComments(
-									@PathParam("articleId") long id,
-									@Context UriInfo uriInfo){
-			//no auth required
-			
-			GenericEntity<List<CommentModel>> entity = 
-					new GenericEntity<List<CommentModel>>( 
-							service.getAllArticleComments(id, uriInfo)){};
-			return Response.ok(entity).build();		
-		}
-	   
-		
-		@Path("/{commentId}")
-		public Response getCommentOfUser( ){
-			throw new NoImplementionException();
-		}
-		
-		
-		@POST
-		public Response postComment(
-				@HeaderParam("Authorization") String authString,
-				CommentModel model,
-				@Context UriInfo uriInfo)
-		{
-			return Response.status(Status.CREATED).entity(
-					service.postArticleComment(authString,model, uriInfo)).build();
-		}
-	
-		
-		
-	
-		
-		
-  
-}  
+
+	private CommentService service;
+
+	public CommentResource() {
+		this.service = new CommentService();
+
+	}
+
+	@GET
+	public Response getComments(@PathParam("articleId") long id,
+			@Context UriInfo uriInfo) {
+		// no auth required
+
+		GenericEntity<List<CommentModel>> entity = new GenericEntity<List<CommentModel>>(
+				service.getAllArticleComments(id, uriInfo)) {
+		};
+		return Response.ok(entity).build();
+	}
+
+	@Path("/{commentId}")
+	public Response getCommentOfUser() {
+		throw new NoImplementionException();
+	}
+
+	@POST
+	public Response postComment(
+			@HeaderParam("Authorization") String authString,
+			CommentModel model, @Context UriInfo uriInfo) {
+		return Response.status(Status.CREATED)
+				.entity(service.postArticleComment(authString, model, uriInfo))
+				.build();
+	}
+
+}

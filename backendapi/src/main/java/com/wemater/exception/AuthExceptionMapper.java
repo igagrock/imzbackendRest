@@ -12,8 +12,9 @@ public class AuthExceptionMapper implements ExceptionMapper<AuthException> {
 
 	@Override
 	public Response toResponse(AuthException ex) {
-		ErrorModel  errorModel = new ErrorModel(ex.getError_type(), ex.getCode(), ex.getError_message());
-		 System.out.println("AuthExceptionmapper mapper found");
+		ErrorModel errorModel = new ErrorModel(ex.getError_type(),
+				ex.getCode(), ex.getError_message());
+		System.out.println("AuthExceptionmapper mapper found");
 		return Response.status(Status.UNAUTHORIZED).entity(errorModel).build();
 	}
 

@@ -8,12 +8,14 @@ import javax.ws.rs.ext.Provider;
 import com.wemater.modal.ErrorModel;
 
 @Provider
-public class DataNotInsertedExceptionMapper implements ExceptionMapper<DataNotInsertedException> {
+public class DataNotInsertedExceptionMapper implements
+		ExceptionMapper<DataNotInsertedException> {
 
 	@Override
 	public Response toResponse(DataNotInsertedException ex) {
 
-		ErrorModel  errorModel = new ErrorModel(ex.getError_type(), ex.getCode(), ex.getError_message());
+		ErrorModel errorModel = new ErrorModel(ex.getError_type(),
+				ex.getCode(), ex.getError_message());
 		System.out.println("Notintserted mapper executed..");
 		return Response.status(Status.CONFLICT).entity(errorModel).build();
 	}
