@@ -125,4 +125,4 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 	}	
 
-}
+}   //commit after merge here
