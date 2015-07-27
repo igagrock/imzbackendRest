@@ -167,8 +167,7 @@ public class AuthUtil {
 
 	}
 
-	@SuppressWarnings("unused")
-	private void removeFromAuthMap(String username) {
+	public static void removeFromAuthMap(String username) {
 		Authmapper.remove(username);
 	}
 

@@ -17,7 +17,6 @@
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
  
-
   <servlet>
     <description></description>
     <display-name>StartExecutorforArticles</display-name>
