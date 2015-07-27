@@ -17,18 +17,19 @@ import com.wemater.util.Util;
 public class UserDao extends GenericDaoImpl<User, Long> {
 
 	private final SessionUtil sessionUtil;
-    //inject sessionUtil object at the runtime to use the session
-	public UserDao(SessionUtil sessionUtil)
-	{
+
+	// inject sessionUtil object at the runtime to use the session
+	public UserDao(SessionUtil sessionUtil) {
 		super(sessionUtil, User.class);
 		this.sessionUtil = sessionUtil;
 	}
 
 	public SessionUtil getSessionUtil() throws InstantiationException {
-		
-			if (sessionUtil == null)  
-	            throw new InstantiationException("SessionUtil has not been set on DAO before usage");
-			return sessionUtil;
+
+		if (sessionUtil == null)
+			throw new InstantiationException(
+					"SessionUtil has not been set on DAO before usage");
+		return sessionUtil;
 	}
 
 	public User createUser(String username, String email, String name,
@@ -115,12 +116,12 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 					comment.setUser(anyonymous);
 				}
 				 }
-				 
-				  sessionUtil.CommitCurrentTransaction();
-			} catch (HibernateException e) {
-				sessionUtil.rollBackCurrentTransaction();
-				throw new EvaluateException(e);
-			}
+				
+			sessionUtil.CommitCurrentTransaction();
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
 
 		
 
