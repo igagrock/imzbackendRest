@@ -68,7 +68,6 @@ public class PublicService implements Runnable {
 	public void run() {
 
 		setLatestArticles(pd.fetchLatestArticles());
-
 		setTrendingArticles(pd.fetchTrendingArticles());
 		setQuickReadArticles(pd.fetchQuickReadArticles());
 		setExploreArticles(pd.fetchExploreArticles());
