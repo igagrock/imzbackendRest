@@ -8,6 +8,7 @@ import org.hibernate.HibernateException;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
@@ -123,6 +124,48 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			throw new EvaluateException(e);
 		}
 
-	}	
+	}
+	
+	
+	public String ifEmailExists(String email){
+		String emailaddress=null;
+		try {
+			sessionUtil.beginSessionWithTransaction();
+			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUseremailExist")
+					                     .setParameter("email", email).uniqueResult();
+			
+			sessionUtil.CommitCurrentTransaction();
+			
+			if(emailaddress == null) throw new DataNotFoundException("Email does not exist");
+			return emailaddress;
+			
+			
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+	}
+	
+	//check if username exisits
+	public String ifUsernameExists(String username){
+		String emailaddress=null;
+		try {
+			sessionUtil.beginSessionWithTransaction();
+			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUsernameExist")
+					                     .setParameter("username", username).uniqueResult();
+			
+			sessionUtil.CommitCurrentTransaction();
+			
+			if(emailaddress == null) throw new DataNotFoundException("username does not exist");
+			return emailaddress;
+			
+			
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+	}
+	
+	
 
 }   //commit after merge here

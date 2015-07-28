@@ -82,6 +82,17 @@ public class UserService {
 		ud.removeRefrences(user);
 		ud.delete(user);
 	}
+	
+	
+	//for ajax requests
+	
+	public String IfUsernameExist(String username){
+		return ud.ifUsernameExists(username);
+		
+	}
+	public String ifEmailExist(String email){
+		return ud.ifEmailExists(email);
+	}
 
 	// /USerService for transforming starts here
 

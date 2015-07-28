@@ -25,7 +25,9 @@ import org.hibernate.annotations.NaturalId;
 		@NamedQuery(name = "user.IsUserCommentAvailable", query = "select user.username from User as user"
 				+ " inner join user.comments as comment on comment.id = :id  "),
 		@NamedQuery(name = "user.IsUserAvailable", query = "from User as user "
-				+ "where user.username = :username and user.password = :password ")
+				+ "where user.username = :username and user.password = :password "),
+		@NamedQuery(name="user.ifUsernameExist", query = "select u.username from User as u  where u.username = :username"),
+		@NamedQuery(name="user.ifUseremailExist", query = "select u.email from User as u  where u.email = :email")
 
 })
 @Table(name = "USER")
