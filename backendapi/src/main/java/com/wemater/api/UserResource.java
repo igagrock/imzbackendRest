@@ -45,6 +45,7 @@ public class UserResource {
 		if(username != null){
 			System.out.println("username is "+username);
 			return Response.ok(service.IfUsernameExist(username)).build();
+		
 		}
 		if(email != null) {
 			System.out.println("email is "+email);

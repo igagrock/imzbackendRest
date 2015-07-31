@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
+import com.wemater.modal.AjaxModel;
 import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
@@ -86,12 +87,12 @@ public class UserService {
 	
 	//for ajax requests
 	
-	public String IfUsernameExist(String username){
-		return ud.ifUsernameExists(username);
+	public AjaxModel IfUsernameExist(String username){
+		return new AjaxModel(ud.ifUsernameExists(username));
 		
 	}
-	public String ifEmailExist(String email){
-		return ud.ifEmailExists(email);
+	public AjaxModel ifEmailExist(String email){
+		return new AjaxModel(ud.ifEmailExists(email));
 	}
 
 	// /USerService for transforming starts here
