@@ -219,5 +219,13 @@ public class AuthUtil {
 		return getParamArray(decodedauthString)[0];
 
 	}
+	
+	public String[] getdecodeParamArray(String encodedauthString) {
+		String[] params =encodedauthString.split(":");
+		if (params.length != 2)
+			throw new AuthException(
+					"temperred verification details auth != 2");
+		return params;
+	}
 
 }

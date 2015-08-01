@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
 
 @NamedQueries(value = {
 		@NamedQuery(name = "user.findbyEmail", query = "from User u where u.email = :email"),
@@ -27,7 +28,9 @@ import org.hibernate.annotations.NaturalId;
 		@NamedQuery(name = "user.IsUserAvailable", query = "from User as user "
 				+ "where user.username = :username and user.password = :password "),
 		@NamedQuery(name="user.ifUsernameExist", query = "select u.username from User as u  where u.username = :username"),
-		@NamedQuery(name="user.ifUseremailExist", query = "select u.email from User as u  where u.email = :email")
+		@NamedQuery(name="user.ifUseremailExist", query = "select u.email from User as u  where u.email = :email"),
+		@NamedQuery(name="user.ifUserVerificationDataExist", query="from User as u where u.username=:username and u.email =:email")
+		
 
 })
 @Table(name = "USER")
@@ -44,6 +47,7 @@ public class User {
 	private List<Article> articles;
 	private int CommentCount;
 	private List<Comment> comments;
+	private Boolean isVerified;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,6 +114,8 @@ public class User {
 	public void setArticleCount(int articleCount) {
 		this.ArticleCount = articleCount;
 	}
+	
+	
 
 	@OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST })
 	public List<Article> getArticles() {
@@ -141,6 +147,15 @@ public class User {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	@Column(name = "IS_VERIFIED", columnDefinition = "boolean default false", nullable = false)
+	public Boolean getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(Boolean isVerified) {
+		this.isVerified = isVerified;
 	}
 
 	public User() {

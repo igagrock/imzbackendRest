@@ -27,6 +27,7 @@ public class UserModel {
 	private int commentcount;
 	private List<CommentModel> comments;
 	private List<Link> links;
+	private Boolean isVerified;
 
 	public UserModel() {
 		super();
@@ -129,10 +130,21 @@ public class UserModel {
 		this.links = links;
 	}
 
+	public Boolean getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(Boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	
+
 	public synchronized UserModel constructModel(User user) {
 
 		this.name = user.getName();
 		this.bio = user.getBio();
+		this.isVerified = user.getIsVerified();
 
 		return this;
 	}

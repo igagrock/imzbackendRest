@@ -1,8 +1,12 @@
 package com.wemater.util;
 
-import org.hibernate.SessionFactory;
+import org.apache.commons.codec.binary.Base64;
+import org.hibernate.HibernateException;
 
-import com.wemater.dao.UserDao;
+import com.wemater.dto.User;
+import com.wemater.exception.DataNotFoundException;
+import com.wemater.service.UserService;
+
 
 
 
@@ -11,19 +15,32 @@ import com.wemater.dao.UserDao;
 
 public class Runner {
 	
-    static SessionFactory sf = HibernateUtil.getSessionFactory();
+
     
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-	   SessionUtil su = new SessionUtil(sf.openSession());
-	   
-	    UserDao ud = new UserDao(su);
 	    
-	    System.out.println(ud.ifUsernameExists("inininin"));
-	   
+		
+
+		String username = "irshsheik11h";
+		String password = "irshsheikh@gmail.com";
+		String auth = username + ":" + password;
+
+		String encodedauth = new String(Base64.encodeBase64(auth.getBytes()));
+       
+		System.out.println(encodedauth);
+		
+		
+		
 	
 		
+		
 	}
+	
+
 	
 }
 

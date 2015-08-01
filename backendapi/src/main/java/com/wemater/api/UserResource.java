@@ -39,7 +39,10 @@ public class UserResource {
 	@GET
 	public Response getAllUsers(@Context UriInfo uriInfo,
 										@QueryParam("username") String username,
-										@QueryParam("email") String email      ) {
+										@QueryParam("email") String email ,
+										@QueryParam("verify") String verificationString
+										
+										) {
 		
 
 		if(username != null){
@@ -51,7 +54,11 @@ public class UserResource {
 			System.out.println("email is "+email);
 			return Response.ok(service.ifEmailExist(email)).build();
 		}
-		  
+		if(verificationString != null){
+			System.out.println("verificationString is "+verificationString);
+			return Response.ok(service.verifyUserEmail(verificationString, uriInfo)).build();
+			
+		}  
 		
 		
 		GenericEntity<List<UserModel>> entity = new GenericEntity<List<UserModel>>(

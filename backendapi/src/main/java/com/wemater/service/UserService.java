@@ -15,6 +15,7 @@ import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
+import com.wemater.util.MailUtil;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
 
@@ -23,12 +24,14 @@ public class UserService {
 	private final SessionUtil su;
 	private final UserDao ud;
 	private final AuthUtil au;
+	private final MailUtil mu;
 
 	public UserService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.ud = new UserDao(su);
 		this.au = new AuthUtil(su);
+		this.mu = new MailUtil();
 
 	}
 
@@ -49,10 +52,10 @@ public class UserService {
 	}
 
 	public UserModel postUser(UserModel model, UriInfo uriInfo) {
-
-		Long id = ud.save(ud.createUser(model)); // create the user in param and
-													// save the user
-
+		// validate the usermodel for null  values and update the model
+		model = ud.validateUserModel(model);		
+		Long id = ud.save(ud.createUser(model));//save the user
+		mu.sendMail(model.getEmail(), model.getUsername()); //send email to user
 		return transformUserToModel(ud.find(id), uriInfo);
 
 	}
@@ -62,17 +65,10 @@ public class UserService {
 
 		// authentication first
 		au.isUserAuthenticated(authString, profilename);
-		ud.update(ud.updateValidateUser(
-				ud.find(Util.removeSpaces(profilename)), model)); // update the
-																	// user in
-																	// the
-																	// database
-
-		return transformUserToModel(ud.find(profilename), uriInfo); // return
-																	// the model
-																	// of the
-																	// updated
-																	// user
+		//update the user in database after validation
+		ud.update(ud.updateValidateUser(ud.find(Util.removeSpaces(profilename)), model)); 
+        //return the model of the updated User																	
+		return transformUserToModel(ud.find(profilename), uriInfo);
 
 	}
 
@@ -95,6 +91,15 @@ public class UserService {
 		return new AjaxModel(ud.ifEmailExists(email));
 	}
 
+	//verify emailservice
+	public UserModel verifyUserEmail(String encodedAuth,UriInfo uriInfo){
+		String[] params = mu.getVerificationParams(encodedAuth); //get the decoded auth array
+		User user = ud.findUserByUsernameEmailBoth(params[0], params[1]); //check if they belong to same user
+		user = ud.setVerified(user); //set User as verified
+		return transformUserToModel(user, uriInfo); //return the verified User
+		
+	}
+	
 	// /USerService for transforming starts here
 
 	// get all users

@@ -20,6 +20,7 @@ import com.wemater.util.Util;
 public class UserDao extends GenericDaoImpl<User, Long> {
 
 	private final SessionUtil sessionUtil;
+
     //inject sessionUtil object at the runtime to use the session
 	public UserDao(SessionUtil sessionUtil)
 	{
@@ -34,6 +35,40 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 					"SessionUtil has not been set on DAO before usage");
 		return sessionUtil;
 	}
+	
+	public User findUserByUsernameEmailBoth(String username, String password) {
+		User user = null;
+		try {
+			sessionUtil.beginSessionWithTransaction();
+			user = (User) sessionUtil.getSession().getNamedQuery("user.ifUserVerificationDataExist")
+					.setParameter("username", username)
+					.setParameter("email", password).uniqueResult();
+			if (user == null)
+				throw new DataNotFoundException(
+						"verification not successfull. Data Invalid");
+			sessionUtil.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+		return user;
+	}
+	
+	public User setVerified(User user) {
+		try {
+			sessionUtil.beginSessionWithTransaction();
+			if (user.getIsVerified() != true)
+				user.setIsVerified(true);
+			else
+				throw new DataNotInsertedException("User is already verified");
+			sessionUtil.CommitCurrentTransaction();
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+      return user;
+	}
 
 	public User createUser(String username, String email, String name,
 			String password, String bio) {
@@ -44,19 +79,21 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		user.setEmail(email);
 		user.setPassword(password);
 		user.setBio(bio);
+		user.setIsVerified(false);
 		return user;
 	}
 
 	public User createUser(UserModel model) {
 
-		model = validateUserModel(model);// validate the usermodel for null
-											// values and update the model
+		
 		User user = new User();
 		user.setUsername(Util.removeSpaces(model.getUsername()));
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
 		user.setPassword(model.getPassword());
 		user.setBio(model.getBio());
+		user.setIsVerified(false);
+		
 		return user;
 	}
 

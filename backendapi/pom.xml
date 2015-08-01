@@ -81,7 +81,12 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.4</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.codemonkey.simplejavamail</groupId>
+		    <artifactId>simple-java-mail</artifactId>
+		    <version>2.3</version>
+		</dependency>
+		
 
 
 	</dependencies>
