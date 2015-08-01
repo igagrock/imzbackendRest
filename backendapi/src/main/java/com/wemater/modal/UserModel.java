@@ -219,31 +219,6 @@ public class UserModel {
 
 	}
 
-	// validate the values of usermodel
-	public synchronized UserModel validateUserModel() {
 
-		System.out.println(this.getUsername() + " / " + this.getName() + " / "
-				+ this.getEmail() + " / " + this.password + " / "
-				+ this.getBio());
-
-		if (Util.IsEmptyOrNull(this.getUsername()))
-			throw new ValueNotProvidedException("Username",
-					"Username is required");
-
-		if (Util.IsEmptyOrNull(this.getName()))
-			throw new ValueNotProvidedException("Name",
-					"Name of user is not provided");
-
-		if (Util.IsEmptyOrNull(this.getPassword()))
-			throw new ValueNotProvidedException("Password",
-					"Password is not provided");
-		if (Util.IsEmptyOrNull(this.getEmail()))
-			throw new ValueNotProvidedException("Email",
-					"Email is not provided");
-
-		if (Util.IsEmptyOrNull(this.getBio()))
-			this.setBio("");
-		return this;
-	}
 
 }

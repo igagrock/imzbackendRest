@@ -45,7 +45,11 @@ public class GenericDaoImpl<T, Id extends Serializable> implements
 
 		} catch (RuntimeException e) {
 			sessionUtil.rollBackCurrentTransaction();
-			throw new DataNotInsertedException("NaturalId already present");
+			if(entity.getClass().getSimpleName().equals("User"))
+			throw new DataNotInsertedException("Username already present");
+			if(entity.getClass().getSimpleName().equals("Article"))
+				throw new DataNotInsertedException("Title already present");
+			
 		}
 
 		return id;

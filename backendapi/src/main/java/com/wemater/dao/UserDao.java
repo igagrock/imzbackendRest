@@ -9,7 +9,9 @@ import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.exception.DataNotFoundException;
+import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
+import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.modal.UserModel;
 import com.wemater.util.AuthUtil;
 import com.wemater.util.SessionUtil;
@@ -47,7 +49,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 	public User createUser(UserModel model) {
 
-		model = model.validateUserModel();// validate the usermodel for null
+		model = validateUserModel(model);// validate the usermodel for null
 											// values and update the model
 		User user = new User();
 		user.setUsername(Util.removeSpaces(model.getUsername()));
@@ -58,6 +60,29 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		return user;
 	}
 
+	// validate the values of usermodel
+	public  UserModel validateUserModel(UserModel model) {
+
+
+		if (Util.IsEmptyOrNull(model.getUsername()))
+			throw new ValueNotProvidedException("Username",
+					"Username is required");
+
+		if (Util.IsEmptyOrNull(model.getName()))
+			model.setName("");
+
+		if (Util.IsEmptyOrNull(model.getPassword()))
+			throw new ValueNotProvidedException("Password",
+					"Password is not provided");
+		if (Util.IsEmptyOrNull(model.getEmail()))
+			throw new ValueNotProvidedException("Email",
+					"Email is not provided");
+         if(isExistingEmail(model.getEmail()))
+        	 throw new DataNotInsertedException("Email already exits");
+		if (Util.IsEmptyOrNull(model.getBio()))
+			model.setBio("");
+		return model;
+	}
 	public synchronized User updateValidateUser(User user, UserModel model) {
 
 		if (!Util.IsEmptyOrNull(model.getName()))
@@ -74,14 +99,15 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			user.setPassword(model.getPassword());
 			//remove the existing password key from auth map here so the user is prompted to login again
 			AuthUtil.removeFromAuthMap(user.getUsername());
-	
 		}
-		
-
-
-		if (!Util.IsEmptyOrNull(model.getEmail()))
-			user.setEmail(model.getEmail());
-
+        //if email is not empty or null and it doesnt exist
+		if (!Util.IsEmptyOrNull(model.getEmail())){
+			if(!isExistingEmail(model.getEmail())){
+				user.setEmail(model.getEmail());
+			}
+			else throw new DataNotInsertedException("Email already exists");
+		}
+			
 		if (!Util.IsEmptyOrNull(model.getBio()))
 			user.setBio(model.getBio());
 
@@ -126,6 +152,22 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 	}
 	
+	public boolean isExistingEmail(String email){
+		String emailaddress=null;
+		try {
+			sessionUtil.beginSessionWithTransaction();
+			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUseremailExist")
+					                     .setParameter("email", email).uniqueResult();
+			
+			sessionUtil.CommitCurrentTransaction();
+			
+			if(emailaddress == null) return false;
+			return true;
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+	}
 	
 	public String ifEmailExists(String email){
 		String emailaddress=null;
