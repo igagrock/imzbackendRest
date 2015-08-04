@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
 
 @NamedQueries(value = {
 		@NamedQuery(name = "user.findbyEmail", query = "from User u where u.email = :email"),

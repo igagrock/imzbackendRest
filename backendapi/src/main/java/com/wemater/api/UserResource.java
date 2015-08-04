@@ -34,8 +34,9 @@ public class UserResource {
 
 	}
 
-	// remove this after testing
+	
 
+	
 	@GET
 	public Response getAllUsers(@Context UriInfo uriInfo,
 										@QueryParam("username") String username,

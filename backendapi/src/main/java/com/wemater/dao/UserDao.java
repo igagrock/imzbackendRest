@@ -244,7 +244,6 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			throw new EvaluateException(e);
 		}
 	}
-	
-	
+
 
 }   //commit after merge here

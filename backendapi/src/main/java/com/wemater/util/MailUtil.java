@@ -13,7 +13,7 @@ public class MailUtil {
 	
 	public String  getMailHTML(String toAddress,String username){
 		 String catString=username+":"+toAddress;
-		  String url="http://localhost:8080/someclient?verify="+new String(Base64.encodeBase64(catString.getBytes()));
+		  String url="http://localhost:8080/wematerClient-1/home/user/signup?verify="+new String(Base64.encodeBase64(catString.getBytes()));
 		
 		return 	"<html><head>	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>"+
 				"</head>	<body>"+

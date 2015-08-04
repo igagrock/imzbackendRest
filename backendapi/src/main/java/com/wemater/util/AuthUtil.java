@@ -147,7 +147,8 @@ public class AuthUtil {
 	}
 
 	private User findRegisteredUser(String[] params) {
-		User AuthUser;
+		User AuthUser = null;
+		try{
 		su.beginSessionWithTransaction();
 
 		AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
@@ -155,9 +156,15 @@ public class AuthUtil {
 				.setParameter("password", params[1]).uniqueResult();
 
 		su.CommitCurrentTransaction();
+		}
+		catch (HibernateException e) {
+		throw new EvaluateException(e);
+		}
+	
 		return AuthUser;
+		
 	}
-
+	
 	private void addToAuthMap(String encodedAuthString) {
 
 		System.out.println(" Adding to auth map");
