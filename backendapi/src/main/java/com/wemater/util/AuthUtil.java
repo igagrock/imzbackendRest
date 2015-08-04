@@ -88,7 +88,7 @@ public class AuthUtil {
 				throw new AuthException(
 						"User credentials are invalid -NOT FOUND IN DATABASE");
 			}
-			if (!username.equals(params[0])) { // either username doesnt match
+			if (AuthUser!= null && !username.equals(params[0])) { // either username doesnt match
 				// or no user present
 				isValidationSuccessfull = false;
 				throw new DataForbiddenException("Private Resouce!!");
@@ -132,8 +132,7 @@ public class AuthUtil {
 						"User credentials are invalid -- NOT FOUND IN DATABASE GET");
 			}
 
-			if (AuthUser != null) { // user present and username matches to
-				// current
+			if (AuthUser != null) { // user present
 				System.out.println("FOUND IN DATABASE GET");
 				addToAuthMap(encodedAuthString);
 				isValidationSuccessfull = true;
@@ -180,24 +179,28 @@ public class AuthUtil {
 
 	private boolean IsUserAvailableInAuthMapGET(String authString) {
 		System.out.println("checking in Map");
+		String LoggedUser = getLoggedInUser(authString);
+		String mappedAuth = Authmapper.get(LoggedUser);
 		System.out.println(Authmapper.get(getLoggedInUser(authString)));
-		if (Authmapper.get(getLoggedInUser(authString)) == null)
-			return false;
-		System.out.println("FOUND IN MAP");
-		return true;
+		if(Authmapper.get(LoggedUser) != null  && mappedAuth.equals(authString))
+		{
+			System.out.println("FOUND IN MAP GET");
+			return true;
+		}
+		return false;
 
 	}
 	
 	private boolean IsUserAvailableInAuthMap(String authString,String username) {
 		System.out.println("checking in Map");
 		String LoggedUser = getLoggedInUser(authString);
+		String mappedAuth = Authmapper.get(LoggedUser);
 		System.out.println(Authmapper.get(getLoggedInUser(authString)));
-		if (Authmapper.get(LoggedUser) == null)
-			return false;
-		System.out.println("FOUND IN MAP");
-		if(Authmapper.get(LoggedUser) != null && LoggedUser.equals(username))
+		if(Authmapper.get(LoggedUser) != null && LoggedUser.equals(username) && mappedAuth.equals(authString))
+		{
+			System.out.println("FOUND IN MAP");
          return true;
-		
+		}
      return false;
 	}
 
