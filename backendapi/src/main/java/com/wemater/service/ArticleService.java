@@ -150,7 +150,9 @@ public class ArticleService {
 
 		return new ArticleModel().constructModel(article)
 				.addCount(article.getCommentCount())
-				.addLikes(article.getLikes()).addTags(article.getTags())
+				.addLikes(article.getLikes())
+				.addContent(article.returnContentString())
+				.addImage(article.returnImageString())
 				.addLinks(self, articles, comments, user);
 
 	}
