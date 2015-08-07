@@ -49,6 +49,7 @@ public class GenericDaoImpl<T, Id extends Serializable> implements
 			throw new DataNotInsertedException("Username already present");
 			if(entity.getClass().getSimpleName().equals("Article"))
 				throw new DataNotInsertedException("Title already present");
+			else throw new EvaluateException(e);
 			
 		}
 

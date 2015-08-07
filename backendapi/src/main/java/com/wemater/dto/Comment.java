@@ -1,5 +1,7 @@
 package com.wemater.dto;
 
+import java.sql.Clob;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.wemater.util.Util;
 
 @NamedQueries(value = {
 
@@ -34,7 +38,7 @@ public class Comment {
 
 	private Long id;
 	private String username;
-	private String content;
+	private Clob content;
 	private Article article;
 	private User user;
 
@@ -60,14 +64,24 @@ public class Comment {
 	}
 
 	@Column(name = "COMMENT_CONTENT")
-	public String getContent() {
+	private Clob getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	private void setContent(Clob content) {
 		this.content = content;
 	}
 
+	public String returnContentString() {
+		return Util.convertClobToString(this.getContent());
+
+	}
+
+	public void createContentString(String content) {
+
+		this.setContent(Util.convertStringToClob(content));
+	}
+	
 	@ManyToOne
 	@JoinColumn(name = "ARTICLE_ID")
 	public Article getArticle() {

@@ -79,7 +79,7 @@ public class CommentModel {
 
 		this.id = comment.getId();
 		this.username = comment.getUsername();
-		this.content = comment.getContent();
+		this.content = comment.returnContentString();
 		return this;
 
 	}

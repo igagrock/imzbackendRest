@@ -42,7 +42,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());
-		comment.setContent(content);
+		comment.createContentString(content);
 		comment.MapCommentsAndArticle(article);
 		comment.MapCommentsAndUser(user);
 		return comment;
@@ -51,7 +51,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 	public Comment validateUpdateComment(Comment comment, CommentModel model) {
 
 		if (!Util.IsEmptyOrNull(model.getContent()))
-			comment.setContent(model.getContent());
+			comment.createContentString(model.getContent());
 		return comment;
 
 	}
