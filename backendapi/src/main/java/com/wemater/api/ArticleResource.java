@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -49,9 +50,10 @@ public class ArticleResource {
 	@GET
 	@Path("/{articleId}")
 	public Response getArticle(@PathParam("articleId") Long Id,
-			@Context UriInfo uriInfo) {
+									@HeaderParam("Authorization") String authString,	
+									@Context UriInfo uriInfo) {
 		// No authentication here coz anyone should see an article
-		return Response.ok(service.getArticleWithFullContent(Id, uriInfo))
+		return Response.ok(service.getArticleWithFullContent(Id,authString, uriInfo))
 				.build();
 
 	}
@@ -73,7 +75,14 @@ public class ArticleResource {
 	public Response updateArticle(
 			@HeaderParam("Authorization") String authString,
 			@PathParam("articleId") Long Id, ArticleModel model,
+			@QueryParam("likes") int likes,
 			@Context UriInfo uriInfo) {
+		
+		if(likes != 0){ //update the likes incase queryparam is there
+			return Response.ok(service.updateLikes(likes, authString, Id, uriInfo)).build();
+			
+		}
+		
 		return Response.ok(
 				service.updateArticle(authString, Id, model, uriInfo)).build();
 

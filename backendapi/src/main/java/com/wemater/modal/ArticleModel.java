@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.wemater.dto.Article;
@@ -18,6 +20,7 @@ import com.wemater.util.Util;
  * @author sheikh
  *
  */
+@XmlRootElement(name="article")
 public class ArticleModel {
 
 	private long id;
@@ -28,10 +31,22 @@ public class ArticleModel {
 	private List<String> tags;
 	private String date;
 	private int likes;
+	private boolean isLiked;
 	private int commentCount;
 	private UserModel userModel;
 	private List<CommentModel> commentModels;
 	private List<Link> links;
+
+	
+	
+	@XmlElement(name="isliked")
+	public boolean isLiked() {
+		return isLiked;
+	}
+
+	public void setLiked(boolean isLiked) {
+		this.isLiked = isLiked;
+	}
 
 	public int getLikes() {
 		return likes;
@@ -171,7 +186,12 @@ public class ArticleModel {
 		this.likes = likes;
 		return this;
 	}
-
+   public synchronized ArticleModel addIsliked(boolean isliked){
+	   this.isLiked = isliked;
+	   return this;
+	   
+   }
+	
 	public synchronized ArticleModel addUser(User user, boolean isArticleCount,
 			boolean isCommentCount) {
 		UserModel model = new UserModel().constructModel(user);

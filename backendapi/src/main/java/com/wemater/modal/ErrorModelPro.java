@@ -2,7 +2,7 @@ package com.wemater.modal;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "error")
 public class ErrorModelPro {
 
 	private String error_type;

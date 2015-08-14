@@ -53,9 +53,11 @@ public class Article {
 	private List<String> tags;
 	private Date date;
 	private int likes;
+	private List<String> likedUser;
 	private int commentCount;
 	private User user;
 	private List<Comment> comments;
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -117,6 +119,20 @@ public class Article {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+   
+	@ElementCollection
+	@JoinTable(name = "LIKED_USER", joinColumns = { @JoinColumn(name = "ARTICLE_ID") })
+	@GenericGenerator(name = "hi_lo", strategy = "hilo")
+	@CollectionId(columns = { @Column(name = "USER_ID") }, generator = "hi_lo", type = @Type(type = "long"))
+	public List<String> getLikedUser() {
+		if(this.likedUser == null) this.likedUser = new ArrayList<String>();
+		return likedUser;
+	}
+
+	public void setLikedUser(List<String> likedUser) {
+		this.likedUser = likedUser;
 	}
 
 	@Column(name = "DATE")

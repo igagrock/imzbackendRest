@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.HibernateException;
 
 import com.wemater.dto.Article;
@@ -61,24 +62,44 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 	// util method to send the likes. using setlikes doubles the count coz of
 	// hibernate proxy
-	public void addLikes(int likes, Article article) {
-
+	public void addLikes(int likes, Article article,String encodeuser) {
+		 String username =   new String(Base64.decodeBase64(encodeuser.split("\\s+")[1])).split(":")[0];
 		try {
 			sessionUtil.beginSessionWithTransaction();
-			if (article != null)
 				article.setLikes(likes);
-			else
-				throw new DataNotFoundException(
-						"likes cant be set- article not found");
-
+			    article.getLikedUser().add(username);
 			sessionUtil.CommitCurrentTransaction();
-
 		} catch (HibernateException e) {
 			sessionUtil.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
 		}
 
 	}
+	
+  public Boolean haveUserLiked(Article article, String encodeuser){
+	 Boolean isPresent = false;
+	  try {
+			sessionUtil.beginSessionWithTransaction();
+				if (article != null )			
+				      if(encodeuser == null) isPresent = false;
+				      else {
+				    	 String user =   new String(Base64.decodeBase64(encodeuser.split("\\s+")[1])).split(":")[0];
+				    	 isPresent = article.getLikedUser().contains(user);	 
+				     }
+				
+				else
+					throw new DataNotFoundException(
+							"likes cant be set- article not found");
+			sessionUtil.CommitCurrentTransaction();
+
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+	  
+	  return isPresent;
+  }
+	
 
 	public Article getArticleOfUserByNamedQuery(String username, long articleId) {
 

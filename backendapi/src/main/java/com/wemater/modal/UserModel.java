@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 
+@XmlRootElement(name = "user")
 public class UserModel {
 
 	private long id;

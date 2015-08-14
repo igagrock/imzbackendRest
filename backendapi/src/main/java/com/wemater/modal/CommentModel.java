@@ -3,12 +3,14 @@ package com.wemater.modal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 
+@XmlRootElement(name="comment")
 public class CommentModel {
 
 	private Long id;
