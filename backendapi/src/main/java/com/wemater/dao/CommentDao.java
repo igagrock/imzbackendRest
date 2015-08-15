@@ -1,6 +1,7 @@
 package com.wemater.dao;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -42,6 +43,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 		Comment comment = new Comment();
 		comment.setUsername(user.getUsername());
+		comment.setDate(new Date());
 		comment.createContentString(content);
 		comment.MapCommentsAndArticle(article);
 		comment.MapCommentsAndUser(user);

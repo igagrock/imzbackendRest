@@ -39,7 +39,7 @@ import com.wemater.util.Util;
 				+ "where a.user.username = :username and a.id = :articleId"),
 
 		@NamedQuery(name = "article.getAllArticlesByUsername", query = "select a "
-				+ "from Article a " + "where a.user.username = :username"),
+				+ "from Article a " + "where a.user.username = :username order by a.id desc"),
 
 		@NamedQuery(name = "article.IsArticleCommentAvailable", query = "select article.id from Article as article"
 				+ " inner join article.comments as comment on comment.id = :id ") })

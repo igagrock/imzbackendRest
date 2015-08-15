@@ -1,6 +1,9 @@
 package com.wemater.modal;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,6 +19,7 @@ public class CommentModel {
 	private Long id;
 	private String username;
 	private String content;
+	private String date;
 	private ArticleModel articleModel;
 	private UserModel userModel;
 	private List<Link> links;
@@ -42,6 +46,15 @@ public class CommentModel {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	@XmlTransient
@@ -82,6 +95,8 @@ public class CommentModel {
 		this.id = comment.getId();
 		this.username = comment.getUsername();
 		this.content = comment.returnContentString();
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		this.date = format.format(comment.getDate());
 		return this;
 
 	}

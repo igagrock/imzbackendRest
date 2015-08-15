@@ -1,6 +1,7 @@
 package com.wemater.dto;
 
 import java.sql.Clob;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.wemater.util.Util;
 
@@ -25,7 +28,7 @@ import com.wemater.util.Util;
 				+ "where c.username = :username and c.id = :commentId"),
 
 		@NamedQuery(name = "comment.getAllArticleCommentsByArticleId", query = "select c "
-				+ "from Comment c " + "where c.article.id = :articleId"),
+				+ "from Comment c " + "where c.article.id = :articleId order by c.id desc"),
 
 		@NamedQuery(name = "comment.getArticleCommentByArticleIdAndCommentid", query = "select c "
 				+ "from Comment c "
@@ -39,6 +42,7 @@ public class Comment {
 	private Long id;
 	private String username;
 	private Clob content;
+	private Date date;
 	private Article article;
 	private User user;
 
@@ -70,6 +74,16 @@ public class Comment {
 
 	private void setContent(Clob content) {
 		this.content = content;
+	}
+	
+	@Column(name = "DATE")
+	@Temporal(TemporalType.DATE)
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public String returnContentString() {
