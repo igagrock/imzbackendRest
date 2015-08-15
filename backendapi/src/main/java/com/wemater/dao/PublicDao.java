@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 
 import com.wemater.dto.Article;
+import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
@@ -106,22 +107,29 @@ public class PublicDao {
 
 	// do it again
 	@SuppressWarnings({ "unchecked" })
-	public List<Article> fetchExploreArticles() {
+	public List<Article> fetchExploreArticles(int next) {
 		System.out.println("fetchexplorearticles .. ");
 
+        int firstResult = next * 10;
+        int maxResult =  10;
 		List<Article> articleList = null;
-		final int SIZE = 5;
+	
 		try {
 			su.beginSessionWithTransaction();
 
 			articleList = su
 					.getSession()
-					.createQuery(
-							"from Article as article order by article.date desc")
-					.setMaxResults(SIZE).list();
+					.createQuery("from Article as article order by article.date desc")
+					.setFirstResult(firstResult)
+					.setMaxResults(maxResult)
+					.list();
 
+			if (articleList.isEmpty())
+				throw new DataNotFoundException("No more articles");
 			su.CommitCurrentTransaction();
-
+ 
+			
+   
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
 			throw new EvaluateException(e);
@@ -130,29 +138,6 @@ public class PublicDao {
 		return articleList;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Article> fetchAgainExploreArticles(int start) {
-		System.out.println("fetchexplorearticles again called here ");
 
-		List<Article> articleList = null;
-		final int SIZE = 5;
-		try {
-			su.beginSessionWithTransaction();
-
-			articleList = su
-					.getSession()
-					.createQuery(
-							"from Article as article order by article.date desc")
-					.setFirstResult(start).setMaxResults(SIZE).list();
-
-			su.CommitCurrentTransaction();
-
-		} catch (HibernateException e) {
-			su.rollBackCurrentTransaction();
-			throw new EvaluateException(e);
-
-		}
-		return articleList;
-	}
 
 }

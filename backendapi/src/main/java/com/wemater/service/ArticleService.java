@@ -38,12 +38,12 @@ public class ArticleService {
 	// here we need sql query
 	// get all articles
 	public List<ArticleModel> getAllArticlesWithNoContent(String authString,
-			String profilename, UriInfo uriInfo) {
+			String profilename, int next, UriInfo uriInfo) {
 
 		au.isUserAuthenticatedGET(authString);
 		// authentic check user is same as others
 		return transformArticlesToModels(
-				ad.getAllArticlesOfUserByNamedQuery(profilename), uriInfo);
+				ad.getAllArticlesOfUserByNamedQuery(profilename, next), uriInfo);
 	}
 
 	// get each article

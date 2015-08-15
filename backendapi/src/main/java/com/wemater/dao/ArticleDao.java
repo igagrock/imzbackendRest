@@ -126,8 +126,11 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public List<Article> getAllArticlesOfUserByNamedQuery(String username) {
+	public List<Article> getAllArticlesOfUserByNamedQuery(String username, int next) {
 
+		int firstResult = next*10;
+		int maxResult = 10;
+		
 		List<Article> articles = null;
 		try {
 
@@ -135,7 +138,10 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 			articles = sessionUtil.getSession()
 					.getNamedQuery("article.getAllArticlesByUsername")
-					.setParameter("username", username).list();
+					.setParameter("username", username)
+					.setFirstResult(firstResult)
+					.setMaxResults(maxResult)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 

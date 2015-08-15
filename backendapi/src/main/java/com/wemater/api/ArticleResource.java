@@ -37,10 +37,11 @@ public class ArticleResource {
 	public Response getArticles(
 			@HeaderParam("Authorization") String authString,
 			@PathParam("profileName") String profilename,
+			@QueryParam("next") int next,
 			@Context UriInfo uriInfo) {
 
 		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(
-				service.getAllArticlesWithNoContent(authString, profilename,
+				service.getAllArticlesWithNoContent(authString, profilename,next,
 						uriInfo)) {
 		};
 

@@ -9,6 +9,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -16,7 +18,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import com.wemater.exception.NoImplementionException;
 import com.wemater.modal.CommentModel;
 import com.wemater.service.CommentService;
 
@@ -34,18 +35,19 @@ public class CommentResource {
 
 	@GET
 	public Response getComments(@PathParam("articleId") long id,
-			@Context UriInfo uriInfo) {
+							@QueryParam("next") int next,
+			                       @Context UriInfo uriInfo) {
 		// no auth required
 
 		GenericEntity<List<CommentModel>> entity = new GenericEntity<List<CommentModel>>(
-				service.getAllArticleComments(id, uriInfo)) {
+				service.getAllArticleComments(id,next, uriInfo)) {
 		};
 		return Response.ok(entity).build();
 	}
 
 	@Path("/{commentId}")
-	public Response getCommentOfUser() {
-		throw new NoImplementionException();
+	public Response getComment() {
+		throw new WebApplicationException("Not Implemented", Status.NOT_IMPLEMENTED);
 	}
 
 	@POST

@@ -24,7 +24,6 @@ public class PublicService implements Runnable {
 	private static List<Article> LatestArticles = new ArrayList<Article>();
 	private static List<Article> trendingArticles = new ArrayList<Article>();
 	private static List<Article> quickReadArticles = new ArrayList<Article>();
-	private static List<Article> exploreArticles = new ArrayList<Article>();
 
 	public PublicService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
@@ -32,13 +31,6 @@ public class PublicService implements Runnable {
 		this.pd = new PublicDao(su);
 	}
 
-	public static List<Article> getExploreArticles() {
-		return exploreArticles;
-	}
-
-	public static void setExploreArticles(List<Article> ExploreArticles) {
-		exploreArticles = ExploreArticles;
-	}
 
 	public static List<Article> getQuickReadArticles() {
 		return quickReadArticles;
@@ -70,7 +62,6 @@ public class PublicService implements Runnable {
 		setLatestArticles(pd.fetchLatestArticles());
 		setTrendingArticles(pd.fetchTrendingArticles());
 		setQuickReadArticles(pd.fetchQuickReadArticles());
-		setExploreArticles(pd.fetchExploreArticles());
 	}
 
 	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo) {
@@ -91,21 +82,11 @@ public class PublicService implements Runnable {
 
 	}
 
-	// do tomarrow and use the map for it to get all the articles or
-	// think again about how do you want to get articles in the list
-	// DO IT AGAIN --again
-	public List<ArticleModel> getExploreArticleModels(UriInfo uriInfo, int start) {
+	// doesnt get the articles using executor services. rather on user command
+	public List<ArticleModel> getExploreArticleModels(int next, UriInfo uriInfo) {
 
 		System.out.println("articles found from explore list");
-		List<Article> articles = null;
-		int SIZE = 5;
-
-		articles = getExploreArticles();
-
-		if (start > SIZE)
-			articles = pd.fetchAgainExploreArticles(start);
-
-		return transformArticlesToModels(articles, uriInfo);
+		return transformArticlesToModels( pd.fetchExploreArticles(next), uriInfo);
 
 	}
 

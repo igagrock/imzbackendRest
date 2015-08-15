@@ -111,7 +111,7 @@ public class CommentService {
 
 	// 3: getallComments on an article of my article
 
-	public List<CommentModel> getAllArticleComments(Long articleId,
+	public List<CommentModel> getAllArticleComments(Long articleId, int next,
 			UriInfo uriInfo) {
 		// No auth required
 		String profilename = Util.getUsernameFromURLforComments(4, uriInfo);
@@ -119,7 +119,7 @@ public class CommentService {
 		if (ad.IsUserArticleAvailable(profilename, articleId)) {
 
 			return transformUsersCommentsToModelsWithArticleId(
-					cd.getAllCommentsOfArticleByNamedQuery(articleId), uriInfo);
+					cd.getAllCommentsOfArticleByNamedQuery(articleId, next), uriInfo);
 		} else
 			return null;
 	}

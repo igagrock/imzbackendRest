@@ -147,8 +147,11 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public List<Comment> getAllCommentsOfArticleByNamedQuery(long id) {
-
+	public List<Comment> getAllCommentsOfArticleByNamedQuery(long id, int next) {
+        
+		int firstResult = next*10;
+		int maxResult = 10;
+		
 		List<Comment> comments = null;
 		try {
 
@@ -156,7 +159,10 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 			comments = sessionUtil.getSession()
 					.getNamedQuery("comment.getAllArticleCommentsByArticleId")
-					.setParameter("articleId", id).list();
+					.setParameter("articleId", id)
+					.setFirstResult(firstResult)
+					.setMaxResults(maxResult)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 
