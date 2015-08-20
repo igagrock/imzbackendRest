@@ -235,19 +235,16 @@ public class ArticleModel {
 	public synchronized ArticleModel ValidateArticle() {
 
 		if (Util.IsEmptyOrNull(this.getTitle()))
-			throw new ValueNotProvidedException("Title",
-					"Title is not provided");
+			throw new ValueNotProvidedException("Title is not provided","Title");
 
 		if (Util.IsEmptyOrNull(this.getImage()))
-			throw new ValueNotProvidedException("Image",
-					"Image is not provided");
+			throw new ValueNotProvidedException("Image is not provided","Image");
 
 		if (Util.IsEmptyOrNull(this.getContent()))
-			throw new ValueNotProvidedException("Content",
-					"Content is not provided");
+			throw new ValueNotProvidedException("Content is not provided","Content");
 
 		if (Util.IsEmptyOrNull(this.getTags()))
-			throw new ValueNotProvidedException("Tags", " Tags Not provided");
+			throw new ValueNotProvidedException( " Tags Not provided","Tags");
 		return this;
 	}
 

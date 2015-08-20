@@ -165,6 +165,7 @@ public class ArticleService {
 				.addLikes(article.getLikes())
 				.addContent(article.returnContentString())
 				.addImage(article.returnImageString())
+				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);
 
 	}

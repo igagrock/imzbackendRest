@@ -1,6 +1,8 @@
 package com.wemater.util;
 
-import org.apache.commons.codec.binary.Base64;
+import java.io.IOException;
+
+
 
 
 
@@ -10,29 +12,14 @@ import org.apache.commons.codec.binary.Base64;
 
 public class Runner {
 	
-
-    
-
+      
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 	    
-		
-
-		String username = "nigerialimits";
-		String email = "nigeria@gmail.com";
-		String auth = username + ":" + email;
-
-		String encodedauth = new String(Base64.encodeBase64(auth.getBytes()));
-       
-		System.out.println(encodedauth);
-		
-		
-		
 	
-		
-		
 	}
 	
 
