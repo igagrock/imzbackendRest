@@ -8,6 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.SessionFactory;
 
+import com.wemater.dao.ArticleDao;
 import com.wemater.dao.PublicDao;
 import com.wemater.dto.Article;
 import com.wemater.modal.ArticleModel;
@@ -20,6 +21,7 @@ public class PublicService implements Runnable {
 	private final SessionFactory sessionfactory;
 	private final SessionUtil su;
 	private final PublicDao pd;
+	private final ArticleDao ad;
 
 	private static List<Article> LatestArticles = new ArrayList<Article>();
 	private static List<Article> trendingArticles = new ArrayList<Article>();
@@ -29,6 +31,7 @@ public class PublicService implements Runnable {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.pd = new PublicDao(su);
+		this.ad = new ArticleDao(su);
 	}
 
 
@@ -64,48 +67,48 @@ public class PublicService implements Runnable {
 		setQuickReadArticles(pd.fetchQuickReadArticles());
 	}
 
-	public List<ArticleModel> getLatestArticleModels(UriInfo uriInfo) {
+	public List<ArticleModel> getLatestArticleModels( String encodedAuth, UriInfo uriInfo) {
 
-		return transformArticlesToModels(getLatestArticles(), uriInfo);
+		return transformArticlesToModels(getLatestArticles(),  encodedAuth, uriInfo);
 
 	}
 
-	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo) {
+	public List<ArticleModel> getTrendingArticleModels( String encodedAuth,UriInfo uriInfo) {
 		System.out.println("articles found from tredding list");
-		return transformArticlesToModels(getTrendingArticles(), uriInfo);
+		return transformArticlesToModels(getTrendingArticles(),  encodedAuth, uriInfo);
 
 	}
 
-	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo) {
+	public List<ArticleModel> getQuickReadArticleModels( String encodedAuth,UriInfo uriInfo) {
 		System.out.println("articles found from read list");
-		return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+		return transformArticlesToModels(getQuickReadArticles(),  encodedAuth, uriInfo);
 
 	}
 
 	// doesnt get the articles using executor services. rather on user command
-	public List<ArticleModel> getExploreArticleModels(int next, UriInfo uriInfo) {
+	public List<ArticleModel> getExploreArticleModels(int next, String encodedAuth, UriInfo uriInfo) {
 
 		System.out.println("articles found from explore list");
-		return transformArticlesToModels( pd.fetchExploreArticles(next), uriInfo);
+		return transformArticlesToModels( pd.fetchExploreArticles(next), encodedAuth, uriInfo);
 
 	}
 
 	// service related methods
 	private List<ArticleModel> transformArticlesToModels(
-			List<Article> articles, UriInfo uriInfo) {
+			List<Article> articles, String encodedAuth, UriInfo uriInfo) {
 		List<ArticleModel> models = new ArrayList<ArticleModel>();
 
 		for (Iterator<Article> iterator = articles.iterator(); iterator
 				.hasNext();) {
 			Article article = (Article) iterator.next();
-			models.add(transformArticleToModel(article, uriInfo));
+			models.add(transformArticleToModel(article,encodedAuth, uriInfo));
 
 		}
 		return models;
 
 	}
 
-	private ArticleModel transformArticleToModel(Article article,
+	private ArticleModel transformArticleToModel(Article article, String encodedAuth,
 			UriInfo uriInfo) {
 
 		Link self = LinkService.createLinkForEachArticleOfUser(
@@ -122,7 +125,9 @@ public class PublicService implements Runnable {
 
 		ArticleModel model = new ArticleModel().constructModel(article)
 				.addCount(article.getCommentCount())
-				.addLikes(article.getLikes()).addTags(article.getTags())
+				.addLikes(article.getLikes())
+				.addTags(article.getTags())
+				.addIsliked( ad.haveUserLiked(article, encodedAuth))
 				.addUser(article.getUser(), false, false)
 				.addLinks(self, articles, comments, user);
 

@@ -17,7 +17,7 @@ import com.wemater.exception.EvaluateException;
 
 public final class Util {
 	private static final int START_TIME = 1;
-	private static final int DELAY = 3600;
+	private static final int DELAY = 60;
 
 	public static boolean IsEmptyOrNull(String string) {
 		if (string == null || string.isEmpty())
