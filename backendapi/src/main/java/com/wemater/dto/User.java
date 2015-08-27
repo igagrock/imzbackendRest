@@ -14,6 +14,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 
 @NamedQueries(value = {
@@ -32,8 +34,10 @@ import org.hibernate.annotations.NaturalId;
 		
 
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "USER")
 @Entity
+
 public class User {
 
 	private long id;
