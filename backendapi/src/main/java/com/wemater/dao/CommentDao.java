@@ -73,7 +73,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 					.getNamedQuery(
 							"comment.getUserCommentByUsernameandCommentid")
 					.setParameter("username", username)
-					.setParameter("commentId", commentId).uniqueResult();
+					.setParameter("commentId", commentId)
+					.setCacheable(true)
+					.uniqueResult();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -98,7 +100,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 			comments = sessionUtil.getSession()
 					.getNamedQuery("comment.getAllUserCommentsByUsername")
-					.setParameter("username", username).list();
+					.setParameter("username", username)
+					.setCacheable(true)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -133,7 +137,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 					.getNamedQuery(
 							"comment.getArticleCommentByArticleIdAndCommentid")
 					.setParameter("articleId", articleId)
-					.setParameter("commentId", commentId).uniqueResult();
+					.setParameter("commentId", commentId)
+					.setCacheable(true)
+					.uniqueResult();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -164,6 +170,7 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 					.setParameter("articleId", id)
 					.setFirstResult(firstResult)
 					.setMaxResults(maxResult)
+					.setCacheable(true)
 					.list();
 
 			sessionUtil.CommitCurrentTransaction();
@@ -193,7 +200,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 			List<String> usernames = sessionUtil.getSession()
 					.getNamedQuery("user.IsUserCommentAvailable")
-					.setParameter("id", commentId).list();
+					.setParameter("id", commentId)
+					.setCacheable(true)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -225,7 +234,9 @@ public class CommentDao extends GenericDaoImpl<Comment, Long> {
 
 			List<Long> ids = sessionUtil.getSession()
 					.getNamedQuery("article.IsArticleCommentAvailable")
-					.setParameter("id", commentId).list();
+					.setParameter("id", commentId)
+					.setCacheable(true)
+					.list();
 			sessionUtil.CommitCurrentTransaction();
 
 			// check if username is available

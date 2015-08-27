@@ -44,7 +44,9 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 			sessionUtil.beginSessionWithTransaction();
 			articles = sessionUtil.getSession().createQuery(articlesByTag)
-					.setParameter("tag", tag).list();
+					.setParameter("tag", tag)
+					.setCacheable(true)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -110,7 +112,9 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 			Article article = (Article) sessionUtil.getSession()
 					.getNamedQuery("article.getArticleByUsernameAndArticleId")
 					.setParameter("username", username)
-					.setParameter("articleId", articleId).uniqueResult();
+					.setParameter("articleId", articleId)
+					.setCacheable(true)
+					.uniqueResult();
 
 			sessionUtil.CommitCurrentTransaction();
 
@@ -141,6 +145,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 					.setParameter("username", username)
 					.setFirstResult(firstResult)
 					.setMaxResults(maxResult)
+					.setCacheable(true)
 					.list();
 
 			sessionUtil.CommitCurrentTransaction();
@@ -172,7 +177,9 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 			List<String> usernames = sessionUtil.getSession()
 					.getNamedQuery("user.IsUserArticleAvailable")
-					.setParameter("id", articleid).list();
+					.setParameter("id", articleid)
+					.setCacheable(true)
+					.list();
 
 			sessionUtil.CommitCurrentTransaction();
 

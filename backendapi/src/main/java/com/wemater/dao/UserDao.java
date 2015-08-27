@@ -42,7 +42,9 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			sessionUtil.beginSessionWithTransaction();
 			user = (User) sessionUtil.getSession().getNamedQuery("user.ifUserVerificationDataExist")
 					.setParameter("username", username)
-					.setParameter("email", password).uniqueResult();
+					.setParameter("email", password)
+					.setCacheable(true)
+					.uniqueResult();
 			if (user == null)
 				throw new DataNotFoundException(
 						"verification not successfull. Data Invalid");
@@ -194,7 +196,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		try {
 			sessionUtil.beginSessionWithTransaction();
 			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUseremailExist")
-					                     .setParameter("email", email).uniqueResult();
+					                     .setParameter("email", email).setCacheable(true).uniqueResult();
 			
 			sessionUtil.CommitCurrentTransaction();
 			
@@ -211,7 +213,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		try {
 			sessionUtil.beginSessionWithTransaction();
 			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUseremailExist")
-					                     .setParameter("email", email).uniqueResult();
+					                     .setParameter("email", email).setCacheable(true).uniqueResult();
 			
 			sessionUtil.CommitCurrentTransaction();
 			
@@ -231,7 +233,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		try {
 			sessionUtil.beginSessionWithTransaction();
 			emailaddress = (String) sessionUtil.getSession().getNamedQuery("user.ifUsernameExist")
-					                     .setParameter("username", username).uniqueResult();
+					                     .setParameter("username", username).setCacheable(true).uniqueResult();
 			
 			sessionUtil.CommitCurrentTransaction();
 			

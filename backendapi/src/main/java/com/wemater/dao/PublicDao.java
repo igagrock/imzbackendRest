@@ -39,7 +39,9 @@ public class PublicDao {
 					.getSession()
 					.createQuery(
 							"from Article as article order by article.date desc")
-					.setMaxResults(10).list();
+					.setMaxResults(10)
+					.setCacheable(true)
+					.list();
 
 			su.CommitCurrentTransaction();
 
@@ -70,7 +72,9 @@ public class PublicDao {
 					.getSession()
 					.createQuery(
 							"from Article as article order by article.likes desc")
-					.setMaxResults(4).list();
+					.setMaxResults(4)
+					.setCacheable(true)
+					.list();
 
 			su.CommitCurrentTransaction();
 
@@ -93,7 +97,9 @@ public class PublicDao {
 					.getSession()
 					.createQuery(
 							"from Article as article order by article.commentCount desc")
-					.setMaxResults(2).list();
+					.setMaxResults(2)
+					.setCacheable(true)
+					.list();
 
 			su.CommitCurrentTransaction();
 
@@ -122,6 +128,7 @@ public class PublicDao {
 					.createQuery("from Article as article order by article.date desc")
 					.setFirstResult(firstResult)
 					.setMaxResults(maxResult)
+					.setCacheable(true)
 					.list();
 
 			if (articleList.isEmpty())
