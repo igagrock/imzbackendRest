@@ -126,9 +126,11 @@ public class PublicService implements Runnable {
 		ArticleModel model = new ArticleModel().constructModel(article)
 				.addCount(article.getCommentCount())
 				.addLikes(article.getLikes())
-				.addTags(article.getTags())
 				.addIsliked( ad.haveUserLiked(article, encodedAuth))
-				.addUser(article.getUser(), false, false)
+				.addContent(article.returnContentString())
+				.addImage(article.returnImageString())
+				.addTags(article.getTags())
+				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);
 
 		return model;
