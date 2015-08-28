@@ -65,16 +65,8 @@ public class ArticleService {
 		// auth here
 		au.isUserAuthenticated(authString, profilename);
 
-		Long id = ad.save(ad.createArticle(model, ud.find(profilename))); // save
-																			// the
-																			// article.
-																			// if
-																			// not
-																			// saved
-																			// --
-																			// throws
-																			// exception
-
+		Long id = ad.save( ad.createArticle(model, ud.find(profilename))); // save
+																		
 		return transformFullArticleToModel(ad.find(id),authString, uriInfo); // return the
 																	// article
 																	// model
@@ -84,7 +76,7 @@ public class ArticleService {
 			ArticleModel model, UriInfo uriInfo) {
 
 		String profilename = Util.getUsernameFromURLforComments(3, uriInfo);
-		// auth here
+		// auth here   
 		au.isUserAuthenticated(authString, profilename);
 
 		if (ad.IsUserArticleAvailable(profilename, id)) {

@@ -236,7 +236,6 @@ public class ArticleModel {
 
 		if (Util.IsEmptyOrNull(this.getTitle()))
 			throw new ValueNotProvidedException("Title is not provided","Title");
-
 		if (Util.IsEmptyOrNull(this.getImage()))
 			throw new ValueNotProvidedException("Image is not provided","Image");
 

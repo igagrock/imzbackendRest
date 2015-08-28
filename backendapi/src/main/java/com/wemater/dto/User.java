@@ -34,12 +34,12 @@ import org.hibernate.annotations.NaturalId;
 		
 
 })
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "USER")
 @Entity
 
 public class User {
-
+   
 	private long id;
 	private String username;
 	private String name;

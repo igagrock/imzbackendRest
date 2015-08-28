@@ -227,7 +227,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 	}
 
 	public Article createArticle(ArticleModel model, User user) {
-
+		
 		model = model.ValidateArticle(); // validate the article first
 
 		Article article = new Article();
