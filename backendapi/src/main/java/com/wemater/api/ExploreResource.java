@@ -37,6 +37,14 @@ public class ExploreResource {
 		return Response.ok(entity).build();
 
 	}
+	@GET
+	@Path("/top")
+	public Response getTopArticles(@Context UriInfo uriInfo) {
+		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(
+				service.getTopArticleModels(uriInfo)){};
+		return Response.ok(entity).build();
+
+	}
 
 	@GET
 	@Path("/latest")

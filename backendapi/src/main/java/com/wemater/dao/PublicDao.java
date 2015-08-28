@@ -1,7 +1,9 @@
 package com.wemater.dao;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.HibernateException;
 
@@ -72,7 +74,7 @@ public class PublicDao {
 					.getSession()
 					.createQuery(
 							"from Article as article order by article.likes desc")
-					.setMaxResults(4)
+					.setMaxResults(6)
 					.setCacheable(true)
 					.list();
 
@@ -85,6 +87,7 @@ public class PublicDao {
 		}
 		return articleList;
 	}
+	
 
 	@SuppressWarnings({ "unchecked" })
 	public List<Article> fetchQuickReadArticles() {
@@ -116,8 +119,8 @@ public class PublicDao {
 	public List<Article> fetchExploreArticles(int next) {
 		System.out.println("fetchexplorearticles .. ");
 
-        int firstResult = next * 10;
-        int maxResult =  10;
+        int firstResult = next * 5;
+        int maxResult =  5;
 		List<Article> articleList = null;
 	
 		try {

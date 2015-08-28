@@ -26,6 +26,7 @@ public class PublicService implements Runnable {
 	private static List<Article> LatestArticles = new ArrayList<Article>();
 	private static List<Article> trendingArticles = new ArrayList<Article>();
 	private static List<Article> quickReadArticles = new ArrayList<Article>();
+	private static List<Article> topArticles = new ArrayList<Article>();
 
 	public PublicService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
@@ -33,6 +34,19 @@ public class PublicService implements Runnable {
 		this.pd = new PublicDao(su);
 		this.ad = new ArticleDao(su);
 	}
+
+
+	
+	public static List<Article> getTopArticles() {
+		return topArticles;
+	}
+
+
+
+	public static void setTopArticles(List<Article> topArticles) {
+		PublicService.topArticles = topArticles;
+	}
+
 
 
 	public static List<Article> getQuickReadArticles() {
@@ -65,8 +79,12 @@ public class PublicService implements Runnable {
 		setLatestArticles(pd.fetchLatestArticles());
 		setTrendingArticles(pd.fetchTrendingArticles());
 		setQuickReadArticles(pd.fetchQuickReadArticles());
+		setTopArticles(pd.fetchTrendingArticles());
 	}
 
+	
+	
+	
 	public List<ArticleModel> getLatestArticleModels( String encodedAuth, UriInfo uriInfo) {
 
 		return transformArticlesToModels(getLatestArticles(),  encodedAuth, uriInfo);
@@ -79,6 +97,11 @@ public class PublicService implements Runnable {
 
 	}
 
+	public List<ArticleModel> getTopArticleModels( UriInfo uriInfo) {
+		System.out.println("articles found from tredding list");
+		return transformTopArticlesToModels(getTrendingArticles(), uriInfo);
+
+	}
 	public List<ArticleModel> getQuickReadArticleModels( String encodedAuth,UriInfo uriInfo) {
 		System.out.println("articles found from read list");
 		return transformArticlesToModels(getQuickReadArticles(),  encodedAuth, uriInfo);
@@ -136,4 +159,42 @@ public class PublicService implements Runnable {
 		return model;
 	}
 
+	// service related methods
+		private List<ArticleModel> transformTopArticlesToModels(
+				List<Article> articles, UriInfo uriInfo) {
+			List<ArticleModel> models = new ArrayList<ArticleModel>();
+
+			for (Iterator<Article> iterator = articles.iterator(); iterator
+					.hasNext();) {
+				Article article = (Article) iterator.next();
+				models.add(transformTopArticleToModel(article, uriInfo));
+
+			}
+			return models;
+
+		}
+
+		private ArticleModel transformTopArticleToModel(Article article,	UriInfo uriInfo) {
+
+			Link self = LinkService.createLinkForEachArticleOfUser(
+					"getAllArticles", article.getUser().getUsername(),
+					article.getId(), uriInfo, "self");
+			Link articles = LinkService.createLinkForAllArticlesOfUser(
+					"getAllArticles", article.getUser().getUsername(), uriInfo,
+					"articles");
+			Link comments = LinkService.createLinkForArticleComments(
+					"getAllArticles", "getAllComments", article.getUser()
+							.getUsername(), article.getId(), uriInfo, "comments");
+			Link user = LinkService.CreateLinkForEachUser(article.getUser()
+					.getUsername(), uriInfo, "user");
+
+			ArticleModel model = new ArticleModel().constructModel(article)
+									.addUser(article.getUser(), false, false)
+									.addLinks(self, articles, comments, user);
+
+			return model;
+		}
+
+	
+	
 }
