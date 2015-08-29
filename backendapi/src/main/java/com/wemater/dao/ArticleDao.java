@@ -132,8 +132,8 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 	@SuppressWarnings({ "unchecked" })
 	public List<Article> getAllArticlesOfUserByNamedQuery(String username, int next) {
 
-		int firstResult = next*10;
-		int maxResult = 10;
+		int firstResult = next*4;
+		int maxResult = 4;
 		
 		List<Article> articles = null;
 		try {

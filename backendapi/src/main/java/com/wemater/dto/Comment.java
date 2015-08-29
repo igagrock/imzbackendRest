@@ -39,7 +39,6 @@ import com.wemater.util.Util;
 
 })
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "COMMENT")
 public class Comment {
 

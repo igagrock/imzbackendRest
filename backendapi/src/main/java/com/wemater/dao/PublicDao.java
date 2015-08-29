@@ -1,9 +1,7 @@
 package com.wemater.dao;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.HibernateException;
 
@@ -119,8 +117,8 @@ public class PublicDao {
 	public List<Article> fetchExploreArticles(int next) {
 		System.out.println("fetchexplorearticles .. ");
 
-        int firstResult = next * 5;
-        int maxResult =  5;
+        int firstResult = next * 3;
+        int maxResult =  3;
 		List<Article> articleList = null;
 	
 		try {
