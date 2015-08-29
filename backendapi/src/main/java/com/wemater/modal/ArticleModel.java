@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
@@ -37,7 +40,6 @@ public class ArticleModel {
 	private List<CommentModel> commentModels;
 	private List<Link> links;
 
-	
 	
 	@XmlElement(name="isliked")
 	public boolean isLiked() {
@@ -251,5 +253,49 @@ public class ArticleModel {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	
+
+	
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder(57,77)
+		         .append(id)
+		         .append(title)
+		         //.append(url)
+		         .append(content)
+		         .append(tags)
+		         .append(likes)
+		         .append(isLiked)
+		         .append(commentCount)
+		         .toHashCode();
+		
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		   if (obj == this) { return true; }
+		   if (obj.getClass() != getClass()) {
+		     return false;
+		     }
+		   
+		   ArticleModel am = (ArticleModel)obj;
+		   
+		   return new EqualsBuilder()
+		   				.append(id, am.getId())
+		   				.append(title, am.getTitle())
+		   				.append(content, am.getContent())
+		   				.append(tags, am.getTags())
+		   				.append(likes, am.getLikes())
+		   				.append(isLiked, am.isLiked())
+		   				.append(commentCount, am.commentCount)
+		               .isEquals();
+	}
+	
+		  
+
 
 }

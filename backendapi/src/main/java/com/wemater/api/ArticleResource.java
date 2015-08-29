@@ -15,12 +15,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.ArticleModel;
 import com.wemater.service.ArticleService;
+import com.wemater.service.CacheService;
 
 @Path("/articles")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,9 +30,11 @@ import com.wemater.service.ArticleService;
 public class ArticleResource {
 
 	private ArticleService service;
+	private CacheService<ArticleModel> cs;
 
 	public ArticleResource() {
 		this.service = new ArticleService();
+		this.cs = new CacheService<ArticleModel>();
 	}
 
 	@GET
@@ -38,24 +42,26 @@ public class ArticleResource {
 			@HeaderParam("Authorization") String authString,
 			@PathParam("profileName") String profilename,
 			@QueryParam("next") int next,
-			@Context UriInfo uriInfo) {
+			@Context UriInfo uriInfo,
+			@Context Request request) {
 
-		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(
-				service.getAllArticlesWithNoContent(authString, profilename,next,
-						uriInfo)) {
-		};
+		List<ArticleModel> modelList = service.getAllArticlesWithNoContent(authString, profilename,next,
+																						uriInfo);
+		GenericEntity<List<ArticleModel>> entity = 
+				new GenericEntity<List<ArticleModel>>(modelList) {};
 
-		return Response.ok(entity).build();
+		return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
 	}
 
 	@GET
 	@Path("/{articleId}")
 	public Response getArticle(@PathParam("articleId") Long Id,
 									@HeaderParam("Authorization") String authString,	
-									@Context UriInfo uriInfo) {
+									@Context UriInfo uriInfo,
+									@Context Request request) {
 		// No authentication here coz anyone should see an article
-		return Response.ok(service.getArticleWithFullContent(Id,authString, uriInfo))
-				.build();
+		return cs.buildResponseWithCacheEtag(request,
+					service.getArticleWithFullContent(Id,authString, uriInfo)).build();
 
 	}
 
@@ -104,4 +110,7 @@ public class ArticleResource {
 	public CommentResource getAllComments() {
 		return new CommentResource();
 	}
+
+	
+	
 }

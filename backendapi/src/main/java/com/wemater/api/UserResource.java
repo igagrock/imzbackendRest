@@ -15,11 +15,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.UserModel;
+import com.wemater.service.CacheService;
 import com.wemater.service.UserService;
 
 @Path("users")
@@ -28,9 +30,11 @@ import com.wemater.service.UserService;
 public class UserResource {
 
 	private UserService service;
+	private CacheService<UserModel> cs;
 
 	public UserResource() {
 		this.service = new UserService();
+		this.cs = new CacheService<UserModel>();
 
 	}
 
@@ -73,10 +77,11 @@ public class UserResource {
 	@Path("/{profileName}")
 	public Response getUser(@HeaderParam("Authorization") String authString,
 								@PathParam("profileName") String profilename,
-								@Context UriInfo uriInfo) {
+								@Context UriInfo uriInfo,
+								@Context Request request) {
 		
-		return Response.ok(service.getUser(authString, profilename, uriInfo))
-				.build();
+		return cs.buildResponseWithCacheEtag(request, 
+				service.getUser(authString, profilename, uriInfo)).build();
 
 	}
 
@@ -123,5 +128,9 @@ public class UserResource {
 	public ArticleResource getAllArticles() {
 		return new ArticleResource();
 	}
+	
+
+	
+	
 
 }

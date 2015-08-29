@@ -13,10 +13,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
+import com.wemater.service.CacheService;
 import com.wemater.service.CommentService;
 
 @Path("userComments")
@@ -25,29 +27,36 @@ import com.wemater.service.CommentService;
 public class UserCommentResource {
 
 	private CommentService service;
+	private CacheService<CommentModel> cs;
 
 	public UserCommentResource() {
 		this.service = new CommentService();
+		this.cs = new CacheService<CommentModel>();
+		
 	}
 
 	@GET
 	public Response getCommentsOfuser(
 			@HeaderParam("Authorization") String authString,
-			@PathParam("profileName") String username, @Context UriInfo uriInfo) {
-		GenericEntity<List<CommentModel>> entity = new GenericEntity<List<CommentModel>>(
-				service.getAlluserComments(authString, username, uriInfo)) {
-		};
+			@PathParam("profileName") String username,
+			@Context UriInfo uriInfo,
+			@Context Request request) {
+		
+		List<CommentModel> modelList = service.getAlluserComments(authString, username, uriInfo);
+		GenericEntity<List<CommentModel>> entity = new GenericEntity<List<CommentModel>>(modelList) {};
 
-		return Response.ok(entity).build();
+		return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
 	}
 
 	@GET
 	@Path("/{commentId}")
 	public Response getCommentOfUser(
 			@HeaderParam("Authorization") String authString,
-			@PathParam("commentId") long id, @Context UriInfo uriInfo) {
-		return Response.ok(service.getOneuserComment(authString, id, uriInfo))
-				.build();
+			@PathParam("commentId") long id,
+			@Context UriInfo uriInfo,
+			@Context Request request) {
+		return cs.buildResponseWithCacheEtag(request,
+				service.getOneuserComment(authString, id, uriInfo)).build();
 	}
 
 	@PUT

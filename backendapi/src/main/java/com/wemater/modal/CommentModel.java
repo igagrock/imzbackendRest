@@ -9,6 +9,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
@@ -23,6 +26,34 @@ public class CommentModel {
 	private ArticleModel articleModel;
 	private UserModel userModel;
 	private List<Link> links;
+	
+	@Override
+	public int hashCode() {
+	
+		return new HashCodeBuilder(27,47)
+					.append(id)
+					.append(content)
+					.append(username)
+		            .toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    
+		if (obj == null) { return false; }
+		   if (obj == this) { return true; }
+		   if (obj.getClass() != getClass()) {
+		     return false;
+		     }
+		   
+		CommentModel cm = (CommentModel) obj;
+		 return new EqualsBuilder()
+		 			 .append(id, cm.getId())
+		 			 .append(content,cm.getContent())
+		 			 .append(username, cm.getUsername())
+		            .isEquals();
+
+	}
 
 	public Long getId() {
 		return id;

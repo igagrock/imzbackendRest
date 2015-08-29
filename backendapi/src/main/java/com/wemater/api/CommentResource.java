@@ -14,11 +14,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
+import com.wemater.service.CacheService;
 import com.wemater.service.CommentService;
 
 @Path("comments")
@@ -27,22 +29,27 @@ import com.wemater.service.CommentService;
 public class CommentResource {
 
 	private CommentService service;
+	private CacheService<CommentModel> cs;
 
 	public CommentResource() {
 		this.service = new CommentService();
+		this.cs = new CacheService<CommentModel>();
 
 	}
 
 	@GET
 	public Response getComments(@PathParam("articleId") long id,
 							@QueryParam("next") int next,
-			                       @Context UriInfo uriInfo) {
+			                       @Context UriInfo uriInfo,
+			                       @Context Request request) {
 		// no auth required
 
-		GenericEntity<List<CommentModel>> entity = new GenericEntity<List<CommentModel>>(
-				service.getAllArticleComments(id,next, uriInfo)) {
-		};
-		return Response.ok(entity).build();
+		List<CommentModel> modelList = service.getAllArticleComments(id,next, uriInfo);
+		GenericEntity<List<CommentModel>> entity =
+				new GenericEntity<List<CommentModel>>(modelList) {};
+				
+				return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
+	
 	}
 
 	@Path("/{commentId}")
@@ -58,5 +65,5 @@ public class CommentResource {
 				.entity(service.postArticleComment(authString, model, uriInfo))
 				.build();
 	}
-
+	
 }

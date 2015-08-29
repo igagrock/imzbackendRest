@@ -9,6 +9,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
@@ -29,6 +32,36 @@ public class UserModel {
 	private List<Link> links;
 	private Boolean isVerified;
 
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,37)
+					.append(email)
+					.append(username)
+					.append(id)
+		           .toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj == null) { return false; }
+		   if (obj == this) { return true; }
+		   if (obj.getClass() != getClass()) {
+		     return false;
+		     }
+		   UserModel um = (UserModel)obj;
+		   
+		return new EqualsBuilder()
+					.append(email, um.getEmail())
+					.append(username, um.getUsername())
+					.append(id, um.getId())
+		           .isEquals();
+	}
+	
+	
+	
+	
 	public UserModel() {
 		super();
 
