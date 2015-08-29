@@ -8,11 +8,13 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.wemater.modal.ArticleModel;
 import com.wemater.service.PublicService;
@@ -76,7 +78,14 @@ public class ExploreResource {
 		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(
 				service.getExploreArticleModels(next ,authString, uriInfo)) {};
 
-		return Response.ok(entity).build();
+				CacheControl cc = new CacheControl();
+				cc.setMaxAge(86400);
+				cc.setPrivate(true);
+		  
+				
+		return Response.ok(entity)
+				.cacheControl(cc)
+				.build();
 
 	}
 
