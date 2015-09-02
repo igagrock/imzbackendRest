@@ -48,7 +48,7 @@ public class CommentResource {
 		GenericEntity<List<CommentModel>> entity =
 				new GenericEntity<List<CommentModel>>(modelList) {};
 				
-				return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
+				return Response.ok(entity).build();
 	
 	}
 

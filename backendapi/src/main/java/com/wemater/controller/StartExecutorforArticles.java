@@ -37,7 +37,7 @@ public class StartExecutorforArticles extends HttpServlet {
 	public void saveUpdateAnyonymous(SessionUtil su) {
 		UserDao ud = new UserDao(su);
 		User user = ud.createUser("Anonymous", "Anonymous", "as@gt.com",
-				"btrstwidsdsd", "I have been made the author of this article");
+				"btrstwidsdsd", "My name is Anonymous. I represent all the orphan articles");
 
 		try {
 			su.beginSessionWithTransaction();

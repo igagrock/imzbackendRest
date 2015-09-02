@@ -79,7 +79,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		user.setUsername(Util.removeSpaces(username));
 		user.setName(name);
 		user.setEmail(email);
-		user.setPassword(password);
+		user.setPassword(Util.generateMD5Hash(password));
 		user.setBio(bio);
 		user.setIsVerified(false);
 		return user;
@@ -92,7 +92,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		user.setUsername(Util.removeSpaces(model.getUsername()));
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
-		user.setPassword(model.getPassword());
+		user.setPassword(Util.generateMD5Hash(model.getPassword()));
 		user.setBio(model.getBio());
 		user.setIsVerified(false);
 		
@@ -101,23 +101,18 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 	// validate the values of usermodel
 	public  UserModel validateUserModel(UserModel model) {
-
+           System.err.println(model.getEmail());
 
 		if (Util.IsEmptyOrNull(model.getUsername()))
-			throw new ValueNotProvidedException("Username",
-					"Username is required");
+			throw new ValueNotProvidedException("Username is required","Username");
 
 		if (Util.IsEmptyOrNull(model.getName()))
 			model.setName("");
 
 		if (Util.IsEmptyOrNull(model.getPassword()))
-			throw new ValueNotProvidedException("Password",
-					"Password is not provided");
+			throw new ValueNotProvidedException("Password is not provided" ,"Password");
 		if (Util.IsEmptyOrNull(model.getEmail()))
-			throw new ValueNotProvidedException("Email",
-					"Email is not provided");
-         if(isExistingEmail(model.getEmail()))
-        	 throw new DataNotInsertedException("Email already exits");
+			throw new ValueNotProvidedException("Email Not Provided", "Email");
 		if (Util.IsEmptyOrNull(model.getBio()))
 			model.setBio("");
 		return model;
@@ -129,14 +124,14 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 
 		if (!Util.IsEmptyOrNull(model.getPassword())){
-			user.setPassword(model.getPassword());
-			//remove the authkey from auth map once password is updated
+			user.setPassword(Util.generateMD5Hash(model.getPassword()));
+			//remove the existing password key from auth map here so the user is prompted to login again
 			AuthUtil.removeFromAuthMap(user.getUsername());
 
 		}
-		if (!Util.IsEmptyOrNull(model.getPassword())){
-			user.setPassword(model.getPassword());
-			//remove the existing password key from auth map here so the user is prompted to login again
+		if (!Util.IsEmptyOrNull(model.getUsername() 	)){
+			user.setUsername(model.getUsername());
+			//remove the auth related to existing username. and eventually let user to login again
 			AuthUtil.removeFromAuthMap(user.getUsername());
 		}
         //if email is not empty or null and it doesnt exist

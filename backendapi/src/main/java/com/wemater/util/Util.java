@@ -2,6 +2,8 @@ package com.wemater.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -103,5 +105,26 @@ public final class Util {
 														// word
 
 	}
+  public static String generateMD5Hash(String password){
+	  StringBuffer hexString = new StringBuffer();
+	  try {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] bytes = md.digest();
+		//convert the byte to hex and attach appending 0's to it
+		
+		for (int i = 0; i < bytes.length; i++) {
+			String hex = Integer.toHexString( 0xff & bytes[i]);
+			if(hex.length() == 1) hexString.append('0');
+			hexString.append(hex);
+		}
+			
+	} catch (NoSuchAlgorithmException e) {
+		 throw new EvaluateException(e);
+	}
+		return hexString.toString();
+	  
+  }// genereateMD5Hash	
+	
 
 }

@@ -146,13 +146,15 @@ public class AuthUtil {
 	}
 
 	private User findRegisteredUser(String[] params) {
+
+		
 		User AuthUser = null;
 		try{
 		su.beginSessionWithTransaction();
 
 		AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
 				.setParameter("username", params[0])
-				.setParameter("password", params[1]).uniqueResult();
+				.setParameter("password", Util.generateMD5Hash(params[1])).uniqueResult(); //MD5 hash done here
 
 		su.CommitCurrentTransaction();
 		}

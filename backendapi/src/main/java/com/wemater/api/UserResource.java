@@ -87,7 +87,7 @@ public class UserResource {
 
 	@POST
 	public Response postUser(@Context UriInfo uriInfo, UserModel model) {
-
+		
 		return Response.status(Status.CREATED)
 				.entity(service.postUser(model, uriInfo)).build();
 
