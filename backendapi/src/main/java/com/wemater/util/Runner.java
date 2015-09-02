@@ -1,15 +1,8 @@
 package com.wemater.util;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
-import com.wemater.dto.User;
+import org.apache.commons.codec.binary.Base64;
 
 
 
@@ -27,12 +20,11 @@ public class Runner {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-	    
-	
-		//SessionFactory sf = HibernateUtil.getSessionFactory();
-	//	SessionUtil su = new SessionUtil(sf.openSession());
-	
-		String hash =Util.generateMD5Hash("Daksh123");  
+
+		String title ="In the world instead and the hate crimes that are responsibe to get awat from the literato";
+		
+		String hash = Base64.encodeBase64String(title.getBytes());
+		
 		System.out.println(hash);
 		
 	}
