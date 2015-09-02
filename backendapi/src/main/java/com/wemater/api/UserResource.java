@@ -77,11 +77,10 @@ public class UserResource {
 	@Path("/{profileName}")
 	public Response getUser(@HeaderParam("Authorization") String authString,
 								@PathParam("profileName") String profilename,
-								@Context UriInfo uriInfo,
-								@Context Request request) {
+								@Context UriInfo uriInfo) {
+		return Response.ok(service.getUser(authString, profilename, uriInfo)).build();
 		
-		return cs.buildResponseWithCacheEtag(request, 
-				service.getUser(authString, profilename, uriInfo)).build();
+	
 
 	}
 
