@@ -72,7 +72,7 @@ public class PublicDao {
 					.getSession()
 					.createQuery(
 							"from Article as article order by article.likes desc")
-					.setMaxResults(6)
+					.setMaxResults(5)
 					.setCacheable(true)
 					.list();
 
@@ -126,7 +126,7 @@ public class PublicDao {
 
 			articleList = su
 					.getSession()
-					.createQuery("from Article as article order by article.date desc")
+					.createQuery("from Article as article order by article.id desc")
 					.setFirstResult(firstResult)
 					.setMaxResults(maxResult)
 					.setCacheable(true)

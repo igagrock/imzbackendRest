@@ -82,9 +82,7 @@ public class PublicService implements Runnable {
 		setTopArticles(pd.fetchTrendingArticles());
 	}
 
-	
-	
-	
+
 	public List<ArticleModel> getLatestArticleModels( String encodedAuth, UriInfo uriInfo) {
 
 		return transformArticlesToModels(getLatestArticles(),  encodedAuth, uriInfo);
