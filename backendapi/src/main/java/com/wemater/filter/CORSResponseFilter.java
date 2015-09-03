@@ -15,9 +15,10 @@ public class CORSResponseFilter implements  ContainerResponseFilter{
 			ContainerResponseContext responseContext) throws IOException {
 		System.out.println("CORS FILTER EXECUTED");
 		responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
+		responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
 		responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");	
-		responseContext.getHeaders().add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Etag,Authorization");
-		
+		responseContext.getHeaders().add("Access-Control-Allow-Headers","*");
+		responseContext.getHeaders().add("Access-Control-Expose-Headers", " Content-Type, Etag,Authorization");	
 	}
 
 }
