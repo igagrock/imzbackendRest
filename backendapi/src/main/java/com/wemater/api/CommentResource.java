@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.wemater.modal.CommentModel;
-import com.wemater.service.CacheService;
 import com.wemater.service.CommentService;
 
 @Path("comments")
@@ -29,11 +28,9 @@ import com.wemater.service.CommentService;
 public class CommentResource {
 
 	private CommentService service;
-	private CacheService<CommentModel> cs;
 
 	public CommentResource() {
 		this.service = new CommentService();
-		this.cs = new CacheService<CommentModel>();
 
 	}
 

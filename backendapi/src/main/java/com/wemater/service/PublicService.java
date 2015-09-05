@@ -8,7 +8,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.SessionFactory;
 
-import com.wemater.dao.ArticleDao;
 import com.wemater.dao.PublicDao;
 import com.wemater.dto.Article;
 import com.wemater.modal.ArticleModel;
@@ -21,7 +20,6 @@ public class PublicService implements Runnable {
 	private final SessionFactory sessionfactory;
 	private final SessionUtil su;
 	private final PublicDao pd;
-	private final ArticleDao ad;
 
 	private static List<Article> LatestArticles = new ArrayList<Article>();
 	private static List<Article> trendingArticles = new ArrayList<Article>();
@@ -32,7 +30,6 @@ public class PublicService implements Runnable {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.pd = new PublicDao(su);
-		this.ad = new ArticleDao(su);
 	}
 
 
@@ -147,10 +144,9 @@ public class PublicService implements Runnable {
 		ArticleModel model = new ArticleModel().constructModel(article)
 				.addCount(article.getCommentCount())
 				.addLikes(article.getLikes())
-				.addIsliked( ad.haveUserLiked(article, encodedAuth))
+				//.addIsliked( ad.haveUserLiked(article, encodedAuth))
 				.addContent(article.returnContentString())
 				.addImage(article.returnImageString())
-				.addTags(article.getTags())
 				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);
 
