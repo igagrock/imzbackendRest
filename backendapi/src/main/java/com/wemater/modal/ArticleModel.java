@@ -268,6 +268,7 @@ public class ArticleModel {
 		         .append(content)
 		         .append(tags)
 		         .append(likes)
+		         .append(isLiked)
 		         .toHashCode();
 		
 	}
@@ -288,6 +289,7 @@ public class ArticleModel {
 		   				.append(content, am.getContent())
 		   				.append(tags, am.getTags())
 		   				.append(likes, am.getLikes())
+		   				.append(isLiked, am.isLiked())
 		               .isEquals();
 	}
 	
