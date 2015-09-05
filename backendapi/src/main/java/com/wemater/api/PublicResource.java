@@ -22,23 +22,22 @@ import com.wemater.service.PublicService;
 @Path("public")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ExploreResource {
+public class PublicResource {
 
 	private PublicService service;
 	private CacheService<ArticleModel> cs;
 
-	public ExploreResource() {
+	public PublicResource() {
 		this.service = new PublicService();
 		this.cs = new CacheService<ArticleModel>();
 	}
 
 	@GET
 	@Path("/trending")
-	public Response getTrendingArticles(@HeaderParam("Authorization") String authString,
-											@Context UriInfo uriInfo,
+	public Response getTrendingArticles(@Context UriInfo uriInfo,
 											@Context Request request
 												) {
-		List<ArticleModel> modelList = service.getTrendingArticleModels(authString,uriInfo);
+		List<ArticleModel> modelList = service.getTrendingArticleModels(uriInfo);
 		
 		GenericEntity<List<ArticleModel>> entity =
 				new GenericEntity<List<ArticleModel>>(modelList) {};
@@ -60,12 +59,9 @@ public class ExploreResource {
 
 	@GET
 	@Path("/latest")
-	public Response getLatestArticles(@HeaderParam("Authorization") String authString,
-			@Context UriInfo uriInfo,
-			@Context Request request
-			) {
+	public Response getLatestArticles(@Context UriInfo uriInfo, @Context Request request) {
 		
-		List<ArticleModel> modelList = service.getLatestArticleModels(authString,uriInfo);
+		List<ArticleModel> modelList = service.getLatestArticleModels(uriInfo);
 		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(modelList) {};
 
 		return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
@@ -74,12 +70,9 @@ public class ExploreResource {
 
 	@GET
 	@Path("/reads")
-	public Response getQuickReadArticles(@HeaderParam("Authorization") String authString,
-			@Context UriInfo uriInfo,
-			@Context Request request
-			) {
+	public Response getQuickReadArticles(@Context UriInfo uriInfo,@Context Request request ) {
 		
-		List<ArticleModel> modelList = service.getQuickReadArticleModels(authString,uriInfo);
+		List<ArticleModel> modelList = service.getQuickReadArticleModels(uriInfo);
 		GenericEntity<List<ArticleModel>> entity = new GenericEntity<List<ArticleModel>>(modelList) {};
 
 		return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
@@ -88,12 +81,11 @@ public class ExploreResource {
 
 	@GET
 	@Path("/explore")
-	public Response exploreArticles(@HeaderParam("Authorization") String authString,
-										@Context UriInfo uriInfo,
+	public Response exploreArticles(@Context UriInfo uriInfo,
 										@Context  Request request ,
 										@QueryParam("next") int next) {
 		
-		List<ArticleModel> modelList = service.getExploreArticleModels(next ,authString, uriInfo);
+		List<ArticleModel> modelList = service.getExploreArticleModels(next , uriInfo);
 		GenericEntity<List<ArticleModel>> entity = 
 				new GenericEntity<List<ArticleModel>>(modelList) {};
 		

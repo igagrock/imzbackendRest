@@ -80,15 +80,15 @@ public class PublicService implements Runnable {
 	}
 
 
-	public List<ArticleModel> getLatestArticleModels( String encodedAuth, UriInfo uriInfo) {
+	public List<ArticleModel> getLatestArticleModels( UriInfo uriInfo) {
 
-		return transformArticlesToModels(getLatestArticles(),  encodedAuth, uriInfo);
+		return transformArticlesToModels(getLatestArticles(), uriInfo);
 
 	}
 
-	public List<ArticleModel> getTrendingArticleModels( String encodedAuth,UriInfo uriInfo) {
+	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo) {
 		System.out.println("articles found from tredding list");
-		return transformArticlesToModels(getTrendingArticles(),  encodedAuth, uriInfo);
+		return transformArticlesToModels(getTrendingArticles(), uriInfo);
 
 	}
 
@@ -97,37 +97,36 @@ public class PublicService implements Runnable {
 		return transformTopArticlesToModels(getTrendingArticles(), uriInfo);
 
 	}
-	public List<ArticleModel> getQuickReadArticleModels( String encodedAuth,UriInfo uriInfo) {
+	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo) {
 		System.out.println("articles found from read list");
-		return transformArticlesToModels(getQuickReadArticles(),  encodedAuth, uriInfo);
+		return transformArticlesToModels(getQuickReadArticles(), uriInfo);
 
 	}
 
 	// doesnt get the articles using executor services. rather on user command
-	public List<ArticleModel> getExploreArticleModels(int next, String encodedAuth, UriInfo uriInfo) {
+	public List<ArticleModel> getExploreArticleModels(int next,  UriInfo uriInfo) {
 
 		System.out.println("articles found from explore list");
-		return transformArticlesToModels( pd.fetchExploreArticles(next), encodedAuth, uriInfo);
+		return transformArticlesToModels( pd.fetchExploreArticles(next), uriInfo);
 
 	}
 
 	// service related methods
 	private List<ArticleModel> transformArticlesToModels(
-			List<Article> articles, String encodedAuth, UriInfo uriInfo) {
+			List<Article> articles, UriInfo uriInfo) {
 		List<ArticleModel> models = new ArrayList<ArticleModel>();
 
 		for (Iterator<Article> iterator = articles.iterator(); iterator
 				.hasNext();) {
 			Article article = (Article) iterator.next();
-			models.add(transformArticleToModel(article,encodedAuth, uriInfo));
+			models.add(transformArticleToModel(article, uriInfo));
 
 		}
 		return models;
 
 	}
 
-	private ArticleModel transformArticleToModel(Article article, String encodedAuth,
-			UriInfo uriInfo) {
+	private ArticleModel transformArticleToModel(Article article, UriInfo uriInfo) {
 
 		Link self = LinkService.createLinkForEachArticleOfUser(
 				"getAllArticles", article.getUser().getUsername(),
@@ -144,7 +143,6 @@ public class PublicService implements Runnable {
 		ArticleModel model = new ArticleModel().constructModel(article)
 				.addCount(article.getCommentCount())
 				.addLikes(article.getLikes())
-				//.addIsliked( ad.haveUserLiked(article, encodedAuth))
 				.addContent(article.returnContentString())
 				.addImage(article.returnImageString())
 				.addUser(article.getUser(), true, false)
