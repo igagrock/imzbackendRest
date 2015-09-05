@@ -22,9 +22,16 @@ public class CacheService<T> {
 			GenericEntity<List<T>> entity){
 
 		CacheControl cc =  new CacheControl();
-		cc.setMaxAge(86400);
+		cc.setMaxAge(60);
 
-		EntityTag eTag = new EntityTag(Integer.toString(modelList.hashCode()));
+	    Integer Hashcode = modelList.hashCode();
+	    System.out.println("Model List Hashcode: "+Hashcode);
+	    
+
+		EntityTag eTag = new EntityTag(Integer.toString(Hashcode));
+		System.out.println("The value of etag :"+eTag.getValue());
+		
+	
 		ResponseBuilder builder = request.evaluatePreconditions(eTag);
 
 		if(builder == null) builder = Response.ok(entity).tag(eTag);
@@ -43,7 +50,7 @@ public class CacheService<T> {
 			T model){
 
 		CacheControl cc =  new CacheControl();
-		cc.setMaxAge(86400);
+		cc.setMaxAge(60);
 
 		EntityTag eTag = new EntityTag(Integer.toString(model.hashCode()));
 		ResponseBuilder builder = request.evaluatePreconditions(eTag);

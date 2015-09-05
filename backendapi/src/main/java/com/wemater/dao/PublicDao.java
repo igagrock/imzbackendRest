@@ -126,7 +126,7 @@ public class PublicDao {
 
 			articleList = su
 					.getSession()
-					.createQuery("from Article as article order by article.id desc")
+					.createQuery("select a from Article a order by a.id desc")
 					.setFirstResult(firstResult)
 					.setMaxResults(maxResult)
 					.setCacheable(true)
