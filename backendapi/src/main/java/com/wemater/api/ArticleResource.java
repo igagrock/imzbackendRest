@@ -41,18 +41,32 @@ public class ArticleResource {
 	public Response getArticles(
 			@HeaderParam("Authorization") String authString,
 			@PathParam("profileName") String profilename,
+			@QueryParam("noContent") boolean noContent,
 			@QueryParam("next") int next,
 			@Context UriInfo uriInfo,
 			@Context Request request) {
 
-		List<ArticleModel> modelList = service.getAllArticlesWithNoContent(authString, profilename,next,
-																						uriInfo);
-		GenericEntity<List<ArticleModel>> entity = 
-				new GenericEntity<List<ArticleModel>>(modelList) {};
+		if(noContent == false){
+			List<ArticleModel> modelList = service.getAllArticlesWithHalfContent(authString, profilename,next,
+					uriInfo);
+          GenericEntity<List<ArticleModel>> entity = 
+           new GenericEntity<List<ArticleModel>>(modelList) {};
 
-		return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
+          return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
+			
+		}
+		else{
+			
+			List<ArticleModel> modelList = service.getAllArticlesWithNoContent(authString, profilename,next,
+					uriInfo);
+          GenericEntity<List<ArticleModel>> entity = 
+           new GenericEntity<List<ArticleModel>>(modelList) {};
+
+          return cs.buildResponseWithCacheEtag(request, modelList, entity).build();
+		}
 	}
 
+	
 	@GET
 	@Path("/{articleId}")
 	public Response getArticle(@PathParam("articleId") Long Id,

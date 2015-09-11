@@ -26,14 +26,12 @@ import com.wemater.service.UserService;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
-
+	
 	private UserService service;
 
 
 	public UserResource() {
 		this.service = new UserService();
-
-
 	}
 
 	

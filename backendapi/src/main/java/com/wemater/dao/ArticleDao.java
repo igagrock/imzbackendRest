@@ -3,6 +3,7 @@ package com.wemater.dao;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -165,6 +166,45 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 	}
 
+	
+	@SuppressWarnings({ "unchecked" })
+	public List<Article> getAllArticlesOfUserNoContent(String username, int next) {
+
+		int firstResult = next*4;
+		int maxResult = 4;
+		
+		List<Article> articles = new ArrayList<Article>();
+		try {
+
+			sessionUtil.beginSessionWithTransaction();
+
+			List<Object> objects = sessionUtil.getSession()
+					.getNamedQuery("article.getAllArticlesWithNoContentByUsername")
+					.setParameter("username", username)
+					.setFirstResult(firstResult)
+					.setMaxResults(maxResult)
+					.setCacheable(true)
+					.list();
+
+			sessionUtil.CommitCurrentTransaction();
+
+			if (objects.isEmpty())
+				throw new DataNotFoundException("No articles for the "	+ username);
+			else{
+				  for (Iterator<Object> iterator = objects.iterator(); iterator.hasNext();) {
+					Object[] obj = (Object[]) iterator.next();
+					Article article = createArticleWithNoContent( (Long)obj[0], (String)obj[1], (String)obj[2], (Date)obj[3]);
+					articles.add(article);
+				}	
+			}
+		} catch (HibernateException e) {
+			sessionUtil.rollBackCurrentTransaction();
+			throw new EvaluateException(e);
+		}
+		return articles;
+	}
+
+	
 	// to check if an article exists for a particular user
 
 	@SuppressWarnings("unchecked")
@@ -232,8 +272,6 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 		Article article = new Article();
 		article.setTitle(model.getTitle());
-		// article.setUrl(URL); URL will be generated later when file will be
-		// serialized
 		article.createImageString(model.getImage());
 		article.createContentString(model.getContent());
 		article.setTags(model.getTags());
@@ -245,6 +283,14 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 		return article;
 	}
 
+	public Article createArticleWithNoContent(Long id, String title,String url, Date date) {
+		Article article = new Article();
+		article.setId(id);
+		article.setTitle(title);
+		article.setUrl(url);
+		article.setDate(date);
+		return article;
+	}
 	public Article ValidateUpdateArticle(Article article, ArticleModel model) {
 
 		if (!Util.IsEmptyOrNull(model.getTitle()))

@@ -35,9 +35,18 @@ public class ArticleService {
 
 	}
 
+	
+	public List<ArticleModel> getAllArticlesWithNoContent(String authString,
+			String profilename, int next, UriInfo uriInfo){
+		
+		au.isUserAuthenticated(authString, profilename);
+	    List<Article> articles = ad.getAllArticlesOfUserNoContent(profilename, next);
+		return transformArticlesToModelsNoContent(articles, profilename, uriInfo);
+	}
+	
 	// here we need sql query
 	// get all articles
-	public List<ArticleModel> getAllArticlesWithNoContent(String authString,
+	public List<ArticleModel> getAllArticlesWithHalfContent(String authString,
 			String profilename, int next, UriInfo uriInfo) {
 
 		au.isUserAuthenticatedGET(authString);
@@ -135,6 +144,39 @@ public class ArticleService {
 
 	}
 
+	private List<ArticleModel> transformArticlesToModelsNoContent(
+			List<Article> articles,String profileName, UriInfo uriInfo) {
+		List<ArticleModel> models = new ArrayList<ArticleModel>();
+
+		for (Iterator<Article> iterator = articles.iterator(); iterator
+				.hasNext();) {
+			Article article = (Article) iterator.next();
+			models.add(transformArticleToModelNoContent(article, profileName, uriInfo));
+
+		}
+		return models;
+
+	}
+	
+	// transform content of article to its model
+
+		private ArticleModel transformArticleToModelNoContent(Article article,String profileName,
+																		UriInfo uriInfo) {
+
+			Link self = LinkService.createLinkForEachArticleOfUser(
+					"getAllArticles", profileName,
+					article.getId(), uriInfo, "self");
+			Link articles = LinkService.createLinkForAllArticlesOfUser(
+					"getAllArticles", profileName, uriInfo,
+					"articles");
+			Link comments = LinkService.createLinkForArticleComments(
+					"getAllArticles", "getAllComments",profileName , article.getId(), uriInfo, "comments");
+			Link user = LinkService.CreateLinkForEachUser(profileName, uriInfo, "user");
+
+			return new ArticleModel().constructModel(article)
+					.addLinks(self, articles, comments, user);
+
+		}
 	// transform content of article to its model
 
 	private ArticleModel transformArticleToModel(Article article,

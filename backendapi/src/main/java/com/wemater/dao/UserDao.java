@@ -8,6 +8,7 @@ import org.hibernate.HibernateException;
 import com.wemater.dto.Article;
 import com.wemater.dto.Comment;
 import com.wemater.dto.User;
+import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.DataNotFoundException;
 import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
@@ -129,10 +130,8 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			AuthUtil.removeFromAuthMap(user.getUsername());
 
 		}
-		if (!Util.IsEmptyOrNull(model.getUsername() 	)){
-			user.setUsername(model.getUsername());
-			//remove the auth related to existing username. and eventually let user to login again
-			AuthUtil.removeFromAuthMap(user.getUsername());
+		if (!Util.IsEmptyOrNull(model.getUsername())){
+			throw new DataForbiddenException("username can not be changed");
 		}
         //if email is not empty or null and it doesnt exist
 		if (!Util.IsEmptyOrNull(model.getEmail())){
