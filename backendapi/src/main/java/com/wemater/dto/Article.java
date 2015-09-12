@@ -40,8 +40,8 @@ import com.wemater.util.Util;
 
 		@NamedQuery(name = "article.getAllArticlesByUsername", query = "select a "
 				+ "from Article a " + "where a.user.username = :username order by a.id desc"),
-		@NamedQuery(name = "article.getAllArticlesWithNoContentByUsername", query = "select a.id, a.title,a.url,a.date "
-						+ "from Article a " + "where a.user.username = :username order by a.id desc"),		
+		@NamedQuery(name = "article.getAllArticlesWithNoContentByUsername", query = "select a.id, a.title,a.url,a.date, "
+						+ "a.commentCount,a.likes from Article a " + "where a.user.username = :username order by a.id desc"),		
 
 		@NamedQuery(name = "article.IsArticleCommentAvailable", query = "select article.id from Article as article"
 				+ " inner join article.comments as comment on comment.id = :id ") })

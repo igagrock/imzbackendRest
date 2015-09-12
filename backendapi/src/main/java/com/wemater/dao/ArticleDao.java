@@ -193,7 +193,9 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 			else{
 				  for (Iterator<Object> iterator = objects.iterator(); iterator.hasNext();) {
 					Object[] obj = (Object[]) iterator.next();
-					Article article = createArticleWithNoContent( (Long)obj[0], (String)obj[1], (String)obj[2], (Date)obj[3]);
+					Article article = createArticleWithNoContent( (Long)obj[0], (String)obj[1],
+																	(String)obj[2], (Date)obj[3],
+																	(int)obj[4],(int)obj[5]);
 					articles.add(article);
 				}	
 			}
@@ -283,12 +285,14 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 		return article;
 	}
 
-	public Article createArticleWithNoContent(Long id, String title,String url, Date date) {
+	public Article createArticleWithNoContent(Long id, String title,String url, Date date,int commentCount, int likes) {
 		Article article = new Article();
 		article.setId(id);
 		article.setTitle(title);
 		article.setUrl(url);
 		article.setDate(date);
+		article.setCommentCount(commentCount);
+		article.setLikes(likes);
 		return article;
 	}
 	public Article ValidateUpdateArticle(Article article, ArticleModel model) {

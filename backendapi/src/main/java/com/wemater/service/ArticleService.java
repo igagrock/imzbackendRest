@@ -174,6 +174,8 @@ public class ArticleService {
 			Link user = LinkService.CreateLinkForEachUser(profileName, uriInfo, "user");
 
 			return new ArticleModel().constructModel(article)
+					.addCount(article.getCommentCount())
+					.addLikes(article.getLikes())
 					.addLinks(self, articles, comments, user);
 
 		}
