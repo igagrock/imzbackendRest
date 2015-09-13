@@ -7,10 +7,8 @@ import org.hibernate.HibernateException;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
-import com.wemater.service.PublicService;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
-import com.wemater.util.Util;
 
 public class StartExecutorforArticles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,17 +25,11 @@ public class StartExecutorforArticles extends HttpServlet {
 
 		System.out.println("Inserting anonymous--DONE ");
 
-		System.out.println("Executor servlet started ");
-		PublicService task = new PublicService();
-		Util.StartExecutorService(task);
-		System.out.println("started the executor service");
-
 	}
 
 	public void saveUpdateAnyonymous(SessionUtil su) {
 		UserDao ud = new UserDao(su);
-		User user = ud.createUser("Anonymous", "Anonymous", "as@gt.com",
-				"btrstwidsdsd", "My name is Anonymous. I represent all the orphan articles");
+		User user = ud.createUser("Anonymous", "nomail@dot.com", "Anonymous", "ndrters123", "The author of this article is no longer avaliable");
 
 		try {
 			su.beginSessionWithTransaction();

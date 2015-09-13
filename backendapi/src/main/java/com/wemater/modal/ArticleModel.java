@@ -40,6 +40,59 @@ public class ArticleModel {
 	private List<CommentModel> commentModels;
 	private List<Link> links;
 
+
+	
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder(57,77)
+		         .append(id)
+		         .append(title)
+		         .append(url)
+		         .append(image)
+		         .append(content)
+		         .append(tags)
+		         .append(date)
+		         .append(likes)
+		         .append(isLiked)
+		         .append(commentCount)
+		         .append(userModel)
+		         .append(commentModels)
+		         .append(links)		         
+		         .toHashCode();
+		
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		   if (obj == this) { return true; }
+		   if (obj.getClass() != getClass()) {
+		     return false;
+		     }
+		   
+		   ArticleModel am = (ArticleModel)obj;
+		   
+		   return new EqualsBuilder()
+		   				.append(id, am.getId())
+		   				.append(title, am.getTitle())
+		   				.append(url, am.getUrl())
+		   				.append(image, am.getImage())
+		   				.append(content, am.getContent())
+		   				.append(date, am.getDate())
+		   				.append(tags, am.getTags())
+		   				.append(likes, am.getLikes())
+		   				.append(isLiked, am.isLiked())
+		   				.append(commentCount, am.commentCount)
+		   				.append(userModel,am.getUserModel())
+		   				.append(commentModels, am.getCommentModels())
+		   				.append(links, am.getLinks())
+		               .isEquals();
+	}
+	
+	
+	
+	
 	
 	@XmlElement(name="isliked")
 	public boolean isLiked() {
@@ -257,42 +310,6 @@ public class ArticleModel {
 	
 	
 
-	
-	@Override
-	public int hashCode() {
-		
-		return new HashCodeBuilder(57,77)
-		         .append(id)
-		         .append(title)
-		         //.append(url)
-		         .append(content)
-		         .append(tags)
-		         .append(likes)
-		         .append(isLiked)
-		         .toHashCode();
-		
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		   if (obj == this) { return true; }
-		   if (obj.getClass() != getClass()) {
-		     return false;
-		     }
-		   
-		   ArticleModel am = (ArticleModel)obj;
-		   
-		   return new EqualsBuilder()
-		   				.append(id, am.getId())
-		   				.append(title, am.getTitle())
-		   				.append(content, am.getContent())
-		   				.append(tags, am.getTags())
-		   				.append(likes, am.getLikes())
-		   				.append(isLiked, am.isLiked())
-		               .isEquals();
-	}
-	
 		  
 
 

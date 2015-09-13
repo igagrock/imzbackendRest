@@ -25,8 +25,6 @@ public class CacheService<T> {
 		cc.setMaxAge(60);
 
 	    Integer Hashcode = modelList.hashCode();
-	    System.out.println("Model List Hashcode: "+Hashcode);
-	    
 
 		EntityTag eTag = new EntityTag(Integer.toString(Hashcode));
 		System.out.println("The value of etag :"+eTag.getValue());

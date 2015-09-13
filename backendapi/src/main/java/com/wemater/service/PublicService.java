@@ -15,16 +15,12 @@ import com.wemater.modal.Link;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
-public class PublicService implements Runnable {
+public class PublicService  {
 
 	private final SessionFactory sessionfactory;
 	private final SessionUtil su;
 	private final PublicDao pd;
 
-	private static List<Article> LatestArticles = new ArrayList<Article>();
-	private static List<Article> trendingArticles = new ArrayList<Article>();
-	private static List<Article> quickReadArticles = new ArrayList<Article>();
-	private static List<Article> topArticles = new ArrayList<Article>();
 
 	public PublicService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
@@ -33,73 +29,27 @@ public class PublicService implements Runnable {
 	}
 
 
-	
-	public static List<Article> getTopArticles() {
-		return topArticles;
-	}
-
-
-
-	public static void setTopArticles(List<Article> topArticles) {
-		PublicService.topArticles = topArticles;
-	}
-
-
-
-	public static List<Article> getQuickReadArticles() {
-		return quickReadArticles;
-	}
-
-	public static void setQuickReadArticles(List<Article> QuickReadArticles) {
-		quickReadArticles = QuickReadArticles;
-	}
-
-	public static List<Article> getLatestArticles() {
-		return LatestArticles;
-	}
-
-	public static void setLatestArticles(List<Article> latestArticles) {
-		LatestArticles = latestArticles;
-	}
-
-	public static List<Article> getTrendingArticles() {
-		return trendingArticles;
-	}
-
-	public static void setTrendingArticles(List<Article> trendingArticles) {
-		PublicService.trendingArticles = trendingArticles;
-	}
-
-	@Override
-	public void run() {
-
-		setLatestArticles(pd.fetchLatestArticles());
-		setTrendingArticles(pd.fetchTrendingArticles());
-		setQuickReadArticles(pd.fetchQuickReadArticles());
-		setTopArticles(pd.fetchTrendingArticles());
-	}
-
 
 	public List<ArticleModel> getLatestArticleModels( UriInfo uriInfo) {
 
-		return transformArticlesToModels(getLatestArticles(), uriInfo);
+		return transformArticlesToModels(pd.fetchLatestArticles(), uriInfo);
 
 	}
 
 	public List<ArticleModel> getTrendingArticleModels(UriInfo uriInfo) {
 		System.out.println("articles found from tredding list");
-		return transformArticlesToModels(getTrendingArticles(), uriInfo);
+		return transformArticlesToModels(pd.fetchTrendingArticles(), uriInfo);
 
 	}
 
 	public List<ArticleModel> getTopArticleModels( UriInfo uriInfo) {
 		System.out.println("articles found from tredding list");
-		return transformTopArticlesToModels(getTrendingArticles(), uriInfo);
+		return transformTopArticlesToModels(pd.fetchTrendingArticles(), uriInfo);
 
 	}
 	public List<ArticleModel> getQuickReadArticleModels(UriInfo uriInfo) {
 		System.out.println("articles found from read list");
-		return transformArticlesToModels(getQuickReadArticles(), uriInfo);
+		return transformArticlesToModels(pd.fetchQuickReadArticles(), uriInfo);
 
 	}
 
