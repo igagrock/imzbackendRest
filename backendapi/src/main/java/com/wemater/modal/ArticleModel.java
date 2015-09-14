@@ -46,7 +46,6 @@ public class ArticleModel {
 	public int hashCode() {
 		
 		return new HashCodeBuilder(57,77)
-		         .append(id)
 		         .append(title)
 		         .append(url)
 		         .append(image)
@@ -56,9 +55,7 @@ public class ArticleModel {
 		         .append(likes)
 		         .append(isLiked)
 		         .append(commentCount)
-		         .append(userModel)
-		         .append(commentModels)
-		         .append(links)		         
+		         .append(userModel)	         
 		         .toHashCode();
 		
 	}

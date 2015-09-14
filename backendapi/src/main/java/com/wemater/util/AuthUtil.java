@@ -75,6 +75,7 @@ public class AuthUtil {
 
 		String[] params = getParamArray(encodedAuthString);
 		System.out.println(params[0] + " " + params[1]);
+		
 
 		User AuthUser = null;
 		Boolean isValidationSuccessfull = false;
@@ -153,7 +154,7 @@ public class AuthUtil {
 		su.beginSessionWithTransaction();
 
 		AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
-				.setParameter("username", params[0])
+				.setParameter("username", Base64.encodeBase64(params[0].getBytes()))
 				.setParameter("password", Util.generateMD5Hash(params[1])).uniqueResult(); //MD5 hash done here
 
 		su.CommitCurrentTransaction();

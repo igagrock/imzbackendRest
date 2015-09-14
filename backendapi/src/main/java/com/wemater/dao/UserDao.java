@@ -3,6 +3,7 @@ package com.wemater.dao;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.HibernateException;
 
 import com.wemater.dto.Article;
@@ -77,7 +78,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			String password, String bio) {
 
 		User user = new User();
-		user.setUsername(Util.removeSpaces(username));
+		user.setUsername(Base64.encodeBase64String(Util.removeSpaces(username).getBytes()));
 		user.setName(name);
 		user.setEmail(email);
 		user.setPassword(Util.generateMD5Hash(password));
@@ -90,7 +91,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 		
 		User user = new User();
-		user.setUsername(Util.removeSpaces(model.getUsername()));
+		user.setUsername(Base64.encodeBase64String(Util.removeSpaces(model.getUsername()).getBytes()));
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
 		user.setPassword(Util.generateMD5Hash(model.getPassword()));

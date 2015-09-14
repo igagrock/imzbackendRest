@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
+import com.wemater.exception.EvaluateException;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
@@ -29,15 +30,17 @@ public class StartExecutorforArticles extends HttpServlet {
 
 	public void saveUpdateAnyonymous(SessionUtil su) {
 		UserDao ud = new UserDao(su);
-		User user = ud.createUser("Anonymous", "nomail@dot.com", "Anonymous", "ndrters123", "The author of this article is no longer avaliable");
+		User user = ud.createUser("Anonymous", "Anomyous@email.com", "Anonymous", "CKBPS0423c", 
+				"This article is an Orphan. I am just taking care of it. You can still read it and support it!");
 
 		try {
 			su.beginSessionWithTransaction();
-			su.getSession().saveOrUpdate(user);
+			su.getSession().save(user);
 			su.CommitCurrentTransaction();
 
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
+			 e.printStackTrace();
 			System.out
 					.println("Anyonymous already inserted. NO NEED TO INSERT");
 		}

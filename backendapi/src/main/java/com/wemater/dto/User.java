@@ -14,6 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
@@ -66,7 +67,7 @@ public class User {
 	@NaturalId
 	@Column(name = "USER_NAME")
 	public String getUsername() {
-		return username;
+		return Base64.decodeBase64(username).toString();
 	}
 
 	public void setUsername(String username) {

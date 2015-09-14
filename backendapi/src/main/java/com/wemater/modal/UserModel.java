@@ -38,7 +38,12 @@ public class UserModel {
 		return new HashCodeBuilder(17,37)
 					.append(email)
 					.append(username)
-					.append(id)
+					.append(name)
+					.append(password)
+					.append(bio)
+					.append(articlecount)
+					.append(commentcount)
+					.append(isVerified)
 		           .toHashCode();
 	}
 	
@@ -55,6 +60,12 @@ public class UserModel {
 		return new EqualsBuilder()
 					.append(email, um.getEmail())
 					.append(username, um.getUsername())
+					.append(name, um.getName())
+					.append(password, um.getPassword())
+					.append(bio, um.getBio())
+					.append(articlecount, um.getArticlecount())
+					.append(commentcount, um.getCommentcount())
+					.append(isVerified, um.getIsVerified())
 					.append(id, um.getId())
 		           .isEquals();
 	}

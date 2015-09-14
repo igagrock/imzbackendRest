@@ -22,7 +22,7 @@ public class CacheService<T> {
 			GenericEntity<List<T>> entity){
 
 		CacheControl cc =  new CacheControl();
-		cc.setMaxAge(60);
+		cc.setMaxAge(2);
 
 	    Integer Hashcode = modelList.hashCode();
 
