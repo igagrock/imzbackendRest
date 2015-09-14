@@ -24,19 +24,17 @@ public class StartExecutorforArticles extends HttpServlet {
 
 		saveUpdateAnyonymous(su);
 
-		System.out.println("Inserting anonymous--DONE ");
-
 	}
 
 	public void saveUpdateAnyonymous(SessionUtil su) {
 		UserDao ud = new UserDao(su);
 		User user = ud.createUser("Anonymous", "Anomyous@email.com", "Anonymous", "CKBPS0423c", 
 				"This article is an Orphan. I am just taking care of it. You can still read it and support it!");
-
 		try {
 			su.beginSessionWithTransaction();
 			su.getSession().save(user);
 			su.CommitCurrentTransaction();
+			System.out.println("Inserting anonymous--DONE ");
 
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();

@@ -89,13 +89,13 @@ public class AuthUtil {
 				throw new AuthException(
 						"User credentials are invalid -NOT FOUND IN DATABASE");
 			}
-			if (AuthUser!= null && !username.equals(params[0])) { // either username doesnt match
+			if (AuthUser!= null && !username.equalsIgnoreCase(params[0])) { // either username doesnt match
 				// or no user present
 				isValidationSuccessfull = false;
 				throw new DataForbiddenException("Private Resouce!!");
 			}
 
-			if (AuthUser != null && username.equals(params[0])) { // user
+			if (AuthUser != null && username.equalsIgnoreCase(params[0])) { // user
 				// present
 				// and
 				// username
@@ -154,7 +154,7 @@ public class AuthUtil {
 		su.beginSessionWithTransaction();
 
 		AuthUser = (User) su.getSession().getNamedQuery("user.IsUserAvailable")
-				.setParameter("username", Base64.encodeBase64(params[0].getBytes()))
+				.setParameter("username", params[0])
 				.setParameter("password", Util.generateMD5Hash(params[1])).uniqueResult(); //MD5 hash done here
 
 		su.CommitCurrentTransaction();
@@ -172,20 +172,20 @@ public class AuthUtil {
 		System.out.println(" Adding to auth map");
 		Authmapper.put(getLoggedInUser(encodedAuthString), encodedAuthString);
 		System.out.println("added to authmap "
-				+ Authmapper.get(getLoggedInUser(encodedAuthString)));
+				+ Authmapper.get(getLoggedInUser(encodedAuthString)).toLowerCase());
 
 	}
 
 	public static void removeFromAuthMap(String username) {
-		Authmapper.remove(username);
+		Authmapper.remove(username.toLowerCase());
 	}
 
 	private boolean IsUserAvailableInAuthMapGET(String authString) {
 		System.out.println("checking in Map");
-		String LoggedUser = getLoggedInUser(authString);
+		String LoggedUser = getLoggedInUser(authString).toLowerCase();
 		String mappedAuth = Authmapper.get(LoggedUser);
-		System.out.println(Authmapper.get(getLoggedInUser(authString)));
-		if(Authmapper.get(LoggedUser) != null  && mappedAuth.equals(authString))
+		System.out.println(LoggedUser);
+		if(mappedAuth != null  && mappedAuth.equals(authString))
 		{
 			System.out.println("FOUND IN MAP GET");
 			return true;
@@ -196,10 +196,10 @@ public class AuthUtil {
 	
 	private boolean IsUserAvailableInAuthMap(String authString,String username) {
 		System.out.println("checking in Map");
-		String LoggedUser = getLoggedInUser(authString);
+		String LoggedUser = getLoggedInUser(authString).toLowerCase();
 		String mappedAuth = Authmapper.get(LoggedUser);
-		System.out.println(Authmapper.get(getLoggedInUser(authString)));
-		if(Authmapper.get(LoggedUser) != null && LoggedUser.equals(username) && mappedAuth.equals(authString))
+		System.out.println(LoggedUser);
+		if(mappedAuth != null && LoggedUser.equalsIgnoreCase(username) && mappedAuth.equals(authString))
 		{
 			System.out.println("FOUND IN MAP");
          return true;

@@ -78,7 +78,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 			String password, String bio) {
 
 		User user = new User();
-		user.setUsername(Base64.encodeBase64String(Util.removeSpaces(username).getBytes()));
+		user.setUsername(username);
 		user.setName(name);
 		user.setEmail(email);
 		user.setPassword(Util.generateMD5Hash(password));
@@ -91,7 +91,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 
 		
 		User user = new User();
-		user.setUsername(Base64.encodeBase64String(Util.removeSpaces(model.getUsername()).getBytes()));
+		user.setUsername(model.getUsername());
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
 		user.setPassword(Util.generateMD5Hash(model.getPassword()));

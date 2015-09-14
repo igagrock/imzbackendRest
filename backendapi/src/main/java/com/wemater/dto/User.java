@@ -67,9 +67,10 @@ public class User {
 	@NaturalId
 	@Column(name = "USER_NAME")
 	public String getUsername() {
-		return Base64.decodeBase64(username).toString();
+		return (username);
 	}
 
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
