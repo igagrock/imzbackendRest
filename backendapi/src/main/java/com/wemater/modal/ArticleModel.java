@@ -28,7 +28,7 @@ public class ArticleModel {
 
 	private long id;
 	private String title;
-	private String url;
+	private String src;
 	private String image;
 	private String content;
 	private List<String> tags;
@@ -36,7 +36,9 @@ public class ArticleModel {
 	private int likes;
 	private boolean isLiked;
 	private int commentCount;
+	@XmlElement(name="users")
 	private UserModel userModel;
+	@XmlElement(name="comments")
 	private List<CommentModel> commentModels;
 	private List<Link> links;
 
@@ -47,7 +49,7 @@ public class ArticleModel {
 		
 		return new HashCodeBuilder(57,77)
 		         .append(title)
-		         .append(url)
+		         .append(src)
 		         .append(image)
 		         .append(content)
 		         .append(tags)
@@ -73,7 +75,7 @@ public class ArticleModel {
 		   return new EqualsBuilder()
 		   				.append(id, am.getId())
 		   				.append(title, am.getTitle())
-		   				.append(url, am.getUrl())
+		   				.append(src, am.getSrc())
 		   				.append(image, am.getImage())
 		   				.append(content, am.getContent())
 		   				.append(date, am.getDate())
@@ -140,12 +142,12 @@ public class ArticleModel {
 		this.title = title;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getSrc() {
+		return src;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUrl(String src) {
+		this.src = src;
 	}
 
 	public String getImage() {
@@ -207,7 +209,7 @@ public class ArticleModel {
 
 		this.id = article.getId();
 		this.title = article.getTitle();
-		this.url = article.getUrl();
+		this.src = article.getUrl();
 		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		this.date = format.format(article.getDate());
 		return this;

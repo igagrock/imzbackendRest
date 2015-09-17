@@ -37,6 +37,7 @@ public class BackupImageService implements Runnable {
  // update the url in the articles	
 	
    public Response ConnectToCDN(String base64Image, String title){
+	   System.out.println("CONNECTING TO CDN");
 	   ImageModel imd = new ImageModel();
 	   imd.setBase64Image(base64Image);
 	   imd.setTitle(title);
@@ -44,6 +45,7 @@ public class BackupImageService implements Runnable {
 	    Client postClient = ClientBuilder.newClient();
 	    WebTarget postwebTarget =  postClient.target("http://cdnbackendapi-vbr.rhcloud.com/api/images");
 	    Invocation.Builder  postBuilder = postwebTarget.request(MediaType.APPLICATION_JSON);
+	    System.out.println("CDN CONNECTION CALL BACK");
 	     return postBuilder.post(Entity.entity(imd, MediaType.APPLICATION_JSON));
 
 		
@@ -62,7 +64,11 @@ public class BackupImageService implements Runnable {
 		
 
 
-
+  //background job to check if any article has EMPTY URLS 
+  // save their image and update the url
+  //future update to be a scheduled thread pool executor
+  //currently only THread pool only		
+  //feedup		
 	@Override
 	public void run() {
 		List<Article>  articles = ad.findAll();
@@ -70,6 +76,8 @@ public class BackupImageService implements Runnable {
 			Article article = (Article) iterator.next();
 			System.out.println(article.getId()+": "+article.getTitle());
 			System.out.println("updating the urls==================");
+
+			//check if the article URL is null. if YES then update it
 			if(article.getUrl() == null || article.getUrl().isEmpty()){
 				System.out.println("ID ="+article.getId()+" EMPTY URL");
 				processURLUpdate(article);
