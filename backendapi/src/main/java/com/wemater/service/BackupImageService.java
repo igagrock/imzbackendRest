@@ -11,12 +11,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.hibernate.HibernateException;
-
 import com.wemater.dao.ArticleDao;
 import com.wemater.dto.Article;
-import com.wemater.exception.DataNotFoundException;
-import com.wemater.exception.EvaluateException;
 import com.wemater.modal.ImageModel;
 import com.wemater.modal.ImageResponseModel;
 import com.wemater.util.HibernateUtil;
@@ -74,7 +70,10 @@ public class BackupImageService implements Runnable {
 			Article article = (Article) iterator.next();
 			System.out.println(article.getId()+": "+article.getTitle());
 			System.out.println("updating the urls==================");
-			processURLUpdate(article);
+			if(article.getUrl() == null || article.getUrl().isEmpty()){
+				System.out.println("ID ="+article.getId()+" EMPTY URL");
+				processURLUpdate(article);
+			}
 			
 		}
 	}
