@@ -141,12 +141,12 @@ public class ArticleModel {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
+	
 	public String getSrc() {
 		return src;
 	}
 
-	public void setUrl(String src) {
+	public void setSrc(String src) {
 		this.src = src;
 	}
 
