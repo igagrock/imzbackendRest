@@ -9,7 +9,6 @@ import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
-import com.wemater.util.Util;
 
 public class StartExecutorforArticles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +25,7 @@ public class StartExecutorforArticles extends HttpServlet {
 		saveUpdateAnyonymous(su);
 		
 		System.out.println("Backing Up Images just checking");
-		Util.StartExecutorService(new BackupImages());
+		//Util.StartExecutorService(new BackupImages());
 
 	}
 
@@ -42,9 +41,7 @@ public class StartExecutorforArticles extends HttpServlet {
 
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
-			 e.printStackTrace();
-			System.out
-					.println("Anyonymous already inserted. NO NEED TO INSERT");
+			System.out	.println("Anyonymous already inserted. NO NEED TO INSERT");
 		}
 
 	}

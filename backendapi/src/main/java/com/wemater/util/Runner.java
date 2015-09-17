@@ -88,7 +88,7 @@ public class Runner {
 		  
 		  try {
 			
-			  imageByte = java.util.Base64.getDecoder().decode(imageString);
+			  imageByte = Base64.decodeBase64(imageString);
 			  System.out.println(imageByte);
 			  ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			  image = ImageIO.read(bis);

@@ -1,4 +1,4 @@
-package com.wemater.controller;
+package com.wemater.service;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,11 +11,11 @@ import com.wemater.exception.EvaluateException;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 
-public class BackupImages implements Runnable {
+public class BackupImageService implements Runnable {
 
 	private SessionUtil su;
 
-	public BackupImages() {
+	public BackupImageService() {
 		super();
 		this.su = new SessionUtil(HibernateUtil.getSessionFactory().openSession());
 		
@@ -41,7 +41,9 @@ public class BackupImages implements Runnable {
 		}
 		return articles;
 	}
-
+  //create method here to use the api to save the image 
+ // update the url in the articles	
+	
 
 	@Override
 	public void run() {
