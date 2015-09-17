@@ -82,7 +82,8 @@ public class ArticleResource {
 	@POST
 	public Response postArticle(
 			@HeaderParam("Authorization") String authString,
-			@PathParam("profileName") String profilename, ArticleModel model,
+			@PathParam("profileName") String profilename,
+			ArticleModel model,
 			@Context UriInfo uriInfo) {
 
 		return Response

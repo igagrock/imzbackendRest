@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -91,13 +92,22 @@ public final class Util {
 
 	}
 
-	public static void StartExecutorService(Runnable task) {
+	public static void StartscheduledExecutorService(Runnable task) {
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleWithFixedDelay(task, START_TIME, DELAY,
 				TimeUnit.SECONDS);
 
 	}
+	
+
+	public static void StartExecutorService(Runnable task) {
+
+		ExecutorService service = Executors.newFixedThreadPool(10);
+		service.execute(task);
+
+	}
+
 
 	public static String removeSpaces(String string) {
 		return string.trim().replaceAll("\\s+", ""); // replace extra inside
