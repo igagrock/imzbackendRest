@@ -7,8 +7,10 @@ import org.hibernate.HibernateException;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
+import com.wemater.service.BackupImageService;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
 public class StartExecutorforArticles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +27,7 @@ public class StartExecutorforArticles extends HttpServlet {
 		saveUpdateAnyonymous(su);
 		
 		System.out.println("Backing Up Images just checking");
-		//Util.StartExecutorService(new BackupImages());
+		Util.StartExecutorService(new BackupImageService());
 
 	}
 

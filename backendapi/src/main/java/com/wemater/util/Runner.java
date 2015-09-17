@@ -49,7 +49,7 @@ public class Runner {
 
 	
    Client client = ClientBuilder.newClient();
-   WebTarget target = client.target("http://backendapi-vbr.rhcloud.com/api").path("users").path("irshsheikh").path("articles/107");
+   WebTarget target = client.target("http://backendapi-vbr.rhcloud.com/api").path("users").path("irshsheikh").path("articles/108");
    System.out.println(target.getUri().toURL().toString());
    Invocation.Builder  builder = target.request(MediaType.APPLICATION_JSON);
    builder.header("Authorization", "Base "+new String(Base64.encodeBase64("irshsheikh:International0401".getBytes())));
