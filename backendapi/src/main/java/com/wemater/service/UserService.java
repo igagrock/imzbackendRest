@@ -13,9 +13,7 @@ import com.wemater.dto.User;
 import com.wemater.modal.AjaxModel;
 import com.wemater.modal.Link;
 import com.wemater.modal.UserModel;
-import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
-import com.wemater.util.MailUtil;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
 
@@ -23,15 +21,15 @@ public class UserService {
 	private final SessionFactory sessionfactory;
 	private final SessionUtil su;
 	private final UserDao ud;
-	private final AuthUtil au;
-	private final MailUtil mu;
+	private final AuthService au;
+	private final MailService mu;
 
 	public UserService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.ud = new UserDao(su);
-		this.au = new AuthUtil(su);
-		this.mu = new MailUtil();
+		this.au = new AuthService(su);
+		this.mu = new MailService();
 
 	}
 

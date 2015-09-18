@@ -26,6 +26,7 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 	public ArticleDao(SessionUtil sessionUtil) {
 		super(sessionUtil, Article.class);
 		this.sessionUtil = sessionUtil;
+		
 	}
 
 	public SessionUtil getSessionUtil() throws InstantiationException {

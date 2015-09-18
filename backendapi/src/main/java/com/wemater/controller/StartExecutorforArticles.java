@@ -3,17 +3,17 @@ package com.wemater.controller;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 
 import com.wemater.dao.UserDao;
 import com.wemater.dto.User;
-import com.wemater.service.BackupImageService;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
-import com.wemater.util.Util;
 
 public class StartExecutorforArticles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger log = Logger.getLogger(StartExecutorforArticles.class);
 
 	@Override
 	public void init() throws ServletException {
@@ -22,12 +22,13 @@ public class StartExecutorforArticles extends HttpServlet {
 				.openSession());
 	
 
-		System.out.println("Inserting anonymous ");
+	
+		log.info("inserting anonymous--STARTED");
 
 		saveUpdateAnyonymous(su);
-		
-		System.out.println("Backing Up Images just checking");
-		Util.StartExecutorService(new BackupImageService());
+
+		//log.info("BackUP images service started");
+		//Util.StartExecutorService(new ImageBackupUtil(su));
 
 	}
 
@@ -39,11 +40,10 @@ public class StartExecutorforArticles extends HttpServlet {
 			su.beginSessionWithTransaction();
 			su.getSession().save(user);
 			su.CommitCurrentTransaction();
-			System.out.println("Inserting anonymous--DONE ");
-
+		    log.info("Inserting anonymous--DONE");
 		} catch (HibernateException e) {
 			su.rollBackCurrentTransaction();
-			System.out	.println("Anyonymous already inserted. NO NEED TO INSERT");
+			log.info("Anyonymous already inserted. NO NEED TO INSERT");
 		}
 
 	}

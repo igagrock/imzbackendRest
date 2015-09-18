@@ -36,7 +36,7 @@ public class ArticleModel {
 	private int likes;
 	private boolean isLiked;
 	private int commentCount;
-	@XmlElement(name="users")
+	@XmlElement(name="user")
 	private UserModel userModel;
 	@XmlElement(name="comments")
 	private List<CommentModel> commentModels;

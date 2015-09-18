@@ -17,6 +17,7 @@
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 
+
   <servlet>
     <description></description>
     <display-name>StartExecutorforArticles</display-name>
@@ -24,5 +25,6 @@
     <servlet-class>com.wemater.controller.StartExecutorforArticles</servlet-class>
     <load-on-startup>2</load-on-startup>
   </servlet>
+
  
 </web-app>

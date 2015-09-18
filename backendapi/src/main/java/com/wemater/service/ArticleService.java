@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import com.wemater.dao.ArticleDao;
@@ -13,25 +14,27 @@ import com.wemater.dao.UserDao;
 import com.wemater.dto.Article;
 import com.wemater.modal.ArticleModel;
 import com.wemater.modal.Link;
-import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
 
 public class ArticleService {
 
+	private static Logger log = Logger.getLogger(ArticleService.class);
 	private final SessionFactory sessionfactory;
 	private final SessionUtil su;
 	private final ArticleDao ad;
 	private final UserDao ud;
-	private final AuthUtil au;
+	private final AuthService au;
+	private final ImageService is;
 
 	public ArticleService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
 		this.su = new SessionUtil(sessionfactory.openSession());
 		this.ad = new ArticleDao(su);
 		this.ud = new UserDao(su);
-		this.au = new AuthUtil(su);
+		this.au = new AuthService(su);
+		this.is = new ImageService(su);
 
 	}
 
@@ -71,11 +74,16 @@ public class ArticleService {
 
 	public ArticleModel postArticle(String authString, String profilename,
 			ArticleModel model, UriInfo uriInfo) {
-		// auth here
+		log.info("Post article---START");
 		au.isUserAuthenticated(authString, profilename);
-
-		Long id = ad.save( ad.createArticle(model, ud.find(profilename))); // save
-																		
+        
+		
+		Article article = ad.createArticle(model, ud.find(profilename));
+		log.info("Article object created from the User Input");
+		log.info("BACKUP  image--STARTED");
+		is.processURLUpdate(article);
+		Long id = ad.save(article); // save
+       																		
 		return transformFullArticleToModel(ad.find(id),authString, uriInfo); // return the
 																	// article
 																	// model
@@ -85,12 +93,23 @@ public class ArticleService {
 			ArticleModel model, UriInfo uriInfo) {
 
 		String profilename = Util.getUsernameFromURLforComments(3, uriInfo);
-		// auth here   
+		/*
+		 * check if the user is authenticated   
+		 */
 		au.isUserAuthenticated(authString, profilename);
-
+        //check if the user is the role of admin for article
 		if (ad.IsUserArticleAvailable(profilename, id)) {
+			//get the article and update it
              Article article = ad.find(id);
-			ad.update(ad.ValidateUpdateArticle(article, model));
+			 ad.update(ad.ValidateUpdateArticle(article, model));
+			//if the image was updated, 
+			 //update the url of image and save the new image
+			if(!Util.IsEmptyOrNull(model.getImage()))
+			{
+			  log.info("IMAGE has been updated for this article- UpdateArticle");	
+			  is.processURLUpdate(article);	
+			}
+			
 			return transformFullArticleToModel(article,authString, uriInfo);
 		}
 

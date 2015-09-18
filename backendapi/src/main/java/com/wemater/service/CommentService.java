@@ -16,7 +16,6 @@ import com.wemater.dto.Comment;
 import com.wemater.dto.User;
 import com.wemater.modal.CommentModel;
 import com.wemater.modal.Link;
-import com.wemater.util.AuthUtil;
 import com.wemater.util.HibernateUtil;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
@@ -28,7 +27,7 @@ public class CommentService {
 	private final CommentDao cd;
 	private final ArticleDao ad;
 	private final UserDao ud;
-	private final AuthUtil au;
+	private final AuthService au;
 
 	public CommentService() {
 		this.sessionfactory = HibernateUtil.getSessionFactory();
@@ -36,7 +35,7 @@ public class CommentService {
 		this.cd = new CommentDao(su);
 		this.ud = new UserDao(su);
 		this.ad = new ArticleDao(su);
-		this.au = new AuthUtil(su);
+		this.au = new AuthService(su);
 
 	}
 

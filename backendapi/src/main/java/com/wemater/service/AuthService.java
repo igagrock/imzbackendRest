@@ -1,4 +1,4 @@
-package com.wemater.util;
+package com.wemater.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +10,15 @@ import com.wemater.dto.User;
 import com.wemater.exception.AuthException;
 import com.wemater.exception.DataForbiddenException;
 import com.wemater.exception.EvaluateException;
+import com.wemater.util.SessionUtil;
+import com.wemater.util.Util;
 
-public class AuthUtil {
+public class AuthService {
 
 	private final SessionUtil su;
 	private final static Map<String, String> Authmapper = new HashMap<String, String>();
 
-	public AuthUtil(SessionUtil su) {
+	public AuthService(SessionUtil su) {
 		this.su = su;
 
 	}

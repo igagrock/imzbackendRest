@@ -15,7 +15,7 @@ import com.wemater.exception.DataNotInsertedException;
 import com.wemater.exception.EvaluateException;
 import com.wemater.exception.ValueNotProvidedException;
 import com.wemater.modal.UserModel;
-import com.wemater.util.AuthUtil;
+import com.wemater.service.AuthService;
 import com.wemater.util.SessionUtil;
 import com.wemater.util.Util;
 
@@ -128,7 +128,7 @@ public class UserDao extends GenericDaoImpl<User, Long> {
 		if (!Util.IsEmptyOrNull(model.getPassword())){
 			user.setPassword(Util.generateMD5Hash(model.getPassword()));
 			//remove the existing password key from auth map here so the user is prompted to login again
-			AuthUtil.removeFromAuthMap(user.getUsername());
+			AuthService.removeFromAuthMap(user.getUsername());
 
 		}
 		if (!Util.IsEmptyOrNull(model.getUsername())){

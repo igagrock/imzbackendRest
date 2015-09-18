@@ -1,4 +1,4 @@
-package com.wemater.util;
+package com.wemater.service;
 
 import org.apache.commons.codec.binary.Base64;
 import org.codemonkey.simplejavamail.Email;
@@ -7,7 +7,7 @@ import org.codemonkey.simplejavamail.TransportStrategy;
 
 import com.wemater.exception.AuthException;
 
-public class MailUtil {
+public class MailService {
 
 
 	
