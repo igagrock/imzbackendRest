@@ -81,8 +81,8 @@ public class ArticleService {
 		Article article = ad.createArticle(model, ud.find(profilename));
 		log.info("Article object created from the User Input");
 		log.info("BACKUP  image--STARTED");
-		is.processURLUpdate(article);
 		Long id = ad.save(article); // save
+		is.processURLUpdate(article);
        																		
 		return transformFullArticleToModel(ad.find(id),authString, uriInfo); // return the
 																	// article

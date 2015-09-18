@@ -11,10 +11,12 @@ import com.wemater.service.ImageService;
 
 public class ImageBackupUtil implements Runnable {
 	private static final Logger log = Logger.getLogger(ImageBackupUtil.class);
+	private final SessionUtil su;
 	private final ArticleDao ad;
 	private final ImageService is;
 
-	public ImageBackupUtil(SessionUtil su) {
+	public ImageBackupUtil() {
+		     this.su = new SessionUtil(HibernateUtil.getSessionFactory().openSession());
 			this.ad = new ArticleDao(su);
 			this.is = new ImageService(su);
 	}
@@ -28,21 +30,14 @@ public class ImageBackupUtil implements Runnable {
 		@Override
 		public void run() {
 			log.info("Backup image util started ");
-			List<Article>  articles = ad.findAll();
+			List<Article> articles = ad.findAll();
 			for (Iterator<Article> iterator = articles.iterator(); iterator.hasNext();) {
-				
 				Article article = (Article) iterator.next();
-				log.info(article.getId()+": "+article.getTitle());
-				log.info("URL Update ----STARTED-- checking if url is NULL");
-
-				//check if the article URL is null. if YES then update it
-				if(Util.IsEmptyOrNull(article.getUrl())){
-					System.out.println("ID ="+article.getId()+" URL is NULL OR EMPTY------UPDATING URL");
-					is.processURLUpdate(article);
-				}
+				is.processURLUpdate(article);
 				
 			}
 		}
 		
 
 }
+ 

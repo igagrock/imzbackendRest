@@ -60,6 +60,7 @@ public class GenericDaoImpl<T, Id extends Serializable> implements
 
 	@Override
 	public void update(T entity) {
+		if(entity == null) throw new NullPointerException("Entity in update is null");
 
 		try {
 			sessionUtil.beginSessionWithTransaction();
@@ -70,6 +71,7 @@ public class GenericDaoImpl<T, Id extends Serializable> implements
 
 		} catch (RuntimeException e) {
 			sessionUtil.rollBackCurrentTransaction();
+			e.printStackTrace();
 			throw new EvaluateException(e);
 		}
 

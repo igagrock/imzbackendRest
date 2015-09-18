@@ -25,7 +25,6 @@ public class SessionUtil {
 
 	public void CommitCurrentTransaction() {
 		session.getTransaction().commit();
-
 	}
 
 	public void rollBackCurrentTransaction() {

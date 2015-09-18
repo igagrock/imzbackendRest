@@ -52,7 +52,7 @@ public class ImageService {
 		if(resp.getStatus() == 200){
 			log.info("RESPONSE STATUS IS ====200==== PROCESSING UPDATE URL");
 			article.setUrl(resp.readEntity(ImageResponseModel.class).getUrl());
-			ad.update(article);
+			 ad.update(article);
 			log.info("URL update------ DONE");
 		}
 		else if(FAIL_COUNT++ < 5){
@@ -61,6 +61,7 @@ public class ImageService {
 			}
 		}
 		
+	
 
 
 }
