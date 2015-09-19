@@ -33,7 +33,7 @@ public class ArticleModel {
 	private String content;
 	private List<String> tags;
 	private String date;
-	private int likes;
+	private int likes;        
 	private boolean isLiked;
 	private int commentCount;
 	@XmlElement(name="user")
@@ -50,7 +50,7 @@ public class ArticleModel {
 		return new HashCodeBuilder(57,77)
 		         .append(title)
 		         .append(src)
-		         .append(image)
+		        // .append(image)
 		         .append(content)
 		         .append(tags)
 		         .append(date)
@@ -76,7 +76,7 @@ public class ArticleModel {
 		   				.append(id, am.getId())
 		   				.append(title, am.getTitle())
 		   				.append(src, am.getSrc())
-		   				.append(image, am.getImage())
+		   				//.append(image, am.getImage())
 		   				.append(content, am.getContent())
 		   				.append(date, am.getDate())
 		   				.append(tags, am.getTags())

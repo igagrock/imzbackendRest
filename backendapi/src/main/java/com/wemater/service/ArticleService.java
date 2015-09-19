@@ -34,7 +34,7 @@ public class ArticleService {
 		this.ad = new ArticleDao(su);
 		this.ud = new UserDao(su);
 		this.au = new AuthService(su);
-		this.is = new ImageService(su);
+		this.is = new ImageService();
 
 	}
 
@@ -77,12 +77,15 @@ public class ArticleService {
 		log.info("Post article---START");
 		au.isUserAuthenticated(authString, profilename);
         
-		
+		 log.info("BACKUP  image--STARTED");
+		 String imageURL = is.processURLUpdate(model.getImage(), model.getTitle());
+		 model.setSrc(imageURL);
+		 log.info("IMAGE URL set on MODEL Object");
 		Article article = ad.createArticle(model, ud.find(profilename));
 		log.info("Article object created from the User Input");
-		log.info("BACKUP  image--STARTED");
 		Long id = ad.save(article); // save
-		is.processURLUpdate(article);
+	    log.info("Article Object saved");
+	
        																		
 		return transformFullArticleToModel(ad.find(id),authString, uriInfo); // return the
 																	// article
@@ -100,15 +103,14 @@ public class ArticleService {
         //check if the user is the role of admin for article
 		if (ad.IsUserArticleAvailable(profilename, id)) {
 			//get the article and update it
-             Article article = ad.find(id);
-			 ad.update(ad.ValidateUpdateArticle(article, model));
-			//if the image was updated, 
-			 //update the url of image and save the new image
-			if(!Util.IsEmptyOrNull(model.getImage()))
-			{
-			  log.info("IMAGE has been updated for this article- UpdateArticle");	
-			  is.processURLUpdate(article);	
+			 Article article = ad.find(id);
+			if(!Util.IsEmptyOrNull(model.getImage())){
+				String imageUrl = is.processURLUpdate(model.getImage(),article.getTitle());
+				model.setSrc(imageUrl);
 			}
+            
+			 ad.update(ad.ValidateUpdateArticle(article, model));
+			
 			
 			return transformFullArticleToModel(article,authString, uriInfo);
 		}
@@ -219,7 +221,7 @@ public class ArticleService {
 				.addCount(article.getCommentCount())
 				.addLikes(article.getLikes())
 				.addContent(article.returnContentString())
-				.addImage(article.returnImageString())
+				//.addImage(article.returnImageString())
 				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);
 
@@ -251,7 +253,7 @@ public class ArticleService {
 				.addLikes(article.getLikes())
 				.addIsliked( ad.haveUserLiked(article, encodedAuth))
 				.addContent(article.returnContentString())
-				.addImage(article.returnImageString())
+				//.addImage(article.returnImageString())
 				.addTags(article.getTags())
 				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);

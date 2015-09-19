@@ -94,7 +94,7 @@ public class PublicService  {
 				.addCount(article.getCommentCount())
 				.addLikes(article.getLikes())
 				.addContent(article.returnContentString())
-				.addImage(article.returnImageString())
+				//.addImage(article.returnImageString())
 				.addUser(article.getUser(), true, false)
 				.addLinks(self, articles, comments, user);
 

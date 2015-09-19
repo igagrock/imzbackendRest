@@ -275,7 +275,8 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 		Article article = new Article();
 		article.setTitle(model.getTitle());
-		article.createImageString(model.getImage());
+		article.setUrl(model.getSrc());
+		//article.createImageString(model.getImage());
 		article.createContentString(model.getContent());
 		article.setTags(model.getTags());
 		article.setDate(new Date());
@@ -286,11 +287,11 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 		return article;
 	}
 
-	public Article createArticleWithNoContent(Long id, String title,String url, Date date,int commentCount, int likes) {
+	public Article createArticleWithNoContent(Long id, String title,String src, Date date,int commentCount, int likes) {
 		Article article = new Article();
 		article.setId(id);
 		article.setTitle(title);
-		article.setUrl(url);
+		article.setUrl(src);
 		article.setDate(date);
 		article.setCommentCount(commentCount);
 		article.setLikes(likes);
@@ -300,8 +301,10 @@ public class ArticleDao extends GenericDaoImpl<Article, Long> {
 
 		if (!Util.IsEmptyOrNull(model.getTitle()))
 			article.setTitle(model.getTitle());
-		if (!Util.IsEmptyOrNull(model.getImage()))
-			article.createImageString(model.getImage());
+		if(!Util.IsEmptyOrNull(model.getSrc()))
+			article.setUrl(model.getSrc());
+		//if (!Util.IsEmptyOrNull(model.getImage()))
+			//article.createImageString(model.getImage());
 		if (!Util.IsEmptyOrNull(model.getContent()))
 			article.createContentString(model.getContent());
 		if (!Util.IsEmptyOrNull(model.getTags()))

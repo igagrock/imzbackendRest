@@ -10,23 +10,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import com.wemater.dao.ArticleDao;
-import com.wemater.dto.Article;
+import com.wemater.exception.DataNotInsertedException;
 import com.wemater.modal.ImageModel;
 import com.wemater.modal.ImageResponseModel;
-import com.wemater.util.SessionUtil;
 
 public class ImageService {
-    private static int FAIL_COUNT = 0;
-    private final ArticleDao ad;
+    private  int FAIL_COUNT = 0;
     private static Logger log = Logger.getLogger(ImageService.class);
-    
-    
- 
-	
-  public ImageService(SessionUtil su) {
-		this.ad = new ArticleDao(su);
-	}
+
 //create method here to use the api to save the image 
  // update the url in the articles	
 	
@@ -46,19 +37,20 @@ public class ImageService {
 
 		
    }
-	public void processURLUpdate(Article article){
+	public String processURLUpdate(String base64Image, String title){
 		log.info("URL UPDATE started");
-		Response resp = ConnectToCDN(article.returnImageString(), article.getTitle());
-		if(resp.getStatus() == 200){
-			log.info("RESPONSE STATUS IS ====200==== PROCESSING UPDATE URL");
-			article.setUrl(resp.readEntity(ImageResponseModel.class).getUrl());
-			 ad.update(article);
-			log.info("URL update------ DONE");
-		}
-		else if(FAIL_COUNT++ < 5){
-              log.info("Image update---- FAILED.--- TRYING again--- @ "+FAIL_COUNT+" times");
-			  processURLUpdate(article);
+		Response resp = ConnectToCDN(base64Image,title );
+			if(resp.getStatus() != 200 && FAIL_COUNT++ < 5){
+				log.info("RESPONSE STATUS== "+resp.getStatus());
+				 log.info("Image update---- FAILED.--- TRYING again--- @ "+FAIL_COUNT+" times");
+				  processURLUpdate(base64Image, title);
 			}
+			else if(resp.getStatus() != 200 && FAIL_COUNT >5)
+				  throw new DataNotInsertedException("unable to insert image at CDN");
+			
+			 log.info("Image update---- SUCCESS.--- RETURNING URL--");
+			 return resp.readEntity(ImageResponseModel.class).getUrl();
+		
 		}
 		
 	
