@@ -197,6 +197,7 @@ public class ArticleService {
 			return new ArticleModel().constructModel(article)
 					.addCount(article.getCommentCount())
 					.addLikes(article.getLikes())
+					.addUser(article.getUser(), true, true)
 					.addLinks(self, articles, comments, user);
 
 		}
@@ -222,7 +223,7 @@ public class ArticleService {
 				.addLikes(article.getLikes())
 				.addContent(article.returnContentString())
 				//.addImage(article.returnImageString())
-				.addUser(article.getUser(), true, false)
+				.addUser(article.getUser(), true, true)
 				.addLinks(self, articles, comments, user);
 
 	}
@@ -255,7 +256,7 @@ public class ArticleService {
 				.addContent(article.returnContentString())
 				//.addImage(article.returnImageString())
 				.addTags(article.getTags())
-				.addUser(article.getUser(), true, false)
+				.addUser(article.getUser(), true, true)
 				.addLinks(self, articles, comments, user);
 
 	}

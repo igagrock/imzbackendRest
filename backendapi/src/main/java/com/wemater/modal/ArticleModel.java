@@ -248,7 +248,7 @@ public class ArticleModel {
 	
 	public synchronized ArticleModel addUser(User user, boolean isArticleCount,
 			boolean isCommentCount) {
-		UserModel model = new UserModel().constructModel(user);
+		UserModel model = new UserModel().constructModel(user).addUsername(user.getUsername());
 		if (isArticleCount)
 			model.addArticleCount(user.getArticleCount());
 		if (isCommentCount)
