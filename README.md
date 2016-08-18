@@ -3,8 +3,9 @@
 
 
 
-> ==================Authentication Rules for API======================================
- > ___________________GET REQUESTS_____________________________________________________
+> ##Authentication Rules for API
+> ###GET REQUESTS
+
 ```
 1) users              -- Delete the resource after testing
 2) users/{user_name}  -- AuthRequired
@@ -14,15 +15,20 @@
 6) users/{user_name}/articles/{article_id}/comments/{comment_id} -- NotIMPLEMENTED
 7) users/{user_name}/comments -- AuthRequired
 8) users/{user_name}/comments/{comment_id} --AuthRequired
+
 ```
 
-> __________________POST REQUESTS______________________________________________________
-```
+  >  ###POST REQUESTS
+  
+ ```
  1) users 						 -- AuthRequired
  2) users/{user_name}/articles	 -- AuthRequired
  3) users/{user_name}/articles/{article_id}/comments -- AuthRequiredGET
-```
- > __________________PUT REQUESTS______________________________________________________
+ ```
+ 
+ 
+ > ###PUT REQUESTS
+ 
  
  ```
  1)  users/{user_name} -- AuthRequired
@@ -31,7 +37,7 @@
  ```
  
 
-> ___________________DELETE REQUESTS___________________________________________________
+> ###DELETE REQUESTS
 
 ```
  1)  users/{user_name} -- AuthRequired
